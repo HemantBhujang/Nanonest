@@ -1,6 +1,9 @@
-# React + Vite
+# NanoNest
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+NanoNest is a digital marketing platform designed to boost business conversions. 
+It connects entrepreneurs with potential investors, streamlining the funding process. 
+With user-friendly features and expert insights, NanoNest empowers startups to enhance their online presence and achieve sustainable growth.
 
 Currently, two official plugins are available:
 
