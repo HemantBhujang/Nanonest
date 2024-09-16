@@ -6,7 +6,7 @@ import logo from "../assets/react.svg";
 const Navbar = ({title,services,industry,about,team,more,faq,in_faq,blog}) => {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar navbar-expand-lg bg-body-tertiary shadow p-2 mb-4 bg-white rounded">
   <div className="container-fluid">
   <a className="navbar-brand" href="#">
  
