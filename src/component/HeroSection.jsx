@@ -1,6 +1,7 @@
 import React from 'react'
 import hero from "../assets/pagal sakshi.png";
-
+import HeroVector from '../assets/Hero_vector.svg';
+import './HeroSection.css'; 
 
 const HeroSection = () => {
   return (
@@ -13,10 +14,11 @@ const HeroSection = () => {
      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus omnis a ducimus ipsam quibusdam dicta ipsum repudiandae. Molestias, nihil reprehenderit odit consequatur neque quas sit nulla amet recusandae nesciunt eveniet?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ducimus tempora distinctio molestiae error ullam voluptas. Quia corrupti vel velit adipisci fugiat facilis quasi recusandae tempore animi nobis, iure voluptas.
     </div>
     <div className="col my-4 container">
-   <img src={hero} alt="hero" width="735rem" height='533rem' className='img-thumbnail' />
+   <img src={hero} alt="hero" width="735rem" height='533rem' className='img-fluid' />
     </div>
   </div>
   </div>
+  <img src={HeroVector} alt="Hero Vector" className="hero-vector" />
     </div>
   )
 }
