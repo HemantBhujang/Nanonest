@@ -19,7 +19,7 @@ const HeroSection = () => {
 </h1>
     <h5 className='mx-3 my-2'>Featured in leading publications around the world</h5>
     <button type="button" class="btn btn-lg my-4 mx-2" style={{backgroundColor : '#F9BC6E'}}>SignIn as Investor </button>
-    <button type="button" class="btn btn-lg my-4 mx-5" style={{backgroundColor : '#F9BC6E'}}>SignIn as Enterpreneur</button>
+    <button type="button" class="btn btn-lg my-4 mx-2" style={{backgroundColor : '#F9BC6E'}}>SignIn as Enterpreneur</button>
     </div>
     
     </div>
