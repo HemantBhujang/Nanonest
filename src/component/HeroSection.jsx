@@ -19,7 +19,9 @@ const HeroSection = () => {
   </div>
   </div>
   <img src={HeroVector} alt="Hero Vector" className="hero-vector mt-0 mb-5" />
+ 
     </div>
+    
   )
 }
 
