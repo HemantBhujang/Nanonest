@@ -1,9 +1,9 @@
 import React from 'react'
-import Testimonials from './Testimonials'
+
 
 const Apointment = () => {
   return (
-    <div class="badge text-wrap" style={{backgroundColor:'#F9BC6E', color:'white', height:'200px' ,width:'95rem'}}>
+    <div class="badge text-wrap" style={{backgroundColor:'#F9BC6E', color:'white', height:'250px' ,width:'100%'}}>
     <div class="row">
       <div class="col">
         <h1 className='text-start my-5 mx-5'>Book A Free <br />Digital Marketing Consultation</h1>
@@ -17,7 +17,7 @@ const Apointment = () => {
       </div>
     </div>
     </div>
-    <Testimonials />  
+     
     </div>
     
    
