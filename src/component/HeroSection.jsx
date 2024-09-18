@@ -14,7 +14,7 @@ const HeroSection = () => {
     <div className=" my-2">
   <div className="row">
     <div className="col ">
-    <h1  className="h1" style={{ color: 'black', fontSize: '80px' }}>  
+    <h1  className="h1" style={{ color: 'black', fontSize: '15vmin' }}>  
     We help you grow your <span className="h1" style={{ color: '#F9BC6E', fontSize: '15vmin' }}>Conversation</span>  
 </h1>
     <h5 className='mx-3 my-2'>Featured in leading publications around the world</h5>
