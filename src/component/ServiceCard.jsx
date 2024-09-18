@@ -20,7 +20,7 @@ const ServiceCard = ({relation,title,content}) => {
     <div className="carousel-item" data-bs-interval="2000">
       <img src="..." className="d-block w-100" alt="..."/>
       <div className="carousel-caption d-none d-md-block">
-        <h5>Second slide label</h5>
+        <h5>Second slide </h5>
         <p>Some representative placeholder content for the second slide.</p>
       </div>
     </div>
