@@ -6,6 +6,9 @@ import Section2 from './component/Section2';
 import Appointment from './component/Apointment';
 import Testimonials from './component/Testimonials';
 import Services from './component/Services';
+import Industry from './component/Industry';
+import wave from '../src/assets/Wave.jpg';
+import webDesign from './assets/Web Design 1.png'
 
 const App = () => {
   return (
