@@ -6,7 +6,6 @@ import Section2 from './component/Section2';
 import Appointment from './component/Apointment';
 import Testimonials from './component/Testimonials';
 import Services from './component/Services';
-import webDesign from './assets/Web Design 1.png'
 
 const App = () => {
   return (
@@ -34,6 +33,13 @@ const App = () => {
               itWorker={webDesign}
             />
           } />
+          <Route path='/Industry' element={
+            <Industry 
+            title="Welcome"
+            content="where your entrepreneurial journey meets limitless growth and opportunity!"
+            wave={wave}
+            />
+          }/>
         </Routes>
       </div>
     </Router>
