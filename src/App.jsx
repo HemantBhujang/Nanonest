@@ -6,6 +6,8 @@ import Section2 from './component/Section2';
 import Appointment from './component/Apointment';
 import Testimonials from './component/Testimonials';
 import Services from './component/Services';
+import Industry from './component/Industry';
+import wave from '../src/assets/Wave.jpg'
 
 const App = () => {
   return (
@@ -32,6 +34,13 @@ const App = () => {
               content='All our digital marketing services start with a free 30-minute consultation call where we find the best strategy towards reaching your goals.'
             />
           } />
+          <Route path='/Industry' element={
+            <Industry 
+            title="Welcome"
+            content="where your entrepreneurial journey meets limitless growth and opportunity!"
+            wave={wave}
+            />
+          }/>
         </Routes>
       </div>
     </Router>
