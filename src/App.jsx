@@ -6,6 +6,7 @@ import Section2 from './component/Section2';
 import Appointment from './component/Apointment';
 import Testimonials from './component/Testimonials';
 import Services from './component/Services';
+import webDesign from './assets/Web Design 1.png'
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
             <Services 
               title='Services'  
               content='All our digital marketing services start with a free 30-minute consultation call where we find the best strategy towards reaching your goals.'
+              itWorker={webDesign}
             />
           } />
         </Routes>
