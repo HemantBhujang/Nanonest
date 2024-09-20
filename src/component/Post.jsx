@@ -1,16 +1,16 @@
 import React from 'react'
 
-const Post = () => {
+const Post = ({ProfilePic,Name,Content,Button}) => {
   return (
-    <div className="container text-center">
-  <div className="row">
-    <div className="col">
+    <div class="container text-center">
+  <div class="row">
+    <div class="col">
       Column
     </div>
-    <div className="col">
+    <div class="col">
       Column
     </div>
-    <div className="col">
+    <div class="col">
       Column
     </div>
   </div>

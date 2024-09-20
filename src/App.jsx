@@ -9,6 +9,9 @@ import Services from './component/Services';
 import Industry from './component/Industry';
 import wave from '../src/assets/Wave.jpg';
 import webDesign from './assets/Web Design 1.png'
+import SignIn from './component/SignIn'
+import AfterLogin from './component/AfterLogin';
+// import Tabish from './assets/Tabish Khan.jpg'
 
 const App = () => {
   return (
@@ -25,6 +28,11 @@ const App = () => {
               <Section2 />
               <Appointment />
               <Testimonials />
+              {/* <SignIn/> */}
+              <AfterLogin title='Welcom, Sakshi' 
+              content='where your entrepreneurial journey meets limitless growth and opportunity!'
+              wave={wave}
+             />
             </>
           }/>
           
@@ -46,6 +54,7 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+    
   );
 }
 
