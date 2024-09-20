@@ -51,6 +51,7 @@ const App = () => {
             wave={wave}
             />
           }/>
+          <Route path="/signIn" element={<SignIn />} />
         </Routes>
       </div>
     </Router>

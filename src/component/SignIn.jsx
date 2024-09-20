@@ -1,6 +1,7 @@
 // AuthForm.js
 import React, { useState } from 'react';
-// import './SignIn.css'; // Ensure to import your CSS
+//  import './SignIn.css'; // Ensure to import your CSS
+
 
 const SignIn = () => {
     const [isActive, setIsActive] = useState(false);
