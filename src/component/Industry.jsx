@@ -4,9 +4,9 @@ import Post from './Post'
 const Industry = ({title,content,wave}) => {
   return (
     <>    
-<div class="container text-start">
-  <div class="row">
-    <div class="col">
+<div className="container text-start">
+  <div className="row">
+    <div className="col">
         <h1 className='my-5' style={{fontSize:'15vmin'}}>{title}</h1>
         <h5 className='text-start' style={{color:'#F9BC6E'}}>{content}</h5>
     </div>

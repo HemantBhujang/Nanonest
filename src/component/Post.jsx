@@ -2,15 +2,15 @@ import React from 'react'
 
 const Post = () => {
   return (
-    <div class="container text-center">
-  <div class="row">
-    <div class="col">
+    <div className="container text-center">
+  <div className="row">
+    <div className="col">
       Column
     </div>
-    <div class="col">
+    <div className="col">
       Column
     </div>
-    <div class="col">
+    <div className="col">
       Column
     </div>
   </div>
