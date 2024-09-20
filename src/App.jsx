@@ -11,7 +11,7 @@ import wave from '../src/assets/Wave.jpg';
 import webDesign from './assets/Web Design 1.png'
 import SignIn from './component/SignIn'
 import AfterLogin from './component/AfterLogin';
-import Tabish from './assets/Tabish Khan.jpg'
+// import Tabish from './assets/Tabish Khan.jpg'
 
 const App = () => {
   return (
@@ -32,10 +32,6 @@ const App = () => {
               <AfterLogin title='Welcom, Sakshi' 
               content='where your entrepreneurial journey meets limitless growth and opportunity!'
               wave={wave}
-              ProfilePic={Tabish}
-              Name="Tabish Khan"
-              CName="Aura Digital"
-              Website="auradigital.in"
              />
             </>
           }/>
