@@ -12,8 +12,22 @@ import Typography from '@mui/material/Typography';
 import LogIn from '../assets/LogIn.jpg';
 import Divider from '@mui/material/Divider';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { Link as RouterLink } from 'react-router-dom';
 
-export default function SignInSide({ toggleForm }) {
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        NanoNest
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+export default function SignInSide() {
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
@@ -110,9 +124,9 @@ export default function SignInSide({ toggleForm }) {
 </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" variant="body2" onClick={toggleForm}>
-                {"Don't have an account? Sign Up"}
-              </Link>
+            <RouterLink to="/signup" variant="body2">
+                 {"Don't have an account? Sign Up"}
+              </RouterLink>
             </Grid>
           </Grid>
         </Box>
@@ -138,6 +152,10 @@ export default function SignInSide({ toggleForm }) {
               Sign in with Facebook
             </Button>
           </Box>
+
+          <Box mt={5}>
+              <Copyright />
+            </Box>
       </Grid>
     </Grid>
   );

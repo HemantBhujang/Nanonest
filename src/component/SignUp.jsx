@@ -11,13 +11,17 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import SignUp from '../assets/SignUp.png';
+import Divider from '@mui/material/Divider';
+import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { Link as RouterLink } from 'react-router-dom';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        NanoNest
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -35,7 +39,7 @@ export default function SignUpSide() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundImage: `url(${SignUp})`,
           backgroundRepeat: 'no-repeat',
           backgroundColor: (theme) =>
             theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -78,6 +82,16 @@ export default function SignUpSide() {
               name="firstName"
               autoComplete="fname"
               autoFocus
+              sx={{  
+                '& .MuiOutlinedInput-root': {  
+                  '&:hover fieldset': {  
+                    borderColor: '#F9BC6E', // Border color on hover  
+                  },  
+                  '&.Mui-focused fieldset': {  
+                    borderColor: '#F9BC6E', // Border color when focused  
+                  },  
+                },  
+              }}
             />
             <TextField
               variant="outlined"
@@ -88,6 +102,16 @@ export default function SignUpSide() {
               label="Last Name"
               name="lastName"
               autoComplete="lname"
+              sx={{  
+                '& .MuiOutlinedInput-root': {  
+                  '&:hover fieldset': {  
+                    borderColor: '#F9BC6E', // Border color on hover  
+                  },  
+                  '&.Mui-focused fieldset': {  
+                    borderColor: '#F9BC6E', // Border color when focused  
+                  },  
+                },  
+              }}
             />
             <TextField
               variant="outlined"
@@ -98,6 +122,16 @@ export default function SignUpSide() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              sx={{  
+                '& .MuiOutlinedInput-root': {  
+                  '&:hover fieldset': {  
+                    borderColor: '#F9BC6E', // Border color on hover  
+                  },  
+                  '&.Mui-focused fieldset': {  
+                    borderColor: '#F9BC6E', // Border color when focused  
+                  },  
+                },  
+              }}
             />
             <TextField
               variant="outlined"
@@ -109,6 +143,16 @@ export default function SignUpSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              sx={{  
+                '& .MuiOutlinedInput-root': {  
+                  '&:hover fieldset': {  
+                    borderColor: '#F9BC6E', // Border color on hover  
+                  },  
+                  '&.Mui-focused fieldset': {  
+                    borderColor: '#F9BC6E', // Border color when focused  
+                  },  
+                },  
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -119,18 +163,40 @@ export default function SignUpSide() {
               fullWidth
               variant="contained"
               color="primary"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, backgroundColor: '#F9BC6E',  }}
             >
               Sign Up
             </Button>
             <Grid container>
               <Grid item xs>
-              <Link href="#" variant="body2" onClick={toggleForm}>
-                  {"Already have an account? Sign In"}
-               </Link>
+              <RouterLink to="/signIn" variant="body2">
+                 {"Don't have an account? Sign In"}
+              </RouterLink>
 
               </Grid>
             </Grid>
+            <Divider>or</Divider>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="outlined"
+              onClick={() => alert('Sign in with Google')}
+              startIcon={<GoogleIcon />}
+            >
+              Sign in with Google
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="outlined"
+              onClick={() => alert('Sign in with Facebook')}
+              startIcon={<FacebookIcon />}
+            >
+              Sign in with Facebook
+            </Button>
+          </Box>
+
             <Box mt={5}>
               <Copyright />
             </Box>
