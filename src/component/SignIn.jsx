@@ -1,70 +1,126 @@
-// AuthForm.js
-import React, { useState } from 'react';
-//  import './SignIn.css'; // Ensure to import your CSS
+import React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
 
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
-const SignIn = () => {
-    const [isActive, setIsActive] = useState(false);
- 
-
-    const handleRegisterClick = () => {
-        setIsActive(true);
-    };
-
-    const handleLoginClick = () => {
-        setIsActive(false);
-    };
-
-    return (
-        <div className={`container ${isActive ? 'active' : ''}`} id="container">
-            <div className="form-container sign-up">
-                <form>
-                    <h1>Create Account</h1>
-                    <div className="social-icons">
-                        <a href="#" className="icon"><i className="fa-brands fa-google-plus-g"></i></a>
-                        <a href="#" className="icon"><i className="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" className="icon"><i className="fa-brands fa-github"></i></a>
-                        <a href="#" className="icon"><i className="fa-brands fa-linkedin-in"></i></a>
-                    </div>
-                    <span>or use your email for registration</span>
-                    <input type="text" placeholder="Name" />
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <button type="submit">Sign Up</button>
-                </form>
-            </div>
-            <div className="form-container sign-in">
-                <form>
-                    <h1>Sign In</h1>
-                    <div className="social-icons">
-                        <a href="#" className="icon"><i className="fa-brands fa-google-plus-g"></i></a>
-                        <a href="#" className="icon"><i className="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" className="icon"><i className="fa-brands fa-github"></i></a>
-                        <a href="#" className="icon"><i className="fa-brands fa-linkedin-in"></i></a>
-                    </div>
-                    <span>or use your email and password</span>
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <a href="#">Forget Your Password?</a>
-                    <button type="submit">Sign In</button>
-                </form>
-            </div>
-            <div className="toggle-container">
-                <div className="toggle">
-                    <div className="toggle-panel toggle-left">
-                        <h1>Welcome Back!</h1>
-                        <p>Enter your personal details to use all site features</p>
-                        <button className="hidden" onClick={handleLoginClick}>Sign In</button>
-                    </div>
-                    <div className="toggle-panel toggle-right">
-                        <h1>Hello, Friend!</h1>
-                        <p>Register with your personal details to use all site features</p>
-                        <button className="hidden" onClick={handleRegisterClick}>Sign Up</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export default SignIn;
+export default function SignInSide() {
+  return (
+    <Grid container component="main" sx={{ height: '100vh' }}>
+      <CssBaseline />
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        sx={{
+          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={5}
+        component={Paper}
+        elevation={6}
+        square
+      >
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, backgroundColor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" noValidate sx={{ mt: 1 }}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+            <Box mt={5}>
+              <Copyright />
+            </Box>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
+  );
+}
