@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';  
+
+import { auth } from './Firebase'; 
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth"; // Import necessary Firebase authentication methods
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,7 +16,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import SignUp from '../assets/SignUp.png';
 import Divider from '@mui/material/Divider';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import { Link as RouterLink } from 'react-router-dom';
 
 function Copyright() {
@@ -30,6 +33,40 @@ function Copyright() {
 }
 
 export default function SignUpSide() {
+
+  const [firstName, setFirstName] = useState('');  
+  const [lastName, setLastName] = useState('');  
+  const [email, setEmail] = useState('');  
+  const [password, setPassword] = useState('');  
+  const [error, setError] = useState(null);  
+  
+  const handleSignUp = async (event) => {  
+   event.preventDefault();  
+   try {  
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);  
+    const user = userCredential.user;  
+    console.log('User created:', user);  
+
+    // Updating the user's profile with the first and last name  
+    await updateProfile(user, {  
+      displayName: `${firstName} ${lastName}`,  
+    });  
+   } catch (error) {  
+    setError(error.message);  
+   }  
+  };  
+  
+  const handleGoogleSignIn = async () => {  
+    try {
+      const provider = new GoogleAuthProvider();  
+      const result = await signInWithPopup(auth, provider);  
+      const user = result.user;  
+      console.log('User signed in with Google:', user);
+    } catch (error) {
+      setError(error.message);
+    }
+  };  
+
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
@@ -82,6 +119,8 @@ export default function SignUpSide() {
               name="firstName"
               autoComplete="fname"
               autoFocus
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               sx={{  
                 '& .MuiOutlinedInput-root': {  
                   '&:hover fieldset': {  
@@ -102,6 +141,8 @@ export default function SignUpSide() {
               label="Last Name"
               name="lastName"
               autoComplete="lname"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               sx={{  
                 '& .MuiOutlinedInput-root': {  
                   '&:hover fieldset': {  
@@ -122,6 +163,8 @@ export default function SignUpSide() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               sx={{  
                 '& .MuiOutlinedInput-root': {  
                   '&:hover fieldset': {  
@@ -143,6 +186,8 @@ export default function SignUpSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               sx={{  
                 '& .MuiOutlinedInput-root': {  
                   '&:hover fieldset': {  
@@ -163,45 +208,40 @@ export default function SignUpSide() {
               fullWidth
               variant="contained"
               color="primary"
+              onClick={handleSignUp} 
               sx={{ mt: 3, mb: 2, backgroundColor: '#F9BC6E',  }}
             >
               Sign Up
             </Button>
             <Grid container>
               <Grid item xs>
-              <RouterLink to="/signIn" variant="body2">
-                 {"Don't have an account? Sign In"}
-              </RouterLink>
-
+                <RouterLink to="/signIn" variant="body2">
+                  {"Don't have an account? Sign In"}
+                </RouterLink>
               </Grid>
             </Grid>
             <Divider>or</Divider>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Google')}
-              startIcon={<GoogleIcon />}
-            >
-              Sign in with Google
-            </Button>
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Facebook')}
-              startIcon={<FacebookIcon />}
-            >
-              Sign in with Facebook
-            </Button>
-          </Box>
-
-            <Box mt={5}>
-              <Copyright />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={handleGoogleSignIn}
+                startIcon={<GoogleIcon />}
+              >
+                Sign Up with Google
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<FacebookIcon />}
+              >
+                Sign Up with Facebook
+              </Button>
             </Box>
+            {error && <Typography color="error">{error}</Typography>}
           </Box>
         </Box>
+        <Copyright />
       </Grid>
     </Grid>
   );
