@@ -12,6 +12,7 @@ import webDesign from './assets/Web Design 1.png'
 import SignIn from './component/SignIn'
 import SignUp from './component/SignUp'; 
 import AfterLogin from './component/AfterLogin';
+import Profile from './component/Profile';
 // import Tabish from './assets/Tabish Khan.jpg'
 
 const App = () => {
@@ -29,11 +30,8 @@ const App = () => {
               <Section2 />
               <Appointment />
               <Testimonials />
-              {/* <SignIn/> */}
-              <AfterLogin title='Welcom, Sakshi' 
-              content='where your entrepreneurial journey meets limitless growth and opportunity!'
-              wave={wave}
-             />
+              <Profile />
+              {/* <SignIn/> */} 
             </>
           }/>
           
@@ -54,6 +52,8 @@ const App = () => {
           }/>
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="AfterLogin" element ={<AfterLogin wave={wave} title='Welcom, Sakshi' 
+              content='where your entrepreneurial journey meets limitless growth and opportunity!'/>} />
         </Routes>
       </div>
     </Router>
