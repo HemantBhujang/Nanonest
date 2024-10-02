@@ -12,7 +12,7 @@ import webDesign from './assets/Web Design 1.png'
 import SignIn from './component/SignIn'
 import SignUp from './component/SignUp'; 
 import AfterLogin from './component/AfterLogin';
-// import Tabish from './assets/Tabish Khan.jpg'
+// import Tabish from '../assets/Tabish Khan.jpg'
 
 const App = () => {
   return (

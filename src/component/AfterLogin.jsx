@@ -1,6 +1,8 @@
 import React from 'react'
 import Post from './Post'
 import Tabish from '../assets/Tabish Khan.jpg'
+import Profile from './Profile'
+import Sakshi from '../assets/Sakshi.jpg'
 
 const AfterLogin = ({title,content,wave}) => {
   return (
@@ -32,6 +34,9 @@ const AfterLogin = ({title,content,wave}) => {
               Name="Tabish Khan"
               Content="Aura Digital"
               Button="View Profile" />
+
+    <Profile Profile={Sakshi} />
+
               
     </>
 
