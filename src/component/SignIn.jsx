@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,10 +10,11 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import LogIn from '../assets/LogIn.jpg';
 import Divider from '@mui/material/Divider';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { GoogleIcon, FacebookIcon } from './CustomIcons';
+import { signInWithEmail, signInWithGoogle } from './AuthService'; // Custom auth functions
 import { Link as RouterLink } from 'react-router-dom';
+import Profile from './Profile';
 
 function Copyright() {
   return (
@@ -28,6 +30,43 @@ function Copyright() {
 }
 
 export default function SignInSide() {
+  const navigate = useNavigate();
+
+  // Handle email/password sign-in
+  const handleEmailSignIn = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+
+    try {
+      const user = await signInWithEmail(email, password);
+      if (user) {
+        navigate('/AfterLogin'); // Redirect to Home.jsx on success
+      } else {
+        alert('Invalid credentials. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error during sign in:', error);
+      alert('Error during sign-in. Please try again.');
+    }
+  };
+
+  // Handle Google sign-in
+  const handleGoogleSignIn = async () => {
+    try {
+      const user = await signInWithGoogle();
+      if (user) {
+        navigate('/AfterLogin'); // Redirect to Home.jsx on success
+      } else {
+        alert('Google sign-in failed.');
+      }
+    } catch (error) {
+      console.error('Error during Google sign-in:', error);
+      alert('Error during Google sign-in. Please try again.');
+    }
+  };
+
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
@@ -37,7 +76,7 @@ export default function SignInSide() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url(${LogIn})`,
+          backgroundImage: `url(../assets/LogIn.jpg)`,
           backgroundRepeat: 'no-repeat',
           backgroundColor: (t) =>
             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -67,95 +106,83 @@ export default function SignInSide() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" noValidate sx={{ mt: 1 }}>  
-  <TextField  
-    margin="normal"  
-    required  
-    fullWidth  
-    id="email"  
-    label="Email Address"  
-    name="email"  
-    autoComplete="email"  
-    autoFocus  
-    sx={{  
-      '& .MuiOutlinedInput-root': {  
-        '&:hover fieldset': {  
-          borderColor: '#F9BC6E', // Border color on hover  
-        },  
-        '&.Mui-focused fieldset': {  
-          borderColor: '#F9BC6E', // Border color when focused  
-        },  
-      },  
-    }}  
-  />  
-  <TextField  
-    margin="normal"  
-    required  
-    fullWidth  
-    name="password"  
-    label="Password"  
-    type="password"  
-    id="password"  
-    autoComplete="current-password"  
-    sx={{  
-      '& .MuiOutlinedInput-root': {    
-        '&:hover fieldset': {  
-          borderColor: '#F9BC6E', // Border color on hover  
-        },  
-        '&.Mui-focused fieldset': {  
-          borderColor: '#F9BC6E', // Border color when focused  
-        },  
-      },  
-    }}  
-  />  
-
-         <Button  
-           type="submit"  
-           fullWidth  
-           variant="contained"  
-           sx={{  
-           mt: 3,  
-           mb: 2,  
-           backgroundColor: '#F9BC6E',  
-         
-  }}  
->  
-  Sign In  
-</Button>
+        <Box component="form" noValidate onSubmit={handleEmailSignIn} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#F9BC6E',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#F9BC6E',
+                },
+              },
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#F9BC6E',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#F9BC6E',
+                },
+              },
+            }}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: '#F9BC6E',
+            }}
+          >
+            Sign In
+          </Button>
           <Grid container>
             <Grid item>
-            <RouterLink to="/signup" variant="body2">
-                 {"Don't have an account? Sign Up"}
+              <RouterLink to="/signup" variant="body2">
+                {"Don't have an account? Sign Up"}
               </RouterLink>
             </Grid>
           </Grid>
         </Box>
 
         <Divider>or</Divider>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Google')}
-              startIcon={<GoogleIcon />}
-            >
-              Sign in with Google
-            </Button>
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Facebook')}
-              startIcon={<FacebookIcon />}
-            >
-              Sign in with Facebook
-            </Button>
-          </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleGoogleSignIn}
+            startIcon={<GoogleIcon />}
+          >
+            Sign in with Google
+          </Button>
+        </Box>
 
-          <Box mt={5}>
-              <Copyright />
-            </Box>
+        <Box mt={5}>
+          <Copyright />
+        </Box>
       </Grid>
     </Grid>
   );

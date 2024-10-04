@@ -3,7 +3,8 @@ import Post from './Post'
 import Tabish from '../assets/Tabish Khan.jpg'
 import Profile from './Profile'
 import Sakshi from '../assets/Sakshi.jpg'
-
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
+import VisitProfile from '../component/VisitProfile'
 const AfterLogin = ({title,content,wave}) => {
   return (
     <>    
@@ -26,6 +27,12 @@ const AfterLogin = ({title,content,wave}) => {
               Name="Tabish Khan"
               Content="Aura Digital"
               Button="View Profile" />
+    <Router>
+      <Routes>
+        <Route exact path="visit_profile" element={<VisitProfile/>} />
+      </Routes>
+    </Router>
+    
     <Post ProfilePic={Tabish}
               Name="Tabish Khan"
               Content="Aura is a new-age digital consultancy. We help brands grow digitally through Social Media Management, Branding, Animations, Web Development. We're a one-stop shop for all your digital needs."
