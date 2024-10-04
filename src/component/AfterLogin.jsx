@@ -7,7 +7,13 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import VisitProfile from '../component/VisitProfile'
 const AfterLogin = ({title,content,wave}) => {
   return (
-    <>    
+    <> 
+    <Navbar2
+    title='NanoNest'   
+    msg='Message'   
+    notification='Notification'
+    button ='Profile'
+    />
     <div className='container text-start my-5'>
         <h1 style={{fontSize:'8vmin'}} className='my-3'>{title}</h1>
         <h3 style={{fontSize:'4vmin', color:'#F9BC6E'}}>{content}</h3> 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from "../assets/react.svg";
 
-const Navbar = ({ title, services, industry, about, team, more, faq, in_faq, blog }) => {
+const Navbar = ({ title, services, industry, about, team, more, faq, in_faq, blog, button }) => {
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary shadow p-2 mb-4 bg-white rounded">
@@ -40,7 +40,9 @@ const Navbar = ({ title, services, industry, about, team, more, faq, in_faq, blo
                 </ul>
               </li>
             </ul>
-            <button type="button" className="btn btn-outline-warning mx-3">Contact Us</button>
+            
+            <button type="button" className="btn btn-outline-warning mx-3">{button}</button>
+            
           </div>
         </div>
       </nav>
