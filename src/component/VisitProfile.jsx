@@ -2,7 +2,7 @@ import React from 'react'
 
 const VisitProfile = () => {
   return (
-    <div>
+    <div className='container'>
         
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
   Launch static backdrop modal

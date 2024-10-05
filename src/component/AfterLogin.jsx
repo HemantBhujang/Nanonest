@@ -41,9 +41,10 @@ const AfterLogin = ({title,content,wave}) => {
     <Post ProfilePic={Tabish}
               Name="Tabish Khan"
               Content="Aura is a new-age digital consultancy. We help brands grow digitally through Social Media Management, Branding, Animations, Web Development. We're a one-stop shop for all your digital needs."
-              Button="View Profile" />
+              Button="View Profile" href=""/>
 
     {/* <Profile Profile={Sakshi} /> */}
+    {/* <VisitProfile /> */}
 
               
     </>
