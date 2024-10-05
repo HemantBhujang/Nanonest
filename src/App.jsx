@@ -68,7 +68,7 @@ const MainLayout = () => {
         <Route path="/services" element={  
           <Services   
             title='Services'  
-            content='All our digital marketing services start with a free 30-minute consultation call where we find the best strategy towards reaching your goals.'  
+            content='All our digital marketing services start with a free 30 minute consultation call where we find the best strategy towards reaching your goals.'  
             itWorker={webDesign}  
           />  
         } />  
