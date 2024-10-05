@@ -25,7 +25,7 @@ const App = () => {
 
 // Create a separate component for layout  
 const MainLayout = () => {  
-  const location = useLocation();  
+  // const location = useLocation();  
   
   // Define the paths where you do not want to render Navbar  
   const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin'];  

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const Navbar = ({ title, msg,notification, button }) => {
+const Navbar2 = ({ title, msg,notification, button }) => {
   const navigate =useNavigate();
   const handleButtonClick=()=>{
     navigate('/profile');
@@ -40,4 +40,4 @@ const Navbar = ({ title, msg,notification, button }) => {
   );
 }
 
-export default Navbar;
+export default Navbar2;

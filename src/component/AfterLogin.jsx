@@ -5,6 +5,7 @@ import Profile from './Profile'
 import Sakshi from '../assets/Sakshi.jpg'
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import VisitProfile from '../component/VisitProfile'
+import Navbar2 from './Navbar2'
 const AfterLogin = ({title,content,wave}) => {
   return (
     <> 
