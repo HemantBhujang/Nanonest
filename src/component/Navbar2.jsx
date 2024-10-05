@@ -1,8 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from "../assets/react.svg";
+import { useNavigate } from 'react-router-dom'; 
 
-const Navbar = ({ title, msg,notification,button }) => {
+
+
+const Navbar = ({ title, msg,notification, button }) => {
+  const navigate =useNavigate();
+  const handleButtonClick=()=>{
+    navigate('/profile');
+  }
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary shadow p-2 mb-4 bg-white rounded">
@@ -17,14 +24,14 @@ const Navbar = ({ title, msg,notification,button }) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-                <Link className="nav-link active mx-3" to="#">{msg}</Link>
+                <Link className="nav-link active mx-3" to="/#">{msg}</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="#">{notification}</Link>
               </li>
              </ul>
            
-            <button type="button" className="btn btn-outline-warning mx-3">{button}</button>
+            <button type="button" className="btn btn-outline-warning mx-3" onClick={handleButtonClick}>{button}</button>
             
           </div>
         </div>
