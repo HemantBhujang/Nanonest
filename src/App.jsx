@@ -58,7 +58,7 @@ const MainLayout = () => {
             <Section2 />  
             <Appointment />  
             <Testimonials />  
-            <Profile />  
+          
             {/* <SignIn /> */}  
           </>  
         }/>  
@@ -81,9 +81,11 @@ const MainLayout = () => {
         }/>  
 
         <Route path="/signIn" element={<SignIn />} />  
-        <Route path="/signup" element={<SignUp />} />  
+        <Route path="/signup" element={<SignUp />} /> 
+        <Route path ="Profile" element={<Profile /> }/>
+
         <Route path="/AfterLogin" element={  
-          <AfterLogin   
+          <AfterLogin
             wave={wave}   
             title='Welcome, Sakshi'   
             content='where your entrepreneurial journey meets limitless growth and opportunity!'   
