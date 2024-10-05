@@ -24,7 +24,7 @@ const Profile = ({Profile}) => {
                     <h6>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius, doloribus expedita. Explicabo cupiditate est quod reiciendis consequatur distinctio voluptatem illo exercitationem deserunt quaerat eius incidunt, optio veniam natus labore unde.</h6>
                     </div>
                     </div>
-
+                    <h1 className='container my-5'>Dashboard Of Investment</h1>
                     <ol class="list-group list-group-numbered m-5">
                     <li class="list-group-item d-flex justify-content-between align-items-start">
                         <div class="ms-2 me-auto">
