@@ -34,11 +34,11 @@ const AfterLogin = ({title,content,wave}) => {
               Name="Tabish Khan"
               Content="Aura Digital"
               Button="View Profile" />
-    <Router>
+    {/* <Router>
       <Routes>
         <Route exact path="visit_profile" element={<VisitProfile/>} />
       </Routes>
-    </Router>
+    </Router> */}
     
     <Post ProfilePic={Tabish}
               Name="Tabish Khan"
