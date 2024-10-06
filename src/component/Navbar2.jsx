@@ -14,7 +14,7 @@ const Navbar2 = ({ title, msg,notification, button }) => {
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary shadow p-2 mb-4 bg-white rounded">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand">
             <img src={logo} alt="Logo" width="30" height="24" className="d-inline-block align-text-top mx-2"></img>
             {title}
           </Link>
@@ -24,7 +24,7 @@ const Navbar2 = ({ title, msg,notification, button }) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-                <Link className="nav-link active mx-3" to="/#">{msg}</Link>
+                <Link className="nav-link active mx-3" to="#">{msg}</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="#">{notification}</Link>
@@ -32,6 +32,7 @@ const Navbar2 = ({ title, msg,notification, button }) => {
              </ul>
            
             <button type="button" className="btn btn-outline-warning mx-3" onClick={handleButtonClick}>{button}</button>
+            
             
           </div>
         </div>
