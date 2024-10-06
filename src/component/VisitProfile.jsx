@@ -1,28 +1,31 @@
-// UserProfile.js
 import React from 'react';
+import tabish from '../assets/Tabish Khan.jpg';
+
 const VisitProfile = () => {
-       return (
-        <div className="container mt-5">
-            <h1 className="text-center">'s Profile</h1>
-            <div className="card mt-4">
-                <div className="card-body">
-                    <h5 className="card-title">Personal Information</h5>
-                    <p className="card-text"><strong>Age:</strong> </p>
-                    <p className="card-text"><strong>Email:</strong> </p>
-                    <Link to="/" className="btn btn-primary">Back to User List</Link>
+    return (
+        <> 
+        <div className="container text-center my-5 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+            <div className="row">
+                <div className="col">
+                    <img src={tabish} alt="Profile Picture" style={{height:'30rem', borderRadius: '20px'}} />
+                </div>
+                <div className="col d-flex flex-column justify-content-between">
+                    <div>
+                        <h1 style={{fontSize:'4rem'}}>Tabish Khan</h1>
+                        <h5 style={{color:'#969696'}}>Aura Digital</h5>
+                        <h5 style={{color:'#969696',fontSize:'1rem'}} className='my-5'>Aura is a new-age digital consultancy. We help brands grow digitally through Social Media Management, Branding, Animations, Web Development. We're a one-stop shop for all your digital needs.</h5>
+                    </div>
+                    <div className="mt-auto">
+                        <div className="btn-group" role="group" aria-label="Basic outlined example">
+                            <button type="button" className="btn btn-outline-warning">Add to List</button>
+                            <button type="button" className="btn btn-outline-warning">Message</button>
+                            <button type="button" className="btn btn-outline-warning">Invest</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <h2 className="mt-5">Posts</h2>
-            <div className="list-group mt-3">
-                {user.posts.map(post => (
-                    <div key={post.id} className="list-group-item">
-                        <h5 className="mb-1"></h5>
-                        <p className="mb-1"></p>
-                    </div>
-                ))}
-            </div>
         </div>
+        </>
     );
 };
 

@@ -14,6 +14,7 @@ import Divider from '@mui/material/Divider';
 import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import { signInWithEmail, signInWithGoogle } from './AuthService'; // Custom auth functions
 import { Link as RouterLink } from 'react-router-dom';
+import real_img from '../assets/real_img.png'
 import Profile from './Profile';
 
 function Copyright() {
@@ -76,12 +77,12 @@ export default function SignInSide() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url(../assets/LogIn.jpg)`,
+          backgroundImage: `url(${real_img})`,
           backgroundRepeat: 'no-repeat',
           backgroundColor: (t) =>
             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundSize: '150%',
+          backgroundPosition: 'start',
         }}
       />
       <Grid
