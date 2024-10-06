@@ -13,6 +13,7 @@ import SignIn from './component/SignIn'
 import SignUp from './component/SignUp'; 
 import AfterLogin from './component/AfterLogin';
 import Profile from './component/Profile'
+import VisitProfile from './component/VisitProfile';
 // import Tabish from './assets/Tabish Khan.jpg'
 
 const App = () => {  
@@ -84,6 +85,7 @@ const MainLayout = () => {
         <Route path="/signIn" element={<SignIn />} />  
         <Route path="/signup" element={<SignUp />} /> 
         <Route path ="Profile" element={<Profile /> }/>
+        <Route path ="VisitProfile" element={<VisitProfile /> }/>
 
         <Route path="/AfterLogin" element={  
           <AfterLogin
