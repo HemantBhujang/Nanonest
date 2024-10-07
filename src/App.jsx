@@ -1,4 +1,4 @@
-import React from 'react';  
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';  
 import Navbar from './component/Navbar';  
 import HeroSection from './component/HeroSection';  
@@ -13,23 +13,33 @@ import SignIn from './component/SignIn';
 import SignUp from './component/SignUp';  
 import AfterLogin from './component/AfterLogin';  
 import Profile from './component/Profile';  
+import { getAuth, onAuthStateChanged } from "firebase/auth";  // Import Firebase Auth
 
 const App = () => {  
+  const [user, setUser] = useState(null);  // State to hold the current user
+
+  useEffect(() => {
+    const auth = getAuth();
+    // Monitor the authentication state
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser); // Set the logged-in user data
+      } else {
+        setUser(null); // No user is signed in
+      }
+    });
+  }, []);
+
   return (  
     <Router>  
-      <MainLayout />  
+      <MainLayout user={user} />  {/* Pass user data to the MainLayout */}
     </Router>  
   );  
 };  
 
-// Create a separate component for layout  
-const MainLayout = () => {  
+const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  
-  // Define the paths where you do not want to render Navbar  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin' , '/profile'];  
-
-  // Check if the current path is in the noNavbarPaths array  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile'];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
@@ -49,21 +59,16 @@ const MainLayout = () => {
         />  
       )}  
 
-      {/* Define routes */}  
       <Routes>  
-        {/* Home route with multiple components */}  
         <Route path="/" element={  
           <>  
             <HeroSection />  
             <Section2 />  
             <Appointment />  
             <Testimonials />  
-          
-            {/* <SignIn /> */}  
           </>  
         }/>  
 
-        {/* Services route */}  
         <Route path="/services" element={  
           <Services   
             title='Services'  
@@ -87,13 +92,13 @@ const MainLayout = () => {
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
-            title='Welcome, Sakshi'   
+            title={`Welcome, ${user?.displayName || 'User'}`}  // Dynamically pass user's name
             content='where your entrepreneurial journey meets limitless growth and opportunity!'   
           />  
         } />  
       </Routes>  
     </div>  
   );  
-}  
+};  
 
 export default App;
