@@ -11,11 +11,12 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { GoogleIcon, FacebookIcon } from './CustomIcons';
+import { GoogleIcon } from './CustomIcons';
 import { signInWithEmail, signInWithGoogle } from './AuthService'; // Custom auth functions
 import { Link as RouterLink } from 'react-router-dom';
-import real_img from '../assets/real_img.png'
-import Profile from './Profile';
+import real_img from '../assets/real_img.png';
+import { sendPasswordResetEmail } from 'firebase/auth'; // Import Firebase reset email function
+import { auth } from './Firebase'; // Ensure this is correctly imported
 
 function Copyright() {
   return (
@@ -33,7 +34,6 @@ function Copyright() {
 export default function SignInSide() {
   const navigate = useNavigate();
 
-  // Handle email/password sign-in
   const handleEmailSignIn = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -43,7 +43,7 @@ export default function SignInSide() {
     try {
       const user = await signInWithEmail(email, password);
       if (user) {
-        navigate('/AfterLogin'); // Redirect to Home.jsx on success
+        navigate('/AfterLogin');
       } else {
         alert('Invalid credentials. Please try again.');
       }
@@ -53,18 +53,30 @@ export default function SignInSide() {
     }
   };
 
-  // Handle Google sign-in
   const handleGoogleSignIn = async () => {
     try {
       const user = await signInWithGoogle();
       if (user) {
-        navigate('/AfterLogin'); // Redirect to Home.jsx on success
+        navigate('/AfterLogin');
       } else {
         alert('Google sign-in failed.');
       }
     } catch (error) {
       console.error('Error during Google sign-in:', error);
       alert('Error during Google sign-in. Please try again.');
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const email = prompt('Please enter your email to reset password:');
+    if (!email) return;
+
+    try {
+      await sendPasswordResetEmail(auth, email); // Use 'auth' instead of 'firebaseAuth'
+      alert('Password reset email sent! Please check your inbox.');
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+      alert('Error sending password reset email. Please try again.');
     }
   };
 
@@ -79,8 +91,6 @@ export default function SignInSide() {
         sx={{
           backgroundImage: `url(${real_img})`,
           backgroundRepeat: 'no-repeat',
-          backgroundColor: (t) =>
-            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
           backgroundSize: '150%',
           backgroundPosition: 'start',
         }}
@@ -161,6 +171,11 @@ export default function SignInSide() {
             Sign In
           </Button>
           <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2" onClick={handleForgotPassword}>
+                Forgot password?
+              </Link>
+            </Grid>
             <Grid item>
               <RouterLink to="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
