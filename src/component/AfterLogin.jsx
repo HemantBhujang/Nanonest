@@ -1,8 +1,6 @@
 import React from 'react'
 import Post from './Post'
 import Tabish from '../assets/Tabish Khan.jpg'
-import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
-import VisitProfile from '../component/VisitProfile'
 import Navbar2 from './Navbar2'
 const AfterLogin = ({title,content,wave}) => {
   return (
@@ -11,6 +9,7 @@ const AfterLogin = ({title,content,wave}) => {
     title='NanoNest'   
     msg='Message'   
     notification='Notification'
+    menu='Menu'
     button ='Profile'
     />
     <div className='container text-start my-5'>
@@ -28,25 +27,16 @@ const AfterLogin = ({title,content,wave}) => {
         <li><a class="dropdown-item" href="#">Other</a></li>
       </ul>
     </div>
-    <Post ProfilePic={Tabish}
+
+    <Post 
               Name="Tabish Khan"
               Content="Aura Digital"
               Button="View Profile" />
-    {/* <Router>
-      <Routes>
-        <Route exact path="visit_profile" element={<VisitProfile/>} />
-      </Routes>
-    </Router> */}
     
     <Post ProfilePic={Tabish}
               Name="Tabish Khan"
               Content="Aura is a new-age digital consultancy. We help brands grow digitally through Social Media Management, Branding, Animations, Web Development. We're a one-stop shop for all your digital needs."
-              Button="View Profile" href=""/>
-
-    {/* <Profile Profile={Sakshi} /> */}
-    {/* <VisitProfile /> */}
-
-              
+              Button="View Profile" href=""/>              
     </>
 
   )

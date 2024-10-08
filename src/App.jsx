@@ -14,6 +14,9 @@ import SignUp from './component/SignUp';
 import AfterLogin from './component/AfterLogin';  
 import Profile from './component/Profile';  
 import { getAuth, onAuthStateChanged } from "firebase/auth";  // Import Firebase Auth
+import VisitProfile from './component/VisitProfile';
+import Testimonial from './component/Testimonial';
+import Menu from './component/Menu';
 
 const App = () => {  
   const [user, setUser] = useState(null);  // State to hold the current user
@@ -39,7 +42,7 @@ const App = () => {
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile'];  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu'];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
@@ -62,10 +65,13 @@ const MainLayout = ({ user }) => {
       <Routes>  
         <Route path="/" element={  
           <>  
+          <Testimonial />
             <HeroSection />  
             <Section2 />  
             <Appointment />  
-            <Testimonials />  
+            <Testimonials /> 
+            
+            
           </>  
         }/>  
 
@@ -86,7 +92,9 @@ const MainLayout = ({ user }) => {
         }/>  
 
         <Route path="/signIn" element={<SignIn />} />  
-        <Route path="/signup" element={<SignUp />} /> 
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/VisitProfile" element={<VisitProfile />} />
+        <Route path="Profile/Menu" element ={<Menu />}/>
        
         <Route path="/profile" element={<Profile />} />
         <Route path="/AfterLogin" element={  

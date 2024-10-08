@@ -1,6 +1,5 @@
 import React,{useState,useEffect} from 'react';
 import { auth } from './Firebase'; // Import the Firebase auth instance
-import { signOut } from 'firebase/auth';
 import Navbar2 from './Navbar2';
 import { getAuth,onAuthStateChanged } from 'firebase/auth';
 
@@ -33,18 +32,7 @@ const Profile = ({ Profile }) => {
     });
   }, []);
 
-  // Handle Logout Function
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("User signed out");
-        // Optionally, you can redirect the user to the login page after logout
-        window.location.href = '/'; 
-      })
-      .catch((error) => {
-        console.error("Error signing out: ", error);
-      });
-  };
+  
 
   return (
     <>
@@ -53,6 +41,7 @@ const Profile = ({ Profile }) => {
         msg='Message'
         notification='Notification'
         button='Profile'
+        menu='Menu'
       />
 
       <div className="container text-center my-5">
@@ -85,7 +74,7 @@ const Profile = ({ Profile }) => {
           </div>
         </div>
 
-        <h1 className="container my-5">Dashboard Of Investment</h1>
+        {/* <h1 className="container my-5">Dashboard Of Investment</h1>
         <ol className="list-group list-group-numbered m-5">
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
@@ -108,8 +97,7 @@ const Profile = ({ Profile }) => {
             </div>
             <span className="badge text-bg-danger rounded-pill">$29</span>
           </li>
-        </ol>
-        <button type="button" className="btn btn-outline-warning mx-3" onClick={handleLogout}>Logout</button>
+        </ol> */}
       </div>
     </>
   );
