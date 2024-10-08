@@ -1,13 +1,20 @@
 import React from 'react';
 import tabish from '../assets/Tabish Khan.jpg';
+import Navbar2 from './Navbar2';
 
 const VisitProfile = () => {
     return (
         <> 
+        <Navbar2
+    title='NanoNest'   
+    msg='Message'   
+    notification='Notification'
+    button ='Profile'
+    />  
         <div className="container text-center my-5 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
             <div className="row">
                 <div className="col">
-                    <img src={tabish} alt="Profile Picture" style={{height:'30rem', borderRadius: '20px'}} />
+                    <img src={tabish} alt="Profile Picture" style={{height:'50vmin', borderRadius: '20px'}} />
                 </div>
                 <div className="col d-flex flex-column justify-content-between">
                     <div>
