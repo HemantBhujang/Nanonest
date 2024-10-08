@@ -1,9 +1,37 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { auth } from './Firebase'; // Import the Firebase auth instance
 import { signOut } from 'firebase/auth';
 import Navbar2 from './Navbar2';
+import { getAuth,onAuthStateChanged } from 'firebase/auth';
 
 const Profile = ({ Profile }) => {
+
+  const [user, setUser] = useState(null);  // State to hold the current user
+  const [userEmail,setUserEmail] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email); // Set the email state
+      } else {
+        setUserEmail(''); // No user signed in
+      }
+    });
+    return () => unsubscribe(); // Clean up the subscription
+  }, []);
+
+
+  useEffect(() => {
+    const auth = getAuth();
+    // Monitor the authentication state
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser); // Set the logged-in user data
+      } else {
+        setUser(null); // No user is signed in
+      }
+    });
+  }, []);
 
   // Handle Logout Function
   const handleLogout = () => {
@@ -37,14 +65,15 @@ const Profile = ({ Profile }) => {
           </div>
           <div className="col">
             <h6 style={{ opacity: '50%' }}>Your Name</h6>
-            <h6>Sakshi Kakde</h6>
+            <h6>{`${user?.displayName || 'User'}`}</h6>
           </div>
           <div className="col">
             <button type="button" className="btn btn-outline-warning my-5">Edit</button>
           </div>
           <div className="col">
             <h6 style={{ opacity: '50%' }}>Contact Information</h6>
-            <h6>sakshikakde@nanonest.in</h6>
+            {/* <h6>{`${user.email?.displayName || 'User'}`}</h6> */}
+            <h6>{userEmail}</h6>
             <h6>+91987654321</h6>
           </div>
           <div className="col">
