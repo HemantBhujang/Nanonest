@@ -17,6 +17,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";  // Import Firebase
 import VisitProfile from './component/VisitProfile';
 import Testimonial from './component/Testimonial';
 import Menu from './component/Menu';
+import EntrepreneurProfileForm from './component/EntrepreneurProfileForm';
 
 const App = () => {  
   const [user, setUser] = useState(null);  // State to hold the current user
@@ -95,7 +96,7 @@ const MainLayout = ({ user }) => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/VisitProfile" element={<VisitProfile />} />
         <Route path="Profile/Menu" element ={<Menu />}/>
-       
+        <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
         <Route path="/profile" element={<Profile />} />
         <Route path="/AfterLogin" element={  
           <AfterLogin
