@@ -18,6 +18,7 @@ import VisitProfile from './component/VisitProfile';
 //import Testimonial from './component/Testimonial';
 import Menu from './component/Menu';
 import EntrepreneurProfileForm from './component/EntrepreneurProfileForm';
+import MessageSection from './component/MessageSection';
 
 const App = () => {  
   const [user, setUser] = useState(null);  // State to hold the current user
@@ -99,6 +100,7 @@ const MainLayout = ({ user }) => {
        
         <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
         <Route path="/profile" element={<Profile />} />
+        <Route path='/profile/MessageSection' element={<MessageSection />}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
