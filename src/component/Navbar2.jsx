@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const Navbar2 = ({ title, msg,notification, button }) => {
+const Navbar2 = ({ title, msg, notification, menu, button }) => {
   const navigate =useNavigate();
   const handleButtonClick=()=>{
     navigate('/profile');
@@ -28,6 +28,9 @@ const Navbar2 = ({ title, msg,notification, button }) => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="#">{notification}</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link active mx-3" to="/menu">{menu}</Link>
               </li>
              </ul>
            

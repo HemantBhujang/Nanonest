@@ -43,7 +43,7 @@ const App = () => {
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu'];  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile','menu'];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
@@ -94,8 +94,9 @@ const MainLayout = ({ user }) => {
 
         <Route path="/signIn" element={<SignIn />} />  
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/menu" element={<Menu />} />
         <Route path="/VisitProfile" element={<VisitProfile />} />
-        <Route path="Profile/Menu" element ={<Menu />}/>
+       
         <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
         <Route path="/profile" element={<Profile />} />
         <Route path="/AfterLogin" element={  
