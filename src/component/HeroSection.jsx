@@ -26,7 +26,7 @@ const HeroSection = () => {
     We help you grow your <span className="h1" style={{ color: '#F9BC6E', fontSize: '15vmin' }}>Conversation</span>  
 </h1>
     <h5 className='mx-3 my-2'>Featured in leading publications around the world</h5>
-    <button type="button" class="btn btn-lg my-4 mx-2" onClick={()=> navigate('/SignIn')} style={{backgroundColor : '#F9BC6E'}}>SignIn as Investor </button>
+    <button type="button" class="btn btn-lg my-4 mx-2" onClick={handleSignInClick} style={{backgroundColor : '#F9BC6E'}}>SignIn as Investor </button>
 
     <button type="button" class="btn btn-lg my-4 mx-2" style={{backgroundColor : '#F9BC6E'}} onClick={handleSignInClick} >SignIn as Enterpreneur</button>
     </div>
