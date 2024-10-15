@@ -5,7 +5,7 @@ import logo from "../assets/react.svg";
 import { signOut } from 'firebase/auth'; // Assuming you're using Firebase for authentication
 import { auth } from "./Firebase"; // Adjust this import based on your Firebase setup
 
-const Navbar2 = ({ title, msg, notification, button = "Profile", menu }) => {
+const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
   const navigate = useNavigate();
 
   const handleViewProfile = () => {
@@ -46,9 +46,7 @@ const Navbar2 = ({ title, msg, notification, button = "Profile", menu }) => {
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="#">{notification}</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link active mx-3" to="/menu">{menu}</Link>
-              </li>
+              
             </ul>
 
             {/* Dropdown Button for Profile */}

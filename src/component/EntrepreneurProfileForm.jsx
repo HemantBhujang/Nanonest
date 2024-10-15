@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Navbar2 from './Navbar2'
 
 const EntrepreneurProfileForm = () => {
   const [formData, setFormData] = useState({
@@ -33,6 +34,15 @@ const EntrepreneurProfileForm = () => {
   };
 
   return (
+    <>
+    <Navbar2
+    title='NanoNest'   
+    msg='Message'   
+    notification='Notification'
+    menu='Menu'
+    button ='Profile'
+    />
+
     <div className="container my-5">
       <h2 className="text-center text-warning">Entrepreneur Profile</h2>
       <form onSubmit={handleSubmit}>
@@ -152,6 +162,7 @@ const EntrepreneurProfileForm = () => {
         <button type="submit" className="btn btn-warning">Submit</button>
       </form>
     </div>
+    </>
   );
 };
 
