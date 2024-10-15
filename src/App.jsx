@@ -15,7 +15,6 @@ import AfterLogin from './component/AfterLogin';
 import Profile from './component/Profile';  
 import { getAuth, onAuthStateChanged } from "firebase/auth";  // Import Firebase Auth
 import VisitProfile from './component/VisitProfile';
-//import Testimonial from './component/Testimonial';
 import Menu from './component/Menu';
 import EntrepreneurProfileForm from './component/EntrepreneurProfileForm';
 import MessageSection from './component/MessageSection';
@@ -44,7 +43,7 @@ const App = () => {
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','menu'];  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu'];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
@@ -67,7 +66,7 @@ const MainLayout = ({ user }) => {
       <Routes>  
         <Route path="/" element={  
           <>  
-          {/* <Testimonial /> */}
+         
             <HeroSection />  
             <Section2 />  
             <Appointment />  
@@ -95,12 +94,11 @@ const MainLayout = ({ user }) => {
 
         <Route path="/signIn" element={<SignIn />} />  
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/menu" element={<Menu />} />
         <Route path="/VisitProfile" element={<VisitProfile />} />
-       
-        <Route path='/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
+        <Route path="Profile/Menu" element ={<Menu />}/>
+        <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
         <Route path="/profile" element={<Profile />} />
-        <Route path='/MessageSection' element={<MessageSection />}/>
+        <Route path='/profile/MessageSection' element={<MessageSection />}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
