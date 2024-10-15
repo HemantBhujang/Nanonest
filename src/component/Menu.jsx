@@ -1,8 +1,6 @@
 import React from 'react'
 import { auth } from './Firebase';
 import { signOut } from 'firebase/auth';
-
-
 const Menu = () => {
     // Handle Logout Function
   const handleLogout = () => {
@@ -43,11 +41,12 @@ const Menu = () => {
                 <p className="mb-1">Some placeholder content in a paragraph.</p>
                 <small className="text-body-secondary">And some muted small print.</small>
             </a>
+            <a href="EntrepreneurProfileForm" className="list-group-item list-group-item-action" >Edit Profile</a>
             </div>
              <div className="d-grid gap-2 col-6 mx-auto">
                 <button className="btn btn-outline-warning my-5" type="button" onClick={handleLogout}>Logout</button>
+              </div>
                 
-                </div>
     </div>
   )
 }
