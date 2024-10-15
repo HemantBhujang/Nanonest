@@ -44,7 +44,7 @@ const App = () => {
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile','menu'];  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','menu'];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
@@ -98,9 +98,9 @@ const MainLayout = ({ user }) => {
         <Route path="/menu" element={<Menu />} />
         <Route path="/VisitProfile" element={<VisitProfile />} />
        
-        <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
+        <Route path='/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
         <Route path="/profile" element={<Profile />} />
-        <Route path='/profile/MessageSection' element={<MessageSection />}/>
+        <Route path='/MessageSection' element={<MessageSection />}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
