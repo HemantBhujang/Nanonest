@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const Navbar2 = ({ title, msg,notification, button }) => {
+const Navbar2 = ({ title, msg,notification, button,menu }) => {
   const navigate =useNavigate();
   const handleButtonClick=()=>{
     navigate('/profile');
@@ -24,10 +24,13 @@ const Navbar2 = ({ title, msg,notification, button }) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-                <Link className="nav-link active mx-3" to="#">{msg}</Link>
+                <Link className="nav-link active mx-3"  to="MessageSection" >{msg}</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="#">{notification}</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link active mx-3" to="Menu">{menu}</Link>
               </li>
              </ul>
            

@@ -15,7 +15,6 @@ import AfterLogin from './component/AfterLogin';
 import Profile from './component/Profile';  
 import { getAuth, onAuthStateChanged } from "firebase/auth";  // Import Firebase Auth
 import VisitProfile from './component/VisitProfile';
-import Testimonial from './component/Testimonial';
 import Menu from './component/Menu';
 import EntrepreneurProfileForm from './component/EntrepreneurProfileForm';
 import MessageSection from './component/MessageSection';
@@ -67,7 +66,7 @@ const MainLayout = ({ user }) => {
       <Routes>  
         <Route path="/" element={  
           <>  
-          <Testimonial />
+         
             <HeroSection />  
             <Section2 />  
             <Appointment />  

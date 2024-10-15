@@ -3,10 +3,9 @@ import { auth,storage } from './Firebase'; // Import the Firebase auth instance
 import Navbar2 from './Navbar2';
 import { getAuth,onAuthStateChanged } from 'firebase/auth';
 import defaultProfilePic from '../assets/ProfilePic.png'; // Adjust the path as necessary
-
+import wave from "../assets/Wave.jpg"
 const Profile = ({ Profile }) => {
 
-  // const defaultProfilePic = 'https://your-firebase-storage-url/ProfilePic.jpg';
   const [user, setUser] = useState(null);  // State to hold the current user
   const [userEmail,setUserEmail] = useState(null);
   
@@ -47,53 +46,39 @@ const Profile = ({ Profile }) => {
         menu='Menu'
       />
 
-      <div className="container text-center my-5">
-        <div className="row row-cols-2">
-          <div className="col">
-            {/* <img src={defaultProfilePic} className="rounded img-fluid" alt="Profile Picture" style={{ width: '300px' }} /> */}
-            <img 
+<div className="container text-center my-5 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+            <div className="row">
+                <div className="col">
+                <img 
                 src={user?.photoURL || defaultProfilePic} 
                 className="card-img-top rounded-circle" 
                 alt="Profile" 
                 style={{ width: '300px' }} 
               />
-          </div>
-        <div class="card" style={{width: "18rem;"}}>
-          <div class="card-body">
-            <h5 class="card-title">{`${user?.displayName || 'User'}`}</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">Company Name</h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="card-link">{userEmail}</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
+                </div>
+                <div className="col d-flex flex-column justify-content-between">
+                    <div>
+                        <h1 style={{fontSize:'4rem'}}>{`${user?.displayName || 'User'}`}</h1>
+                        <h5 style={{color:'#969696'}}>Company Name</h5>
+                        <h5 style={{color:'#969696',fontSize:'1rem'}} className='my-5'>Aura is a new-age digital consultancy. We help brands grow digitally through Social Media Management, Branding, Animations, Web Development. We're a one-stop shop for all your digital needs.</h5>
+                    </div>
+                    <div className='container'>
+                      <a href="#" className='m-5'>{userEmail}</a>
+                      <a href="#" className='m-5'>Website URl</a>
+                     </div>
+                    <div className="mt-auto">
+                        {/* <div className="btn-group" role="group" aria-label="Basic outlined example">
+                            <button type="button" className="btn btn-outline-warning">Add to List</button>
+                            <button type="button" className="btn btn-outline-warning">Message</button>
+                            <button type="button" className="btn btn-outline-warning">Invest</button>
+                        </div> */}
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-        {/* <h1 className="container my-5">Dashboard Of Investment</h1>
-        <ol className="list-group list-group-numbered m-5">
-          <li className="list-group-item d-flex justify-content-between align-items-start">
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Aura digital</div>
-              Active
-            </div>
-            <span className="badge text-bg-primary rounded-pill">$14</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-start">
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Rukhmini Services</div>
-              Active
-            </div>
-            <span className="badge text-bg-primary rounded-pill">$7</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-start list-group-item list-group-item-danger">
-            <div className="ms-2 me-auto">
-              <div className="fw-bold">Gujrat Giants</div>
-              Expired
-            </div>
-            <span className="badge text-bg-danger rounded-pill">$29</span>
-          </li>
-        </ol> */}
-      </div>
+        <div>
+          <img src={wave} alt="wave image" style={{width:"120rem"}} />
+        </div>
     </>
   );
 }
