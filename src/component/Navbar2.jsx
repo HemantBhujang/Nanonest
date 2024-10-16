@@ -41,7 +41,7 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active mx-3" to="/message-section">{msg}</Link>
+                <Link className="nav-link active mx-3" to="/profile/MessageSection">{msg}</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="#">{notification}</Link>

@@ -108,18 +108,29 @@ const Profile = () => {
               <a href={profileData.linkedin} target="_blank" rel="noopener noreferrer" className='m-5'>
                 LinkedIn Profile
               </a>
-              <a href={profileData.facebook} target="_blank" rel="noopener noreferrer" className='m-5'>
-                Facebook Profile
-              </a>
+             
             </div>
           </div>
         </div>
       </div>
 
+      <div class="card  container">
+  <h5 class="card-header text-center"> List of Project</h5>
+  <div class="card-body">
+    <h5 class="card-title text-center">Add your project</h5>
+    <p class="card-text"></p>
+    <div class="d-flex justify-content-center">
+  <a href="#" class="btn btn-primary">Add</a>
+</div>
+  </div>
+</div>
+
       {/* Wave Image Section */}
       <div>
         <img src={wave} alt="wave image" style={{width:"100%"}} />
       </div>
+
+
     </>
   );
 }

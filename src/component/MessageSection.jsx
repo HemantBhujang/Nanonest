@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import Navbar2 from './Navbar2';
 
 const MessageSection = () => {
   const inputRef = useRef(null); // Use ref to manage input
@@ -16,6 +17,13 @@ const MessageSection = () => {
 
   return (
     <> 
+    <Navbar2
+    title='NanoNest'   
+    msg='Message'   
+    notification='Notification'
+    menu='Menu'
+    button ='Profile'
+    />
       <div className="list-group container">
         <a href="#" className="list-group-item list-group-item-action active" aria-current="true">
           <div className="d-flex w-100 justify-content-between">

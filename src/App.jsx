@@ -40,7 +40,7 @@ const App = () => {
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu' ,'/profile/EntrepreneurProfileForm'];  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu' ,'/profile/EntrepreneurProfileForm', '/profile/MessageSection'];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
