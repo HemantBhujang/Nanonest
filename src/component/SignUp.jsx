@@ -1,7 +1,6 @@
 import React, { useState } from 'react';  
-
 import { auth } from './Firebase'; 
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth"; // Import necessary Firebase authentication methods
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, updateProfile } from "firebase/auth"; 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,6 +17,7 @@ import SignUp from '../assets/SignUp.png';
 import Divider from '@mui/material/Divider';
 import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import { Link as RouterLink } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar'; // For error notifications
 
 function Copyright() {
   return (
@@ -33,29 +33,36 @@ function Copyright() {
 }
 
 export default function SignUpSide() {
-
   const [firstName, setFirstName] = useState('');  
   const [lastName, setLastName] = useState('');  
   const [email, setEmail] = useState('');  
   const [password, setPassword] = useState('');  
   const [error, setError] = useState(null);  
-  
-  const handleSignUp = async (event) => {  
-   event.preventDefault();  
-   try {  
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);  
-    const user = userCredential.user;  
-    console.log('User created:', user);  
+  const [openSnackbar, setOpenSnackbar] = useState(false); // Snackbar state
 
-    // Updating the user's profile with the first and last name  
-    await updateProfile(user, {  
-      displayName: `${firstName} ${lastName}`,  
-    });  
-   } catch (error) {  
-    setError(error.message);  
-   }  
+  const handleSignUp = async (event) => {  
+    event.preventDefault();  
+    try {  
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);  
+      const user = userCredential.user;  
+      console.log('User created:', user);  
+
+      // Updating the user's profile with the first and last name  
+      await updateProfile(user, {  
+        displayName: `${firstName} ${lastName}`,  
+      });
+      
+      // Clear form fields
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {  
+      setError(error.message);  
+      setOpenSnackbar(true); // Show error in snackbar
+    }  
   };  
-  
+
   const handleGoogleSignIn = async () => {  
     try {
       const provider = new GoogleAuthProvider();  
@@ -64,8 +71,25 @@ export default function SignUpSide() {
       console.log('User signed in with Google:', user);
     } catch (error) {
       setError(error.message);
+      setOpenSnackbar(true); // Show error in snackbar
     }
-  };  
+  };
+
+  const handleFacebookSignIn = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log('User signed in with Facebook:', user);
+    } catch (error) {
+      setError(error.message);
+      setOpenSnackbar(true); // Show error in snackbar
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -233,10 +257,12 @@ export default function SignUpSide() {
               <Button
                 fullWidth
                 variant="outlined"
+                onClick={handleFacebookSignIn}
                 startIcon={<FacebookIcon />}
               >
                 Sign Up with Facebook
               </Button>
+
             </Box>
             {error && <Typography color="error">{error}</Typography>}
           </Box>

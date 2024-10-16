@@ -25,13 +25,10 @@ const App = () => {
   useEffect(() => {
     const auth = getAuth();
     // Monitor the authentication state
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser); // Set the logged-in user data
-      } else {
-        setUser(null); // No user is signed in
-      }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser || null); // Set the logged-in user data or null
     });
+    return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
   return (  
@@ -93,10 +90,12 @@ const MainLayout = ({ user }) => {
         }/>  
 
         <Route path="/signIn" element={<SignIn />} />  
+        <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
+
         <Route path="/signup" element={<SignUp />} />
         <Route path="/VisitProfile" element={<VisitProfile />} />
         <Route path="Profile/Menu" element ={<Menu />}/>
-        <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
+
         <Route path="/profile" element={<Profile />} />
         <Route path='/profile/MessageSection' element={<MessageSection />}/>
         <Route path="/AfterLogin" element={  
@@ -105,7 +104,9 @@ const MainLayout = ({ user }) => {
             title={`Welcome, ${user?.displayName || 'User'}`}  // Dynamically pass user's name
             content='where your entrepreneurial journey meets limitless growth and opportunity!'   
           />  
-        } />  
+        } /> 
+        {/* 404 Not Found Route */}
+        <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  
     </div>  
   );  

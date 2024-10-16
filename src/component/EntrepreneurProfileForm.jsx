@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar2 from './Navbar2';
-import { ref as databaseRef, set } from 'firebase/database'; // Correct import for ref
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'; // Correct import for storage ref
-import { database, storage } from './Firebase'; // Import your Firebase configuration
+import { ref as databaseRef, set } from 'firebase/database';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { database, storage, auth } from './Firebase'; // Import your Firebase configuration including auth
+import { onAuthStateChanged } from 'firebase/auth';
 
 const PopupMessage = ({ message, onClose }) => (
   <div className="modal show" tabIndex="-1" style={{ display: 'block' }}>
@@ -29,17 +30,30 @@ const EntrepreneurProfileForm = () => {
     twitter: '',
     facebook: '',
     description: '',
-    profileImage: null, // For storing the uploaded image
+    profileImage: null,
   });
 
-  const [uploadStatus, setUploadStatus] = useState(''); // To provide feedback to the user
-  const [showPopup, setShowPopup] = useState(false); // State to handle popup visibility
-  const [popupMessage, setPopupMessage] = useState(''); // State to hold popup message
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+
+  // Fetch current user from Firebase Auth and prefill form
+  useEffect(() => {
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        name: currentUser.displayName || '', // Prefill name if available
+        email: currentUser.email || '', // Prefill email
+      }));
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === 'file') {
-      setFormData({ ...formData, [name]: files[0] }); // Store the selected file
+      setFormData({ ...formData, [name]: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -47,20 +61,22 @@ const EntrepreneurProfileForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUploadStatus('Uploading...'); // Notify the user about the upload process
-    
+    setUploadStatus('Uploading...');
+
     try {
       let profileImageUrl = '';
       
+      
+      // If the user has uploaded an image
+
       // If the user has uploaded an image
       if (formData.profileImage) {
         const imageRef = storageRef(storage, `profileImages/${formData.profileImage.name}`);
-        const snapshot = await uploadBytes(imageRef, formData.profileImage); // Upload the image
-        profileImageUrl = await getDownloadURL(snapshot.ref); // Get the image URL
+        const snapshot = await uploadBytes(imageRef, formData.profileImage);
+        profileImageUrl = await getDownloadURL(snapshot.ref);
       }
-      
-      // Add the data to Firebase Realtime Database (including the image URL)
-      const userRef = databaseRef(database, 'entrepreneurs/' + formData.name); // Use the user's name or unique ID
+
+      const userRef = databaseRef(database, 'entrepreneurs/' + formData.name);
       await set(userRef, {
         name: formData.name,
         email: formData.email,
@@ -70,14 +86,13 @@ const EntrepreneurProfileForm = () => {
         twitter: formData.twitter,
         facebook: formData.facebook,
         description: formData.description,
-        profileImageUrl, // Save the image URL
+        profileImageUrl,
       });
 
       setUploadStatus('Form submitted successfully!');
-      setPopupMessage('Form submitted successfully!'); // Set the message for the popup
-      setShowPopup(true); // Show the popup
-      
-      // Clear form after successful submission
+      setPopupMessage('Form submitted successfully!');
+      setShowPopup(true);
+
       setFormData({
         name: '',
         email: '',
@@ -89,12 +104,12 @@ const EntrepreneurProfileForm = () => {
         description: '',
         profileImage: null,
       });
-  
+
     } catch (error) {
       console.error('Error uploading data:', error);
       setUploadStatus('Error submitting the form, please try again.');
-      setPopupMessage('Error submitting the form, please try again.'); // Set error message
-      setShowPopup(true); // Show popup for error
+      setPopupMessage('Error submitting the form, please try again.');
+      setShowPopup(true);
     }
   };
 
@@ -102,15 +117,15 @@ const EntrepreneurProfileForm = () => {
   const closePopup = () => {
     setShowPopup(false);
   };
-  
+
   return (
     <>
       <Navbar2
-        title='NanoNest'   
-        msg='Message'   
-        notification='Notification'
-        menu='Menu'
-        button='Profile'
+        title="NanoNest"
+        msg="Message"
+        notification="Notification"
+        menu="Menu"
+        button="Profile"
       />
 
       <div className="container my-5">
@@ -118,7 +133,7 @@ const EntrepreneurProfileForm = () => {
         <form onSubmit={handleSubmit}>
           {/* Profile Image Field */}
           <div className="mb-3">
-            <label htmlFor="profileImage" className="form-label">Profile Image</label>
+            <label htmlFor="profileImage" className="form-label">Profile Image<span className="text-danger">*</span></label>
             <input
               type="file"
               className="form-control"
@@ -126,6 +141,7 @@ const EntrepreneurProfileForm = () => {
               name="profileImage"
               accept="image/*"
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -144,7 +160,7 @@ const EntrepreneurProfileForm = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
+            <label htmlFor="email" className="form-label">Email<span className="text-danger">*</span></label>
             <input
               type="email"
               className="form-control"
@@ -157,7 +173,7 @@ const EntrepreneurProfileForm = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="companyName" className="form-label">Company Name</label>
+            <label htmlFor="companyName" className="form-label">Company Name<span className="text-danger">*</span></label>
             <input
               type="text"
               className="form-control"
@@ -170,7 +186,7 @@ const EntrepreneurProfileForm = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="website" className="form-label">Website</label>
+            <label htmlFor="website" className="form-label">Website <span className="text-danger">*</span></label>
             <input
               type="url"
               className="form-control"
@@ -178,11 +194,12 @@ const EntrepreneurProfileForm = () => {
               name="website"
               value={formData.website}
               onChange={handleChange}
+              required
             />
           </div>
 
           <div className="mb-3">
-            <label htmlFor="linkedin" className="form-label">LinkedIn Profile</label>
+            <label htmlFor="linkedin" className="form-label">LinkedIn Profile<span className="text-danger">*</span></label>
             <input
               type="url"
               className="form-control"
@@ -190,6 +207,7 @@ const EntrepreneurProfileForm = () => {
               name="linkedin"
               value={formData.linkedin}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -218,7 +236,7 @@ const EntrepreneurProfileForm = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">Description</label>
+            <label htmlFor="description" className="form-label">Description<span className="text-danger">*</span></label>
             <textarea
               className="form-control"
               id="description"
@@ -226,6 +244,7 @@ const EntrepreneurProfileForm = () => {
               value={formData.description}
               onChange={handleChange}
               rows="4"
+              required
             ></textarea>
           </div>
 
