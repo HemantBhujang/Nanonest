@@ -39,7 +39,7 @@ const ExpandMore = styled((props) => {
     ],
   }));
 
-const IndustyCard = () => {
+const IndustyCard = ({name,subheader,content}) => {
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -61,8 +61,8 @@ const IndustyCard = () => {
           <MoreVertIcon />
         </IconButton>
       }
-      title="Shrimp and Chorizo Paella"
-      subheader="September 14, 2016"
+      title={name}
+      subheader={subheader}
     />
     <CardMedia
       component="img"
@@ -72,9 +72,7 @@ const IndustyCard = () => {
     />
     <CardContent>
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        This impressive paella is a perfect party dish and a fun meal to cook
-        together with your guests. Add 1 cup of frozen peas along with the mussels,
-        if you like.
+       {content}
       </Typography>
     </CardContent>
     <CardActions disableSpacing>

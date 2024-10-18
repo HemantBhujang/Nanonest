@@ -8,6 +8,7 @@ const Post = ({ProfilePic,Name,Content,Button}) => {
   }
   return (
     <>
+    
     <div className="container text-center">
       <div className='row'>
               <div className="card col mx-5 my-5 shadow-lg mb-4" style={{width: '18rem', borderColor:'#F9BC6E'}}>
