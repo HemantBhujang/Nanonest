@@ -70,7 +70,16 @@ const IndustyCard = ({name,subheader,content}) => {
       image="/static/images/cards/paella.jpg"
       alt="Paella dish"
     />
-    <CardContent>
+    <CardContent 
+          sx={{
+            overflow: 'hidden', 
+            textOverflow: 'ellipsis', 
+            display: '-webkit-box', 
+            WebkitBoxOrient: 'vertical', 
+            WebkitLineClamp: 3,
+            height: '180px', // Set a fixed height for content
+          }}
+        >
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
        {content}
       </Typography>
