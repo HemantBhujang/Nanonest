@@ -1,6 +1,6 @@
 import React, { useState } from 'react';  
 import { auth } from './Firebase'; 
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, updateProfile } from "firebase/auth"; 
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, updateProfile } from "firebase/auth"; 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -40,6 +40,7 @@ export default function SignUpSide() {
   const [error, setError] = useState(null);  
   const [openSnackbar, setOpenSnackbar] = useState(false); // Snackbar state
 
+  // Handle user sign up
   const handleSignUp = async (event) => {  
     event.preventDefault();  
     try {  
@@ -47,22 +48,30 @@ export default function SignUpSide() {
       const user = userCredential.user;  
       console.log('User created:', user);  
 
-      // Updating the user's profile with the first and last name  
-      await updateProfile(user, {  
-        displayName: `${firstName} ${lastName}`,  
-      });
+      // Send email verification after sign-up
+      await sendEmailVerification(user);
+      console.log('Verification email sent to:', user.email);
+      
+      // Update user's profile with their first and last name
+      await updateProfile(user, { displayName: `${firstName} ${lastName}` });
       
       // Clear form fields
       setFirstName('');
       setLastName('');
       setEmail('');
       setPassword('');
+      
+      // Notify user to verify their email
+      setError('A verification email has been sent. Please verify your email to complete the signup.');
+      setOpenSnackbar(true);
+      
     } catch (error) {  
       setError(error.message);  
       setOpenSnackbar(true); // Show error in snackbar
     }  
   };  
 
+  // Handle Google sign in
   const handleGoogleSignIn = async () => {  
     try {
       const provider = new GoogleAuthProvider();  
@@ -75,6 +84,7 @@ export default function SignUpSide() {
     }
   };
 
+  // Handle Facebook sign in
   const handleFacebookSignIn = async () => {
     try {
       const provider = new FacebookAuthProvider();
@@ -87,6 +97,7 @@ export default function SignUpSide() {
     }
   };
 
+  // Handle closing of the snackbar
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
@@ -233,7 +244,7 @@ export default function SignUpSide() {
               variant="contained"
               color="primary"
               onClick={handleSignUp} 
-              sx={{ mt: 3, mb: 2, backgroundColor: '#F9BC6E',  }}
+              sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
             </Button>
@@ -269,6 +280,13 @@ export default function SignUpSide() {
         </Box>
         <Copyright />
       </Grid>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={error}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      />
     </Grid>
   );
 }
