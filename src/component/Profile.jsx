@@ -77,7 +77,7 @@ const Profile = ({ Profile }) => {
             </div>
         </div>
         <div>
-          <img src={wave} alt="wave image" style={{width:"120rem"}} />
+          <img src={wave} alt="wave image" style={{width:"100%"}} />
         </div>
     </>
   );
