@@ -26,7 +26,7 @@ const Navbar = ({ title, services, industry, about, team, more, faq, in_faq, blo
                 <Link className="nav-link active mx-3" to="/about">{about}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active mx-3" to="/team">{team}</Link>
+                <Link className="nav-link active mx-3" to="/Team">{team}</Link>
               </li>
               <li className="nav-item dropdown mx-3">
                 <a className="nav-link dropdown-toggle mx-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

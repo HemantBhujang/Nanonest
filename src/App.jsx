@@ -18,6 +18,8 @@ import VisitProfile from './component/VisitProfile';
 import Menu from './component/Menu';
 import EntrepreneurProfileForm from './component/EntrepreneurProfileForm';
 import MessageSection from './component/MessageSection';
+import Footer from './component/Footer';
+import Team from './component/Team';
 
 const App = () => {  
   const [user, setUser] = useState(null);  // State to hold the current user
@@ -53,7 +55,7 @@ const MainLayout = ({ user }) => {
           about='About Us'   
           team='Team NanoNest'   
           more='More'   
-          faq='Founder FAQ'   
+          faq='Entrepreneur FAQ'   
           in_faq='Investor FAQ'   
           blog='Blog' 
           button='Contact Us' 
@@ -68,6 +70,7 @@ const MainLayout = ({ user }) => {
             <Section2 />  
             <Appointment />  
             <Testimonials /> 
+            <Footer />
             
             
           </>  
@@ -95,6 +98,7 @@ const MainLayout = ({ user }) => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/VisitProfile" element={<VisitProfile />} />
         <Route path="Profile/Menu" element ={<Menu />}/>
+        <Route path="/Team" element={<Team />} />
 
         <Route path="/profile" element={<Profile />} />
         <Route path='/profile/MessageSection' element={<MessageSection />}/>
