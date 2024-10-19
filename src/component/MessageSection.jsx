@@ -1,81 +1,136 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from "react";
 import Navbar2 from './Navbar2';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  Paper,
+  TextField,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+  Box,
+} from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 
 const MessageSection = () => {
-  const inputRef = useRef(null); // Use ref to manage input
-  const [messages, setMessages] = useState([]); // State to store messages
+  const [messages, setMessages] = useState([
+    { text: "Hello! How are you?", sender: "other" },
+    { text: "I'm good! How about you?", sender: "me" },
+  ]);
+  const [newMessage, setNewMessage] = useState("");
 
-  function sendMessage(event) {
-    event.preventDefault(); // Prevent form submission
-    const messageText = inputRef.current.value;
-
-    if (messageText.trim() !== "") {
-      setMessages([...messages, messageText]); // Update messages state
-      inputRef.current.value = ""; // Clear input field
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      setMessages([...messages, { text: newMessage, sender: "me" }]);
+      setNewMessage(""); // Clear input after sending
     }
-  }
+  };
 
   return (
-    <> 
-    <Navbar2
-    title='NanoNest'   
-    msg='Message'   
-    notification='Notification'
-    menu='Menu'
-    button ='Profile'
-    />
-      <div className="list-group container">
-        <a href="#" className="list-group-item list-group-item-action active" aria-current="true">
-          <div className="d-flex w-100 justify-content-between">
-            <h5 className="mb-1">List group item heading</h5>
-            <small>3 days ago</small>
-          </div>
-          <p className="mb-1">Some placeholder content in a paragraph.</p>
-          <small>And some small print.</small>
-        </a>
-        <a href="#" className="list-group-item list-group-item-action" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
-          <div className="d-flex w-100 justify-content-between">
-            <h5 className="mb-1">List group item heading</h5>
-            <small className="text-body-secondary">3 days ago</small>
-          </div>
-          <p className="mb-1">Some placeholder content in a paragraph.</p>
-          <small className="text-body-secondary">And some muted small print.</small>
-        </a>
-        <a href="#" className="list-group-item list-group-item-action" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
-          <div className="d-flex w-100 justify-content-between">
-            <h5 className="mb-1">List group item heading</h5>
-            <small className="text-body-secondary">3 days ago</small>
-          </div>
-          <p className="mb-1">Some placeholder content in a paragraph.</p>
-          <small className="text-body-secondary">And some muted small print.</small>
-        </a>
-      </div>
+    <>
+      {/* Navbar */}
+      <Navbar2
+        title='NanoNest'
+        msg='Message'
+        notification='Notification'
+        menu='Menu'
+        button='Profile'
+      />
 
-      {/* __________________Offcanvas of Personal Message #chat____________ */}
-      <div className="offcanvas offcanvas-start" data-bs-backdrop="static" tabIndex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="staticBackdropLabel">Chat Messages</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div className="offcanvas-body">
-          <div className="message-area">
-            {messages.length === 0 ? (
-              <p>No messages yet</p>
-            ) : (
-              messages.map((msg, index) => (
-                <div key={index} className="message sent">
-                  <p><strong>You:</strong> {msg}</p>
-                </div>
-              ))
-            )}
-          </div>
+      {/* Header */}
+      <AppBar position="static" style={{ backgroundColor: "#F9BC6E" }}>
+        <Toolbar>
+          <Typography variant="h6" style={{ color: "#FFF" }}>
+            Message Sender Profile
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          {/* Invest Button */}
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#424242",
+              color: "#FFF",
+              fontWeight: "bold",
+            }}
+          >
+            Invest
+          </Button>
+        </Toolbar>
+      </AppBar>
 
-          <form className="d-flex" onSubmit={sendMessage}>
-            <input className="form-control me-2 mt-auto" ref={inputRef} type="text" placeholder="Type your message here..." aria-label="Type message here" />
-            <button className="btn btn-outline-warning" type="submit">Send</button>
-          </form>
-        </div>
-      </div>
+      {/* Chat Container */}
+      <Container maxWidth="md" style={{ marginTop: "20px" }}>
+        <Paper
+          style={{
+            height: "60vh",
+            padding: "10px",
+            overflowY: "auto",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            borderRadius: "10px",
+            backgroundColor: "#FFFBEA", // Light background to match theme
+          }}
+        >
+          {/* Messages List */}
+          <List>
+            {messages.map((message, index) => (
+              <ListItem
+                key={index}
+                alignItems="flex-start"
+                style={{
+                  justifyContent: message.sender === "me" ? "flex-end" : "flex-start",
+                }}
+              >
+                <ListItemText
+                  primary={message.text}
+                  style={{
+                    backgroundColor: message.sender === "me" ? "#F9BC6E" : "#F1F1F1",
+                    padding: "10px 20px",
+                    borderRadius: "10px",
+                    maxWidth: "70%",
+                    color: message.sender === "me" ? "#FFF" : "#424242",
+                    boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+
+        {/* Message Input Section */}
+        <Box
+          component="form"
+          sx={{ display: "flex", marginTop: 2, alignItems: "center" }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMessage();
+          }}
+        >
+          <TextField
+            variant="outlined"
+            fullWidth
+            placeholder="Type a message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            autoFocus
+            sx={{
+              backgroundColor: "#FFF",
+              borderRadius: "5px",
+              borderColor: "#F9BC6E",
+            }}
+          />
+          <IconButton
+            color="primary"
+            onClick={handleSendMessage}
+            sx={{ ml: 1, backgroundColor: "#F9BC6E", color: "#FFF" }}
+          >
+            <SendIcon />
+          </IconButton>
+        </Box>
+      </Container>
     </>
   );
 };

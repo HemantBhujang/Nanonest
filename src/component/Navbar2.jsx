@@ -41,7 +41,7 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active mx-3" to="/profile/MessageSection">{msg}</Link>
+                <Link className="nav-link active mx-3" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop" to="#">{msg}</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="#">{notification}</Link>
@@ -64,6 +64,52 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
           </div>
         </div>
       </nav>
+      
+{/* __________________Offcanvas of Personal Message #chat____________ */}
+<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="staticBackdropLabel">Chat Section</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>
+      <p>I will not close if you click outside of me.</p>
+    </div>
+
+    {/* <!-- Messages List --> */}
+    <div class="list-group">
+      {/* <!-- Unread Message --> */}
+      <a href="/MessageSection" class="list-group-item list-group-item-action active" aria-current="true">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">John Doe</h5>
+          <small>5 mins ago</small>
+        </div>
+        <p class="mb-1">Hey! Are we still on for the meeting tomorrow?</p>
+        <small>Unread</small>
+      </a>
+
+      {/* <!-- Read Messages --> */}
+      <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">Jane Smith</h5>
+          <small class="text-muted">1 hour ago</small>
+        </div>
+        <p class="mb-1">I've sent over the documents. Let me know if you need anything else.</p>
+        <small class="text-muted">Read</small>
+      </a>
+
+      <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">Alice Johnson</h5>
+          <small class="text-muted">3 hours ago</small>
+        </div>
+        <p class="mb-1">Thanks for the update! Looking forward to the next steps.</p>
+        <small class="text-muted">Read</small>
+      </a>
+    </div>
+  </div>
+</div>
+
     </div>
   );
 };
