@@ -19,6 +19,7 @@ import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import { Link as RouterLink } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar'; // For error notifications
 
+// Copyright footer
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -42,7 +43,18 @@ export default function SignUpSide() {
 
   // Handle user sign up
   const handleSignUp = async (event) => {  
-    event.preventDefault();  
+    event.preventDefault();
+    
+    // Password validation regex: Minimum 8 characters, one uppercase letter, one special character, and one number
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$/;
+
+    // Check if the password meets the required conditions
+    if (!passwordRegex.test(password)) {
+      setError('Password must contain at least 8 characters, one uppercase letter, one special character, and one number.');
+      setOpenSnackbar(true); // Show error in snackbar
+      return; // Stop signup process if password is invalid
+    }
+
     try {  
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);  
       const user = userCredential.user;  
@@ -55,7 +67,7 @@ export default function SignUpSide() {
       // Update user's profile with their first and last name
       await updateProfile(user, { displayName: `${firstName} ${lastName}` });
       
-      // Clear form fields
+      // Clear form fields after successful sign-up
       setFirstName('');
       setLastName('');
       setEmail('');
@@ -84,18 +96,7 @@ export default function SignUpSide() {
     }
   };
 
-  // Handle Facebook sign in
-  const handleFacebookSignIn = async () => {
-    try {
-      const provider = new FacebookAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      console.log('User signed in with Facebook:', user);
-    } catch (error) {
-      setError(error.message);
-      setOpenSnackbar(true); // Show error in snackbar
-    }
-  };
+ 
 
   // Handle closing of the snackbar
   const handleCloseSnackbar = () => {
@@ -244,18 +245,23 @@ export default function SignUpSide() {
               variant="contained"
               color="primary"
               onClick={handleSignUp} 
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: '#F9BC6E',
+              }}
             >
               Sign Up
             </Button>
             <Grid container>
               <Grid item xs>
                 <RouterLink to="/signIn" variant="body2">
-                  {"Don't have an account? Sign In"}
+                  {"Already have account ? Sign In"}
                 </RouterLink>
               </Grid>
             </Grid>
             <Divider>or</Divider>
+        
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Button
                 fullWidth
@@ -265,14 +271,7 @@ export default function SignUpSide() {
               >
                 Sign Up with Google
               </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={handleFacebookSignIn}
-                startIcon={<FacebookIcon />}
-              >
-                Sign Up with Facebook
-              </Button>
+              
 
             </Box>
             {error && <Typography color="error">{error}</Typography>}
