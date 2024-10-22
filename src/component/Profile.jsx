@@ -83,12 +83,15 @@ const Profile = () => {
         <div className="row">
           <div className="col">
             {/* Display user's profile picture or default if none */}
-            <img 
-              src={user?.photoURL || profileData.profileImageUrl} 
-              className="card-img-top rounded-circle" 
-              alt="Profile" 
-              style={{ width: '300px' }} 
-            />
+            <div className="col">
+  <img 
+    src={user?.photoURL || profileData.profileImageUrl} 
+    className="card-img-top" 
+    alt="Profile" 
+    style={{ width: '300px', height: '300px', borderRadius: '100%' }} 
+  />
+</div>
+
           </div>
           <div className="col d-flex flex-column justify-content-between">
             <div>
