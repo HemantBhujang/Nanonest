@@ -120,7 +120,7 @@ const Profile = () => {
     <h5 class="card-title text-center">Add your project</h5>
     <p class="card-text"></p>
     <div class="d-flex justify-content-center">
-  <a href="#" class="btn btn-primary">Add</a>
+  <a href="NewPostForm" class="btn btn-primary">Add</a>
 </div>
   </div>
 </div>
