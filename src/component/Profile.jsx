@@ -4,10 +4,14 @@ import Navbar2 from './Navbar2';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { ref, onValue } from 'firebase/database'; // Import methods for Firebase Realtime Database
 import defaultProfilePic from '../assets/ProfilePic.png'; // Adjust the path as necessary
-import wave from "../assets/Wave.jpg";
+import wave from '../assets/Wave.jpg';
+import { Card, CardContent, CardMedia, Typography, IconButton, Grid } from '@mui/material';
+import ShareIcon from '@mui/icons-material/Share';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CommentIcon from '@mui/icons-material/Comment';
 
 const Profile = () => {
-  const [user, setUser] = useState(null);  // State to hold the current user
+  const [user, setUser] = useState(null); // State to hold the current user
   const [userEmail, setUserEmail] = useState(null); // State to hold user email
   const [profileData, setProfileData] = useState({
     companyName: '',
@@ -17,6 +21,7 @@ const Profile = () => {
     facebook: '',
     profileImageUrl: '',
   });
+  const [posts, setPosts] = useState([]); // State to hold user posts
 
   // First useEffect to monitor authentication state and fetch email
   useEffect(() => {
@@ -24,6 +29,7 @@ const Profile = () => {
       if (user) {
         setUserEmail(user.email); // Set the email state when user is authenticated
         fetchUserProfileData(user.displayName || user.email); // Fetch profile data based on displayName or email
+        fetchUserPosts(user.displayName || user.email); // Fetch user posts
       } else {
         setUserEmail(''); // Clear email if no user is signed in
       }
@@ -46,8 +52,7 @@ const Profile = () => {
 
   // Function to fetch user profile data from Firebase Realtime Database
   const fetchUserProfileData = (userNameOrEmail) => {
-    const db = database; // Ensure we are using the Firebase database instance
-    const userRef = ref(db, `entrepreneurs/${userNameOrEmail}`); // Path in Realtime DB based on user displayName or email
+    const userRef = ref(database, `entrepreneurs/${userNameOrEmail}`); // Path in Realtime DB based on user displayName or email
 
     onValue(userRef, (snapshot) => {
       if (snapshot.exists()) {
@@ -65,6 +70,17 @@ const Profile = () => {
         console.log("No data available for this user");
       }
     });
+  };
+
+  // Function to fetch user posts (example function, adjust as needed)
+  const fetchUserPosts = (userNameOrEmail) => {
+    // Replace with actual logic to fetch posts from your database
+    const examplePosts = [
+      { title: 'Post 1', content: 'Content for post 1', image: defaultProfilePic },
+      { title: 'Post 2', content: 'Content for post 2', image: defaultProfilePic },
+      { title: 'Post 3', content: 'Content for post 3', image: defaultProfilePic },
+    ];
+    setPosts(examplePosts);
   };
 
   return (
@@ -85,17 +101,17 @@ const Profile = () => {
             {/* Display user's profile picture or default if none */}
             <img 
               src={user?.photoURL || profileData.profileImageUrl} 
-              className="card-img-top rounded-circle" 
+              className="card-img-top" 
               alt="Profile" 
-              style={{ width: '300px' }} 
+              style={{ width: '300px', height: '300px', borderRadius: '100%' }} 
             />
           </div>
           <div className="col d-flex flex-column justify-content-between">
             <div>
               {/* Display user's name, company name, and description */}
-              <h1 style={{fontSize:'4rem'}}>{`${user?.displayName || 'User'}`}</h1>
-              <h5 style={{color:'#969696'}}>{profileData.companyName || 'Company Name'}</h5>
-              <h5 style={{color:'#969696', fontSize:'1rem'}} className='my-5'>
+              <h1 style={{ fontSize: '4rem' }}>{user?.displayName || 'User'}</h1>
+              <h5 style={{ color: '#969696' }}>{profileData.companyName || 'Company Name'}</h5>
+              <h5 style={{ color: '#969696', fontSize: '1rem' }} className='my-5'>
                 {profileData.description || 'Description goes here'}
               </h5>
             </div>
@@ -108,31 +124,65 @@ const Profile = () => {
               <a href={profileData.linkedin} target="_blank" rel="noopener noreferrer" className='m-5'>
                 LinkedIn Profile
               </a>
-             
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card  container">
-  <h5 class="card-header text-center"> List of Project</h5>
-  <div class="card-body">
-    <h5 class="card-title text-center">Add your project</h5>
-    <p class="card-text"></p>
-    <div class="d-flex justify-content-center">
-  <a href="#" class="btn btn-primary">Add</a>
-</div>
-  </div>
-</div>
+      {/* Projects Section */}
+      <div className="card container">
+        <h5 className="card-header text-center">List of Projects</h5>
+        <div className="card-body">
+          <h5 className="card-title text-center">Add your project</h5>
+          <div className="d-flex justify-content-center">
+            <a href="NewPostForm" className="btn btn-primary">Add</a>
+          </div>
+        </div>
+      </div>
 
       {/* Wave Image Section */}
       <div>
-        <img src={wave} alt="wave image" style={{width:"100%"}} />
+        <img src={wave} alt="wave image" style={{ width: "100%" }} />
       </div>
 
-
+      {/* Posts Section */}
+      <div className="container my-5">
+        <Grid container spacing={3}>
+          {posts.map((post, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card sx={{ maxWidth: '100%', margin: 'auto', borderRadius: '15px', boxShadow: 3 }}>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={post.image}
+                  alt={post.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {post.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {post.content}
+                  </Typography>
+                </CardContent>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 16px 16px' }}>
+                  <IconButton aria-label="like">
+                    <FavoriteIcon />
+                  </IconButton>
+                  <IconButton aria-label="comment">
+                    <CommentIcon />
+                  </IconButton>
+                  <IconButton aria-label="share">
+                    <ShareIcon />
+                  </IconButton>
+                </div>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
     </>
   );
-}
+};
 
 export default Profile;
