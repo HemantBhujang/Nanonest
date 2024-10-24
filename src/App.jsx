@@ -11,7 +11,8 @@ import wave from '../src/assets/Wave.jpg';
 import webDesign from './assets/Web Design 1.png';  
 import SignIn from './component/SignIn';  
 import SignUp from './component/SignUp';  
-import AfterLogin from './component/AfterLogin';  
+import AfterLogin from './component/AfterLogin';
+import AfterLogInInvestor from './component/AfterLogInInvestor' ;
 import Profile from './component/Profile';  
 import { getAuth, onAuthStateChanged } from "firebase/auth";  // Import Firebase Auth
 import VisitProfile from './component/VisitProfile';
@@ -42,7 +43,7 @@ const App = () => {
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu' ,'/profile/EntrepreneurProfileForm', '/MessageSection'];  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu' ,'/profile/EntrepreneurProfileForm', '/MessageSection','/AfterLogInInvestor'];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
@@ -108,7 +109,10 @@ const MainLayout = ({ user }) => {
             title={`Welcome, ${user?.displayName || 'User'}`}  // Dynamically pass user's name
             content='where your entrepreneurial journey meets limitless growth and opportunity!'   
           />  
+         
         } /> 
+
+        <Route path='/AfterLogInInvestor' element={<AfterLogInInvestor/>}/>
         {/* 404 Not Found Route */}
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  

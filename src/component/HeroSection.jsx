@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom';
 const HeroSection = () => {
   const navigate = useNavigate();
   
-  const handleSignInClick = () => {
-    navigate('/signIn'); 
+  const handleSignInClick = (userType) => {
+    navigate(`/signIn?userType=${userType}`); 
   };
 
   return (
@@ -25,11 +25,25 @@ const HeroSection = () => {
     <div className="col ">
     <h1  className="h1" style={{ color: 'black', fontSize: '15vmin' }}>  
     We help you grow your <span className="h1" style={{ color: '#F9BC6E', fontSize: '15vmin' }}>Conversation</span>  
-</h1>
+   </h1>
     <h5 className='mx-3 my-2'>Featured in leading publications around the world</h5>
-    <button type="button" class="btn btn-lg my-4 mx-2" onClick={()=> navigate('/SignIn')} style={{backgroundColor : '#F9BC6E'}}>SignIn as Investor </button>
+    <button 
+                    type="button" 
+                    className="btn btn-lg my-4 mx-2" 
+                    onClick={() => handleSignInClick('investor')} 
+                    style={{ backgroundColor: '#F9BC6E' }}
+                  >
+                    SignIn as Investor 
+                  </button>
 
-    <button type="button" class="btn btn-lg my-4 mx-2" style={{backgroundColor : '#F9BC6E'}} onClick={handleSignInClick} >SignIn as Enterpreneur</button>
+                  <button 
+                    type="button" 
+                    className="btn btn-lg my-4 mx-2" 
+                    onClick={() => handleSignInClick('entrepreneur')} 
+                    style={{ backgroundColor: '#F9BC6E' }}
+                  >
+                    SignIn as Entrepreneur
+                  </button>
     </div>
     
     </div>
