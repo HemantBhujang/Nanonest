@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,12 +11,16 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import { GoogleIcon } from './CustomIcons';
-import { signInWithEmail, signInWithGoogle } from './AuthService'; // Custom auth functions
+import { signInWithEmail, signInWithGoogle } from './AuthService';
 import { Link as RouterLink } from 'react-router-dom';
 import real_img from '../assets/real_img.png';
-import { sendPasswordResetEmail } from 'firebase/auth'; // Import Firebase reset email function
-import { auth } from './Firebase'; // Ensure this is correctly imported
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from './Firebase';
 
 function Copyright() {
   return (
@@ -33,6 +37,7 @@ function Copyright() {
 
 export default function SignInSide() {
   const navigate = useNavigate();
+  const [role, setRole] = useState('');
 
   const handleEmailSignIn = async (event) => {
     event.preventDefault();
@@ -72,7 +77,7 @@ export default function SignInSide() {
     if (!email) return;
 
     try {
-      await sendPasswordResetEmail(auth, email); // Use 'auth' instead of 'firebaseAuth'
+      await sendPasswordResetEmail(auth, email);
       alert('Password reset email sent! Please check your inbox.');
     } catch (error) {
       console.error('Error sending password reset email:', error);
@@ -158,6 +163,19 @@ export default function SignInSide() {
               },
             }}
           />
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="role-label">Role</InputLabel>
+            <Select
+              labelId="role-label"
+              id="role"
+              value={role}
+              label="Role"
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <MenuItem value="Entrepreneur">Entrepreneur</MenuItem>
+              <MenuItem value="Investor">Investor</MenuItem>
+            </Select>
+          </FormControl>
           <Button
             type="submit"
             fullWidth
