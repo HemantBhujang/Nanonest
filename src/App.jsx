@@ -22,6 +22,7 @@ import MessageSection from './component/MessageSection';
 import Footer from './component/Footer';
 import Team from './component/Team';
 import NewPostForm from './component/NewPostForm'
+import Investment from './component/Investment';
 
 const App = () => {  
   const [user, setUser] = useState(null);  // State to hold the current user
@@ -102,6 +103,7 @@ const MainLayout = ({ user }) => {
         <Route path="Profile/Menu" element ={<Menu />}/>
         <Route path="/Team" element={<Team />} />
         <Route path='/NewPostForm' element={<NewPostForm />}/>
+        <Route path='/investment' element={<Investment />}/>
 
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection' element={<MessageSection />}/>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Navbar2 from './Navbar2';
 import {
   AppBar,
@@ -17,6 +18,7 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 
 const MessageSection = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const [messages, setMessages] = useState([
     { text: "Hello! How are you?", sender: "other" },
     { text: "I'm good! How about you?", sender: "me" },
@@ -56,6 +58,7 @@ const MessageSection = () => {
               color: "#FFF",
               fontWeight: "bold",
             }}
+            onClick={() => navigate('/investment')} // Navigate to Investment page
           >
             Invest
           </Button>
