@@ -18,10 +18,6 @@ import Divider from '@mui/material/Divider';
 import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import { Link as RouterLink } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar'; // For error notifications
-import { useLocation } from 'react-router-dom';
-import { ref, set } from "firebase/database"; // Import from Firebase Realtime Database
-import { database } from './Firebase'; // Your Firebase setup file
-
 
 // Copyright footer
 function Copyright() {
@@ -45,58 +41,38 @@ export default function SignUpSide() {
   const [error, setError] = useState(null);  
   const [openSnackbar, setOpenSnackbar] = useState(false); // Snackbar state
 
-//for user type
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const userType = queryParams.get('userType');
-
-  console.log('User Type:', userType);
-  
-  
   // Handle user sign up
   const handleSignUp = async (event) => {  
     event.preventDefault();
     
     // Password validation regex: Minimum 8 characters, one uppercase letter, one special character, and one number
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$/;
-  
+
     // Check if the password meets the required conditions
     if (!passwordRegex.test(password)) {
       setError('Password must contain at least 8 characters, one uppercase letter, one special character, and one number.');
       setOpenSnackbar(true); // Show error in snackbar
       return; // Stop signup process if password is invalid
     }
-  
+
     try {  
-      // Create user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);  
       const user = userCredential.user;  
       console.log('User created:', user);  
-  
-      // Send email verification
+
+      // Send email verification after sign-up
       await sendEmailVerification(user);
       console.log('Verification email sent to:', user.email);
-  
+      
       // Update user's profile with their first and last name
       await updateProfile(user, { displayName: `${firstName} ${lastName}` });
-  
-      // Insert user data into Realtime Database with userType
-      await set(ref(database, 'users/' + user.uid), {
-        uid: user.uid,
-        firstName,
-        lastName,
-        email,
-        userType, // Store the userType captured from URL
-        createdAt: new Date().toISOString()
-      });
-      console.log('User data stored in Realtime Database with userType:', userType);
-  
+      
       // Clear form fields after successful sign-up
       setFirstName('');
       setLastName('');
       setEmail('');
       setPassword('');
-  
+      
       // Notify user to verify their email
       setError('A verification email has been sent. Please verify your email to complete the signup.');
       setOpenSnackbar(true);
@@ -105,9 +81,7 @@ export default function SignUpSide() {
       setError(error.message);  
       setOpenSnackbar(true); // Show error in snackbar
     }  
-  };
-  
-
+  };  
 
   // Handle Google sign in
   const handleGoogleSignIn = async () => {  

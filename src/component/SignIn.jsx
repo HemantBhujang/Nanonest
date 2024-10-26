@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate , useLocation} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,13 +33,6 @@ function Copyright() {
 
 export default function SignInSide() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const userType = queryParams.get('userType');
-
-  const handleSignUpClick = () => {
-    navigate(`/signup?userType=${userType}`);
-  };
 
   const handleEmailSignIn = async (event) => {
     event.preventDefault();
@@ -50,12 +43,7 @@ export default function SignInSide() {
     try {
       const user = await signInWithEmail(email, password);
       if (user) {
-        // Navigate based on userType
-        if (userType === 'investor') {
-          navigate('/AfterLogInInvestor'); // Change this to your route for investors
-        } else if (userType === 'entrepreneur') {
-          navigate('/AfterLogin'); // Change this to your route for entrepreneurs
-        }
+        navigate('/AfterLogin');
       } else {
         alert('Invalid credentials. Please try again.');
       }
@@ -69,12 +57,7 @@ export default function SignInSide() {
     try {
       const user = await signInWithGoogle();
       if (user) {
-        // Navigate based on userType
-        if (userType === 'investor') {
-          navigate('/AfterLogInInvestor'); // Change this to your route for investors
-        } else if (userType === 'entrepreneur') {
-          navigate('/AfterLogin'); // Change this to your route for entrepreneurs
-        }
+        navigate('/AfterLogin');
       } else {
         alert('Google sign-in failed.');
       }
@@ -100,7 +83,6 @@ export default function SignInSide() {
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
-      {/* <h1>Sign In as {userType}</h1> */}
       <Grid
         item
         xs={false}
@@ -195,7 +177,7 @@ export default function SignInSide() {
               </Link>
             </Grid>
             <Grid item>
-              <RouterLink to="/signup" variant="body2" onClick={handleSignUpClick}>
+              <RouterLink to="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </RouterLink>
             </Grid>
