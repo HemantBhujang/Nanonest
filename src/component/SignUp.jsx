@@ -18,6 +18,10 @@ import { GoogleIcon } from './CustomIcons';
 import { Link as RouterLink } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar'; // For error notifications
 import SignUp from '../assets/SignUp.png';
+import { getDatabase, ref, set } from "firebase/database"; // Import Realtime Database
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 
 function Copyright() {
   return (
@@ -40,38 +44,67 @@ export default function SignUpSide() {
   const [role, setRole] = useState('');
   const [error, setError] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
-  const handleSignUp = async (event) => {
-    event.preventDefault();
+const handleSignUp = async (event) => {
+  event.preventDefault();
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      setError('Password must contain at least 8 characters, one uppercase letter, one special character, and one number.');
-      setOpenSnackbar(true);
-      return;
-    }
+  // const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$/;
+  // const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*\d)[A-Za-z\d!@#$&*]{8,}$/;
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log('User created:', user);
 
-      await sendEmailVerification(user);
-      await updateProfile(user, { displayName: `${firstName} ${lastName}`, role });
-      
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-      setRole('');
+  if (!role) {
+    setError('Please select a role.');
+    setOpenSnackbar(true);
+    return;
+  }
+// Password validation regex
+const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_\-+=])(?=.*\d)[A-Za-z\d!@#$%^&*()_\-+=]{8,}$/;
 
-      setError('A verification email has been sent. Please verify your email to complete the signup.');
-      setOpenSnackbar(true);
-    } catch (error) {
-      setError(error.message);
-      setOpenSnackbar(true);
-    }
-  };
+// Log the password for debugging
+console.log('Password:', password);
+
+  if (!passwordRegex.test(password)) {
+    setError('Password must contain at least 8 characters, one uppercase letter, one special character, and one number.');
+    setOpenSnackbar(true);
+    return;
+  }
+  
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log('User created:', user);
+
+    await sendEmailVerification(user);
+    await updateProfile(user, { displayName: `${firstName} ${lastName}` });
+
+    // Initialize Realtime Database
+    const db = getDatabase();
+    const userRef = ref(db, 'users/' + user.uid);
+
+    // Save user info to Realtime Database
+    await set(userRef, {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      role: role,
+      uid: user.uid,
+    });
+
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setRole('');
+
+    setError('A verification email has been sent. Please verify your email to complete the signup.');
+    setOpenSnackbar(true);
+  } catch (error) {
+    setError(error.message);
+    setOpenSnackbar(true);
+  }
+};
 
   const handleGoogleSignIn = async () => {
     try {
@@ -154,18 +187,35 @@ export default function SignUpSide() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+             <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type={passwordVisible ? 'text' : 'password'} // Toggle between text and password
+        id="password"
+        autoComplete="current-password"
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+              borderColor: '#F9BC6E',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#F9BC6E',
+            },
+          },
+        }}
+        value={password} // Bind the password state
+        onChange={(e) => setPassword(e.target.value)} // Update password state
+        InputProps={{
+          endAdornment: (
+            <Button onClick={() => setPasswordVisible(!passwordVisible)} style={{ padding: 0 }}>
+              {passwordVisible ? <VisibilityOff /> : <Visibility />}
+            </Button>
+          ),
+        }}
+      />
           <Select
             fullWidth
             variant="outlined"

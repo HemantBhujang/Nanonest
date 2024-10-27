@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom';
 const HeroSection = () => {
   const navigate = useNavigate();
   
-  const handleSignInClick = (userType) => {
-    navigate(`/signIn?userType=${userType}`); 
+  const handleSignInClick = () => {
+    navigate('/signIn'); 
   };
 
   return (
@@ -29,21 +29,14 @@ const HeroSection = () => {
     <h5 className='mx-3 my-2'>Featured in leading publications around the world</h5>
     <button 
                     type="button" 
-                    className="btn btn-lg my-4 mx-2" 
-                    onClick={() => handleSignInClick('investor')} 
-                    style={{ backgroundColor: '#F9BC6E' }}
+                    className="btn btn-lg my-4 mx-2 " 
+                    onClick={() => handleSignInClick()} 
+                    style={{ backgroundColor: '#F9BC6E', width:'40%' ,fontSize: '1.8rem'}}
                   >
-                    SignIn as Investor 
+                    SignIn 
                   </button>
 
-                  <button 
-                    type="button" 
-                    className="btn btn-lg my-4 mx-2" 
-                    onClick={() => handleSignInClick('entrepreneur')} 
-                    style={{ backgroundColor: '#F9BC6E' }}
-                  >
-                    SignIn as Entrepreneur
-                  </button>
+               
     </div>
     
     </div>

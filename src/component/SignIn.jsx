@@ -17,10 +17,15 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { GoogleIcon } from './CustomIcons';
 import { signInWithEmail, signInWithGoogle } from './AuthService';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Link as RouterLink } from 'react-router-dom';
 import real_img from '../assets/real_img.png';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from './Firebase';
+import { auth ,database } from './Firebase';
+import { ref, get } from "firebase/database";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 
 function Copyright() {
   return (
@@ -38,6 +43,8 @@ function Copyright() {
 export default function SignInSide() {
   const navigate = useNavigate();
   const [role, setRole] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
   const handleEmailSignIn = async (event) => {
     event.preventDefault();
@@ -46,18 +53,32 @@ export default function SignInSide() {
     const password = data.get('password');
 
     try {
-      const user = await signInWithEmail(email, password);
-      if (user) {
-        navigate('/AfterLogin');
+      // Step 1: Sign in with email and password
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Step 2: Retrieve the user's role from the database
+      const roleRef = ref(database, `users/${user.uid}/role`);
+      const roleSnapshot = await get(roleRef);
+
+      if (roleSnapshot.exists()) {
+        const userRole = roleSnapshot.val();
+
+        // Step 3: Check if the role matches the selected role
+        if (userRole === role) {
+          navigate('/AfterLogin');  // Navigate if role matches
+        } else {
+          alert('Role mismatch. Please select the correct role.');
+        }
       } else {
-        alert('Invalid credentials. Please try again.');
+        alert('Role not found for this user.');
       }
     } catch (error) {
-      console.error('Error during sign in:', error);
+      console.error('Error during sign-in:', error);
       alert('Error during sign-in. Please try again.');
     }
   };
-
+  
   const handleGoogleSignIn = async () => {
     try {
       const user = await signInWithGoogle();
@@ -143,26 +164,35 @@ export default function SignInSide() {
               },
             }}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#F9BC6E',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#F9BC6E',
-                },
-              },
-            }}
-          />
+           <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type={passwordVisible ? 'text' : 'password'} // Toggle between text and password
+        id="password"
+        autoComplete="current-password"
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+              borderColor: '#F9BC6E',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#F9BC6E',
+            },
+          },
+        }}
+        value={password} // Bind the password state
+        onChange={(e) => setPassword(e.target.value)} // Update password state
+        InputProps={{
+          endAdornment: (
+            <Button onClick={() => setPasswordVisible(!passwordVisible)} style={{ padding: 0 }}>
+              {passwordVisible ? <VisibilityOff /> : <Visibility />}
+            </Button>
+          ),
+        }}
+      />
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel id="role-label">Role</InputLabel>
             <Select
