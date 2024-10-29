@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { database } from './Firebase'; // Import the initialized database
+import { database } from './Firebase'; // Firebase setup
 import { ref, get } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
 import Navbar2 from './Navbar2';
 import IndustyCard from './IndustyCard';
-
-// Swiper imports
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css'; // Import core Swiper styles
-import 'swiper/css/navigation'; // Import the Navigation module styles
-import 'swiper/css/pagination'; // Import the Pagination module styles
-import { Navigation, Pagination } from 'swiper/modules'; // Updated imports for Swiper modules
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Navigation, Pagination } from 'swiper/modules';
 
 const AfterLogin = ({ title, content, wave }) => {
+  const navigate = useNavigate();
   const [entrepreneurData, setEntrepreneurData] = useState([]);
 
   useEffect(() => {
-    // Fetch entrepreneur data from Firebase
     const fetchEntrepreneurData = async () => {
       const entrepreneurRef = ref(database, '/entrepreneurs');
       const snapshot = await get(entrepreneurRef);
@@ -23,6 +22,7 @@ const AfterLogin = ({ title, content, wave }) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
         const formattedData = Object.keys(data).map(key => ({
+          id: key,  // Keep the unique Firebase ID
           name: data[key].name,
           companyName: data[key].companyName,
           description: data[key].description
@@ -35,6 +35,10 @@ const AfterLogin = ({ title, content, wave }) => {
 
     fetchEntrepreneurData();
   }, []);
+
+  const handleProfileClick = (id) => {
+    navigate(`/profile/${id}`); // Use the ID to navigate
+  };
 
   return (
     <>
@@ -51,33 +55,23 @@ const AfterLogin = ({ title, content, wave }) => {
       </div>
       <img src={wave} alt="Wave Image" className="Start" width="100%" />
       <h1 style={{ textAlign: 'center' }}>Explore Startup Raising Now!!</h1>
-      <div className="btn-group dropend" style={{ marginLeft: '90%' }}>
-        <button type="button" className="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          Dropend
-        </button>
-        <ul className="dropdown-menu">
-          <li><a className="dropdown-item" href="#">Investors</a></li>
-          <li><a className="dropdown-item" href="#">Entrepreneur</a></li>
-          <li><a className="dropdown-item" href="#">Other</a></li>
-        </ul>
-      </div>
-
-      {/* Swiper Slider for Entrepreneur Cards */}
       <Swiper
         spaceBetween={30}
-        slidesPerView={3} // Adjust this value to show multiple cards
+        slidesPerView={3}
         navigation
         pagination={{ clickable: true }}
         style={{ padding: '20px' }}
-        modules={[Navigation, Pagination]} // Use Swiper's modules here
+        modules={[Navigation, Pagination]}
       >
         {entrepreneurData.length > 0 ? (
-          entrepreneurData.map((entrepreneur, index) => (
-            <SwiperSlide key={index}>
+          entrepreneurData.map((entrepreneur) => (
+            <SwiperSlide key={entrepreneur.id}>
               <IndustyCard
+                id={entrepreneur.id} // Pass the ID to the card
                 name={entrepreneur.name}
-                subheader={entrepreneur.companyName}
-                content={entrepreneur.description}
+                companyName={entrepreneur.companyName}
+                description={entrepreneur.description}
+                onClick={() => handleProfileClick(entrepreneur.id)} // Handle profile click
               />
             </SwiperSlide>
           ))

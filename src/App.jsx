@@ -45,7 +45,7 @@ const App = () => {
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu' ,'/profile/EntrepreneurProfileForm', '/MessageSection','/AfterLogInInvestor'];  
+  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu' ,'/profile/EntrepreneurProfileForm', '/MessageSection','/AfterLogInInvestor',"/profile/:id"];  
   const showNavbar = !noNavbarPaths.includes(location.pathname);  
 
   return (  
@@ -99,11 +99,12 @@ const MainLayout = ({ user }) => {
         <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
 
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/VisitProfile" element={<VisitProfile />} />
+        {/* <Route path="/VisitProfile" element={<VisitProfile />} /> */}
         <Route path="Profile/Menu" element ={<Menu />}/>
         <Route path="/Team" element={<Team />} />
         <Route path='/NewPostForm' element={<NewPostForm />}/>
         <Route path='/investment' element={<Investment />}/>
+        <Route path="/profile/:id" element={<VisitProfile />} />
 
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection' element={<MessageSection />}/>
@@ -120,6 +121,7 @@ const MainLayout = ({ user }) => {
         {/* 404 Not Found Route */}
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  
+      {/* <VisitProfile/> */}
     </div>  
   );  
 };  
