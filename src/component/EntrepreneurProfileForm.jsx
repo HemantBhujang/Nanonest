@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar2 from './Navbar2';
-import { ref as databaseRef, set } from 'firebase/database';
+import { ref as databaseRef, set, get } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database, storage, auth } from './Firebase'; // Import your Firebase configuration including auth
 import { onAuthStateChanged } from 'firebase/auth';
@@ -39,6 +39,7 @@ const EntrepreneurProfileForm = () => {
 
   // Fetch current user from Firebase Auth and prefill form
   useEffect(() => {
+
     const currentUser = auth.currentUser;
 
     if (currentUser) {
@@ -48,6 +49,33 @@ const EntrepreneurProfileForm = () => {
         email: currentUser.email || '', // Prefill email
       }));
     }
+  
+
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        // Fetch additional user data from the database
+        const userRef = databaseRef(database, 'entrepreneurs/' + currentUser.uid); // Assuming uid is used as a key
+        const snapshot = await get(userRef);
+        
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setFormData({
+            ...formData,
+            name: userData.name || currentUser.displayName || '',
+            email: currentUser.email || '',
+            companyName: userData.companyName || '',
+            website: userData.website || '',
+            linkedin: userData.linkedin || '',
+            twitter: userData.twitter || '',
+            facebook: userData.facebook || '',
+            description: userData.description || '',
+            profileImage: null, // Profile image is usually not stored here
+          });
+        }
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
   const handleChange = (e) => {
@@ -62,21 +90,22 @@ const EntrepreneurProfileForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploadStatus('Uploading...');
-
+  
     try {
       let profileImageUrl = '';
-      
-      
-      // If the user has uploaded an image
-
+  
       // If the user has uploaded an image
       if (formData.profileImage) {
         const imageRef = storageRef(storage, `profileImages/${formData.profileImage.name}`);
         const snapshot = await uploadBytes(imageRef, formData.profileImage);
         profileImageUrl = await getDownloadURL(snapshot.ref);
       }
-
-      const userRef = databaseRef(database, 'entrepreneurs/' + formData.name);
+  
+      // Format the name to be a valid Firebase key (remove special characters, handle spaces)
+      const formattedNameKey = formData.name.replace(/[.#$[\]]/g, '').replace(/\s+/g, '');
+  
+      // Use the formatted name as the key
+      const userRef = databaseRef(database, 'entrepreneurs/' + formattedNameKey);
       await set(userRef, {
         name: formData.name,
         email: formData.email,
@@ -88,11 +117,12 @@ const EntrepreneurProfileForm = () => {
         description: formData.description,
         profileImageUrl,
       });
-
+  
       setUploadStatus('Form submitted successfully!');
       setPopupMessage('Form submitted successfully!');
       setShowPopup(true);
-
+  
+      // Clear form data after submission
       setFormData({
         name: '',
         email: '',
@@ -104,7 +134,7 @@ const EntrepreneurProfileForm = () => {
         description: '',
         profileImage: null,
       });
-
+  
     } catch (error) {
       console.error('Error uploading data:', error);
       setUploadStatus('Error submitting the form, please try again.');
@@ -112,7 +142,7 @@ const EntrepreneurProfileForm = () => {
       setShowPopup(true);
     }
   };
-
+  
   // Function to close the popup
   const closePopup = () => {
     setShowPopup(false);

@@ -51,26 +51,29 @@ const Profile = () => {
   }, []);
 
   // Function to fetch user profile data from Firebase Realtime Database
-  const fetchUserProfileData = (userNameOrEmail) => {
-    const userRef = ref(database, `entrepreneurs/${userNameOrEmail}`); // Path in Realtime DB based on user displayName or email
+ // Function to fetch user profile data from Firebase Realtime Database
+const fetchUserProfileData = (userNameOrEmail) => {
+  const formattedKey = userNameOrEmail.replace(/[.#$[\]]/g, '').replace(/\s+/g, ''); // Remove unsupported characters
+  const userRef = ref(database, `entrepreneurs/${formattedKey}`); // Path in Realtime DB based on formatted name or email
 
-    onValue(userRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        // Update the profile data state with data fetched from Firebase
-        setProfileData({
-          companyName: data.companyName || '',
-          description: data.description || '',
-          website: data.website || '',
-          linkedin: data.linkedin || '',
-          facebook: data.facebook || '',
-          profileImageUrl: data.profileImageUrl || defaultProfilePic,
-        });
-      } else {
-        console.log("No data available for this user");
-      }
-    });
-  };
+  onValue(userRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      // Update the profile data state with data fetched from Firebase
+      setProfileData({
+        companyName: data.companyName || '',
+        description: data.description || '',
+        website: data.website || '',
+        linkedin: data.linkedin || '',
+        facebook: data.facebook || '',
+        twitter: data.twitter || '', 
+        profileImageUrl: data.profileImageUrl || defaultProfilePic,
+      });
+    } else {
+      console.log("No data available for this user");
+    }
+  });
+};
 
   // Function to fetch user posts (example function, adjust as needed)
   const fetchUserPosts = (userNameOrEmail) => {
@@ -119,10 +122,13 @@ const Profile = () => {
               {/* Links to user's email, website, LinkedIn, and Facebook */}
               <a href={`mailto:${userEmail}`} className='m-5'>{userEmail}</a>
               <a href={profileData.website} target="_blank" rel="noopener noreferrer" className='m-5'>
-                Website URL
+              {profileData.website}
               </a>
               <a href={profileData.linkedin} target="_blank" rel="noopener noreferrer" className='m-5'>
-                LinkedIn Profile
+              {profileData.linkedin}
+              </a>
+              <a href={profileData.twitter} target="_blank" rel="noopener noreferrer" className='m-5'>
+              {profileData.twitter}
               </a>
             </div>
           </div>
