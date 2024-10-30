@@ -29,7 +29,7 @@ const Profile = () => {
       if (user) {
         setUserEmail(user.email); // Set the email state when user is authenticated
         fetchUserProfileData(user.displayName || user.email); // Fetch profile data based on displayName or email
-        fetchUserPosts(user.displayName || user.email); // Fetch user posts
+        fetchUserPosts(user.uid); // Fetch user posts by user ID
       } else {
         setUserEmail(''); // Clear email if no user is signed in
       }
@@ -51,39 +51,50 @@ const Profile = () => {
   }, []);
 
   // Function to fetch user profile data from Firebase Realtime Database
- // Function to fetch user profile data from Firebase Realtime Database
-const fetchUserProfileData = (userNameOrEmail) => {
-  const formattedKey = userNameOrEmail.replace(/[.#$[\]]/g, '').replace(/\s+/g, ''); // Remove unsupported characters
-  const userRef = ref(database, `entrepreneurs/${formattedKey}`); // Path in Realtime DB based on formatted name or email
+  const fetchUserProfileData = (userNameOrEmail) => {
+    const formattedKey = userNameOrEmail.replace(/[.#$[\]]/g, '').replace(/\s+/g, ''); // Remove unsupported characters
+    const userRef = ref(database, `entrepreneurs/${formattedKey}`); // Path in Realtime DB based on formatted name or email
 
-  onValue(userRef, (snapshot) => {
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      // Update the profile data state with data fetched from Firebase
-      setProfileData({
-        companyName: data.companyName || '',
-        description: data.description || '',
-        website: data.website || '',
-        linkedin: data.linkedin || '',
-        facebook: data.facebook || '',
-        twitter: data.twitter || '', 
-        profileImageUrl: data.profileImageUrl || defaultProfilePic,
-      });
-    } else {
-      console.log("No data available for this user");
-    }
-  });
-};
+    onValue(userRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        // Update the profile data state with data fetched from Firebase
+        setProfileData({
+          companyName: data.companyName || '',
+          description: data.description || '',
+          website: data.website || '',
+          linkedin: data.linkedin || '',
+          facebook: data.facebook || '',
+          twitter: data.twitter || '',
+          profileImageUrl: data.profileImageUrl || defaultProfilePic,
+        });
+      } else {
+        console.log("No data available for this user");
+      }
+    });
+  };
 
-  // Function to fetch user posts (example function, adjust as needed)
-  const fetchUserPosts = (userNameOrEmail) => {
-    // Replace with actual logic to fetch posts from your database
-    const examplePosts = [
-      { title: 'Post 1', content: 'Content for post 1', image: defaultProfilePic },
-      { title: 'Post 2', content: 'Content for post 2', image: defaultProfilePic },
-      { title: 'Post 3', content: 'Content for post 3', image: defaultProfilePic },
-    ];
-    setPosts(examplePosts);
+  // Function to fetch user posts
+  const fetchUserPosts = (userId) => {
+    const postsRef = ref(database, 'post'); // Reference to the posts in your database
+
+    onValue(postsRef, (snapshot) => {
+      const fetchedPosts = [];
+      if (snapshot.exists()) {
+        snapshot.forEach((childSnapshot) => {
+          const postData = childSnapshot.val();
+          // Check if the userId of the post matches the current user's ID
+          if (postData.userId === userId) {
+            fetchedPosts.push({
+              title: postData.title,
+              content: postData.description,
+              image: postData.imageUrl || defaultProfilePic, // Ensure an image is always available
+            });
+          }
+        });
+        setPosts(fetchedPosts); // Update the state with fetched posts
+      }
+    });
   };
 
   return (
@@ -149,6 +160,7 @@ const fetchUserProfileData = (userNameOrEmail) => {
       {/* Wave Image Section */}
       <div>
         <img src={wave} alt="wave image" style={{ width: "100%" }} />
+        <h1 style={{ textAlign: 'center' }}>View your posts!!</h1>
       </div>
 
       {/* Posts Section */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,6 +9,9 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Snackbar from '@mui/material/Snackbar';
 import { styled } from '@mui/system';
+import { getDatabase, ref, push } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';  // Import onAuthStateChanged
 
 export default function NewPostForm() {
   const [postTitle, setPostTitle] = useState('');
@@ -16,21 +19,81 @@ export default function NewPostForm() {
   const [postImage, setPostImage] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [currentUser, setCurrentUser] = useState(null); // State to hold the current user
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    // Set up an observer on the Auth object
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user); // Save user to state
+        console.log('Current User ID:', user.uid); // Log the user ID
+      } else {
+        console.log('No user is signed in.');
+        setCurrentUser(null); // Clear user from state
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []); // Empty dependency array ensures this runs once on component mount
 
   const handleFileChange = (e) => {
     setPostImage(e.target.files[0]);
   };
-
-  const handlePostSubmit = (event) => {
+  const handlePostSubmit = async (event) => {
     event.preventDefault();
-    if (postTitle && postDescription) {
-      console.log('New Post:', { postTitle, postDescription, postImage });
-      setSnackbarMessage('Post submitted successfully!');
+  
+    if (currentUser) {
+      const userId = currentUser.uid; // Get the current user's ID
+  
+      if (postTitle && postDescription) {
+        const db = getDatabase();
+        const postRef = ref(db, 'post');
+        const storage = getStorage();
+  
+        let imageUrl = null;
+  
+        // Upload image if selected
+        if (postImage) {
+          const imageRef = storageRef(storage, `images/${postImage.name}`);
+          try {
+            const snapshot = await uploadBytes(imageRef, postImage);
+            imageUrl = await getDownloadURL(snapshot.ref);
+          } catch (error) {
+            setSnackbarMessage('Error uploading image. Please try again.');
+            setOpenSnackbar(true);
+            return;
+          }
+        }
+  
+        const newPost = {
+          title: postTitle,
+          description: postDescription,
+          imageUrl: imageUrl, // Store the image URL in the database
+          userId: userId, // Store the user ID in the post
+          createdAt: new Date().toISOString(),
+        };
+  
+        try {
+          await push(postRef, newPost);
+          setSnackbarMessage('Post submitted successfully!');
+          setPostTitle('');
+          setPostDescription('');
+          setPostImage(null);
+        } catch (error) {
+          setSnackbarMessage('Error submitting post. Please try again.');
+        }
+      } else {
+        setSnackbarMessage('Please fill out all required fields.');
+      }
     } else {
-      setSnackbarMessage('Please fill out all required fields.');
+      setSnackbarMessage('No user is signed in. Please log in.');
     }
     setOpenSnackbar(true);
   };
+  
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
