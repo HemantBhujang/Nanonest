@@ -8,7 +8,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
 import { useNavigate } from 'react-router-dom';
 
-const IndustyCard = ({ id, name, companyName, description }) => {
+const IndustyCard = ({ id, name, companyName, description, profileImageUrl }) => {
   const navigate = useNavigate();
 
   const handleViewProfile = () => {
@@ -16,22 +16,32 @@ const IndustyCard = ({ id, name, companyName, description }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 2 }}>
+    <Card
+      sx={{
+        width: 300,
+        height: 400,
+        boxShadow: 3,
+        borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
+    >
       <CardActionArea onClick={handleViewProfile}>
         <CardMedia
           component="img"
           height="140"
-          image="/static/images/cards/contemplative-reptile.jpg" // Replace with actual entrepreneur image URL
+          image={profileImageUrl || '/static/images/cards/default-image.jpg'} // Use profileImageUrl or default image
           alt={name}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h5" component="div" noWrap>
             {name}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
+          <Typography variant="subtitle1" color="text.secondary" noWrap>
             {companyName}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
             {description}
           </Typography>
         </CardContent>

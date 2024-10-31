@@ -25,7 +25,8 @@ const AfterLogin = ({ title, content, wave }) => {
           id: key,  // Keep the unique Firebase ID
           name: data[key].name,
           companyName: data[key].companyName,
-          description: data[key].description
+          description: data[key].description,
+          profileImageUrl: data[key].profileImageUrl
         }));
         setEntrepreneurData(formattedData);
       } else {
@@ -71,6 +72,7 @@ const AfterLogin = ({ title, content, wave }) => {
                 name={entrepreneur.name}
                 companyName={entrepreneur.companyName}
                 description={entrepreneur.description}
+                profileImageUrl={entrepreneur.profileImageUrl} 
                 onClick={() => handleProfileClick(entrepreneur.id)} // Handle profile click
               />
             </SwiperSlide>
