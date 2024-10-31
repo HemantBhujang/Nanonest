@@ -51,22 +51,26 @@ export default function SignInSide() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
-
+  
     try {
       // Step 1: Sign in with email and password
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
+  
       // Step 2: Retrieve the user's role from the database
       const roleRef = ref(database, `users/${user.uid}/role`);
       const roleSnapshot = await get(roleRef);
-
+  
       if (roleSnapshot.exists()) {
         const userRole = roleSnapshot.val();
-
+  
         // Step 3: Check if the role matches the selected role
         if (userRole === role) {
-          navigate('/AfterLogin');  // Navigate if role matches
+          if (userRole === 'Entrepreneur') {
+            navigate('/AfterLogin');  // Navigate to Entrepreneur page
+          } else if (userRole === 'Investor') {
+            navigate('/AfterLogInInvestor');  // Navigate to Investor page
+          }
         } else {
           alert('Role mismatch. Please select the correct role.');
         }
@@ -78,6 +82,7 @@ export default function SignInSide() {
       alert('Error during sign-in. Please try again.');
     }
   };
+  
   
   const handleGoogleSignIn = async () => {
     try {
