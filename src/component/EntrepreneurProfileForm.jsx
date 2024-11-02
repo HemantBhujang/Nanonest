@@ -90,22 +90,30 @@ const EntrepreneurProfileForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploadStatus('Uploading...');
-  
+    
     try {
       let profileImageUrl = '';
+      
+      // Get the current user
+      const currentUser = auth.currentUser;
+  
+      if (!currentUser) {
+        setPopupMessage('Please log in to submit the form.');
+        setShowPopup(true);
+        return;
+      }
   
       // If the user has uploaded an image
       if (formData.profileImage) {
-        const imageRef = storageRef(storage, `profileImages/${formData.profileImage.name}`);
+        const imageRef = storageRef(storage, `profileImages/${currentUser.uid}`);
         const snapshot = await uploadBytes(imageRef, formData.profileImage);
         profileImageUrl = await getDownloadURL(snapshot.ref);
       }
   
-      // Format the name to be a valid Firebase key (remove special characters, handle spaces)
-      const formattedNameKey = formData.name.replace(/[.#$[\]]/g, '').replace(/\s+/g, '');
-  
-      // Use the formatted name as the key
-      const userRef = databaseRef(database, 'entrepreneurs/' + formattedNameKey);
+      // Use the current user's uid as the key
+      const userRef = databaseRef(database, `entrepreneurs/${currentUser.uid}`);
+      
+      // Set the data (this will overwrite existing data at this path)
       await set(userRef, {
         name: formData.name,
         email: formData.email,
@@ -142,6 +150,7 @@ const EntrepreneurProfileForm = () => {
       setShowPopup(true);
     }
   };
+  
   
   // Function to close the popup
   const closePopup = () => {

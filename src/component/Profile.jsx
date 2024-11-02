@@ -19,7 +19,7 @@ const Profile = () => {
     website: '',
     linkedin: '',
     facebook: '',
-    profileImageUrl: '',
+    profileImageUrl: defaultProfilePic,
   });
   const [posts, setPosts] = useState([]); // State to hold user posts
 
@@ -27,38 +27,25 @@ const Profile = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserEmail(user.email); // Set the email state when user is authenticated
-        fetchUserProfileData(user.displayName || user.email); // Fetch profile data based on displayName or email
-        fetchUserPosts(user.uid); // Fetch user posts by user ID
+        setUser(user); // Set user state
+        setUserEmail(user.email); // Set email
+        fetchUserProfileData(user.uid); // Fetch profile data by user UID
+        fetchUserPosts(user.uid); // Fetch user posts by UID
       } else {
-        setUserEmail(''); // Clear email if no user is signed in
+        setUser(null);
+        setUserEmail('');
       }
     });
-    return () => unsubscribe(); // Clean up the subscription
-  }, []);
-
-  // Second useEffect to monitor auth state and set the user object
-  useEffect(() => {
-    const auth = getAuth();
-    // Monitor the authentication state
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser); // Set the logged-in user data
-      } else {
-        setUser(null); // Clear user data if no user is signed in
-      }
-    });
+    return () => unsubscribe(); // Clean up subscription
   }, []);
 
   // Function to fetch user profile data from Firebase Realtime Database
-  const fetchUserProfileData = (userNameOrEmail) => {
-    const formattedKey = userNameOrEmail.replace(/[.#$[\]]/g, '').replace(/\s+/g, ''); // Remove unsupported characters
-    const userRef = ref(database, `entrepreneurs/${formattedKey}`); // Path in Realtime DB based on formatted name or email
+  const fetchUserProfileData = (userId) => {
+    const userRef = ref(database, `entrepreneurs/${userId}`); // Adjusted path to use UID directly
 
     onValue(userRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        // Update the profile data state with data fetched from Firebase
         setProfileData({
           companyName: data.companyName || '',
           description: data.description || '',
@@ -69,7 +56,7 @@ const Profile = () => {
           profileImageUrl: data.profileImageUrl || defaultProfilePic,
         });
       } else {
-        console.log("No data available for this user");
+        console.log("No profile data available for this user.");
       }
     });
   };
@@ -114,7 +101,7 @@ const Profile = () => {
           <div className="col">
             {/* Display user's profile picture or default if none */}
             <img 
-              src={user?.photoURL || profileData.profileImageUrl} 
+              src={profileData.profileImageUrl} 
               className="card-img-top" 
               alt="Profile" 
               style={{ width: '300px', height: '300px', borderRadius: '100%' }} 
