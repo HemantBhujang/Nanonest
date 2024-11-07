@@ -12,9 +12,9 @@ import webDesign from './assets/Web Design 1.png';
 import SignIn from './component/SignIn';  
 import SignUp from './component/SignUp';  
 import AfterLogin from './component/AfterLogin';
-import AfterLogInInvestor from './component/AfterLogInInvestor' ;
+import AfterLogInInvestor from './component/AfterLogInInvestor';
 import Profile from './component/Profile';  
-import { getAuth, onAuthStateChanged } from "firebase/auth";  // Import Firebase Auth
+import { getAuth, onAuthStateChanged } from "firebase/auth";  
 import VisitProfile from './component/VisitProfile';
 import Menu from './component/Menu';
 import EntrepreneurProfileForm from './component/EntrepreneurProfileForm';
@@ -25,28 +25,41 @@ import NewPostForm from './component/NewPostForm'
 import Investment from './component/Investment';
 
 const App = () => {  
-  const [user, setUser] = useState(null);  // State to hold the current user
+  const [user, setUser] = useState(null);  
 
   useEffect(() => {
     const auth = getAuth();
-    // Monitor the authentication state
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser || null); // Set the logged-in user data or null
+      setUser(currentUser || null);
     });
-    return () => unsubscribe(); // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   return (  
     <Router>  
-      <MainLayout user={user} />  {/* Pass user data to the MainLayout */}
+      <MainLayout user={user} /> 
     </Router>  
   );  
 };  
 
 const MainLayout = ({ user }) => {  
   const location = useLocation();  
-  const noNavbarPaths = ['/signIn', '/signup', '/AfterLogin', '/profile','/VisitProfile','/Profile/Menu' ,'/profile/EntrepreneurProfileForm', '/MessageSection','/AfterLogInInvestor',`/profile/id`];  
-  const showNavbar = !noNavbarPaths.includes(location.pathname);  
+
+  // Check if the current path matches the dynamic pattern for profile pages or other pages without a Navbar
+  const noNavbarPaths = [
+    '/signIn', 
+    '/signup', 
+    '/AfterLogin', 
+    '/profile', 
+    '/VisitProfile',
+    '/Profile/Menu', 
+    '/profile/EntrepreneurProfileForm', 
+    '/MessageSection', 
+    '/AfterLogInInvestor'
+  ];
+
+  const isDynamicProfile = /^\/profile\/[a-zA-Z0-9]+$/.test(location.pathname);
+  const showNavbar = !noNavbarPaths.includes(location.pathname) && !isDynamicProfile;
 
   return (  
     <div>  
@@ -68,14 +81,11 @@ const MainLayout = ({ user }) => {
       <Routes>  
         <Route path="/" element={  
           <>  
-         
             <HeroSection />  
             <Section2 />  
             <Appointment />  
             <Testimonials /> 
             <Footer />
-            
-            
           </>  
         }/>  
 
@@ -96,32 +106,28 @@ const MainLayout = ({ user }) => {
         }/>  
 
         <Route path="/signIn" element={<SignIn />} />  
-        <Route path='profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
+        <Route path='/profile/EntrepreneurProfileForm' element ={<EntrepreneurProfileForm />}/>
 
         <Route path="/signup" element={<SignUp />} />
-        {/* <Route path="/VisitProfile" element={<VisitProfile />} /> */}
         <Route path="Profile/Menu" element ={<Menu />}/>
         <Route path="/Team" element={<Team />} />
         <Route path='/NewPostForm' element={<NewPostForm />}/>
         <Route path='/investment' element={<Investment />}/>
-        <Route path="/profile/:id" element={<VisitProfile />} />
+        <Route path="/profile/:id" element={<VisitProfile />} /> {/* Route for dynamic profiles */}
 
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection' element={<MessageSection />}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
-            title={`Welcome, ${user?.displayName || 'User'}`}  // Dynamically pass user's name
+            title={`Welcome, ${user?.displayName || 'User'}`}  
             content='where your entrepreneurial journey meets limitless growth and opportunity!'   
           />  
-         
         } /> 
 
         <Route path='/AfterLogInInvestor' element={<AfterLogInInvestor/>}/>
-        {/* 404 Not Found Route */}
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  
-      {/* <VisitProfile/> */}
     </div>  
   );  
 };  

@@ -10,6 +10,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 
+
+
 const Profile = () => {
   const [user, setUser] = useState(null); // State to hold the current user
   const [userEmail, setUserEmail] = useState(null); // State to hold user email

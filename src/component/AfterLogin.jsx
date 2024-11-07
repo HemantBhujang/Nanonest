@@ -9,71 +9,47 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
-import { Card, CardContent, CardMedia, Typography, Grid, IconButton, Box } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import CommentIcon from '@mui/icons-material/Comment';
-import ShareIcon from '@mui/icons-material/Share';
+import { Box, Typography, Card, CardContent, CardMedia, Grid } from '@mui/material';
 
 const AfterLogin = ({ title, content, wave }) => {
   const navigate = useNavigate();
   const [entrepreneurData, setEntrepreneurData] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState(null);
-  const [posts, setPosts] = useState([]); // State for posts data
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUserId(user.uid);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
+    // Fetch Entrepreneur Data
     const fetchEntrepreneurData = async () => {
       const entrepreneurRef = ref(database, '/entrepreneurs');
       const snapshot = await get(entrepreneurRef);
 
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const formattedData = Object.keys(data).map((key) => ({
+        const formattedData = Object.keys(data).map(key => ({
           id: key,
           name: data[key].name,
           companyName: data[key].companyName,
           description: data[key].description,
-          profileImageUrl: data[key].profileImageUrl,
+          profileImageUrl: data[key].profileImageUrl
         }));
-
-        const filteredData = formattedData.filter(
-          (entrepreneur) => entrepreneur.id !== currentUserId
-        );
-
-        setEntrepreneurData(filteredData);
+        setEntrepreneurData(formattedData);
       } else {
-        console.log('No entrepreneur data available');
+        console.log('No data available');
       }
     };
 
-    if (currentUserId) {
-      fetchEntrepreneurData();
-    }
-  }, [currentUserId]);
-
-  useEffect(() => {
+    // Fetch Posts Data
     const fetchPostsData = async () => {
-      const postsRef = ref(database, '/post');
+      const postsRef = ref(database, '/posts');
       const snapshot = await get(postsRef);
 
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const formattedPosts = Object.keys(data).map((key) => ({
+        const formattedPosts = Object.keys(data).map(key => ({
           id: key,
           title: data[key].title,
           description: data[key].description,
-          imageUrl: data[key].imageUrl,
-          createdAt: data[key].createdAt,
+          postImageUrl: data[key].postImageUrl,
+          userProfilePic: data[key].userProfilePic
         }));
         setPosts(formattedPosts);
       } else {
@@ -81,6 +57,7 @@ const AfterLogin = ({ title, content, wave }) => {
       }
     };
 
+    fetchEntrepreneurData();
     fetchPostsData();
   }, []);
 
@@ -102,6 +79,8 @@ const AfterLogin = ({ title, content, wave }) => {
         <h3 style={{ fontSize: '4vmin', color: '#F9BC6E' }}>{content}</h3>
       </div>
       <img src={wave} alt="Wave Image" className="Start" width="100%" />
+      
+      {/* Entrepreneur Section */}
       <h1 style={{ textAlign: 'center' }}>Explore Startup Raising Now!!</h1>
       <Swiper
         spaceBetween={30}
@@ -119,7 +98,7 @@ const AfterLogin = ({ title, content, wave }) => {
                 name={entrepreneur.name}
                 companyName={entrepreneur.companyName}
                 description={entrepreneur.description}
-                profileImageUrl={entrepreneur.profileImageUrl}
+                profileImageUrl={entrepreneur.profileImageUrl} 
                 onClick={() => handleProfileClick(entrepreneur.id)}
               />
             </SwiperSlide>
@@ -129,77 +108,46 @@ const AfterLogin = ({ title, content, wave }) => {
         )}
       </Swiper>
 
-    {/* Post Section */}
-<div className="container my-5">
-<h1  className="my-5"style={{ textAlign: 'center' }}>Explore projects here!!</h1>
-  <Grid container spacing={3}>
-    {posts.map((post, index) => (
-      <Grid item xs={12} sm={6} md={4} key={index}>
-        <Card 
-          sx={{ 
-            maxWidth: '100%', 
-            margin: 'auto', 
-            borderRadius: '15px', 
-            boxShadow: 3,
-            height: '450px' // Fixed height for the card
-          }}
-        >
-          {/* Image Section */}
-          <CardMedia
-            component="img"
-            image={post.imageUrl}
-            alt={post.title}
-            sx={{ height: '180px', objectFit: 'cover', borderRadius: '15px 15px 0 0' }} // Fixed height for image
-          />
-          
-          {/* Content Section */}
-          <CardContent sx={{ flexGrow: 1 }}>
-            <Typography gutterBottom variant="h5" component="div" color="#F9BC6E" sx={{height:'80px'}}>
-              {post.title}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{
-                display: '-webkit-box',
-                WebkitLineClamp: 3,  // Limits description to 3 lines
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                height: '100px'  // Fixed height for consistent layout
-              }}
-            >
-              {post.description}
-            </Typography>
-          </CardContent>
-          
-          {/* Icons Section */}
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              justifyContent: 'space-around', 
-              alignItems: 'center', 
-              padding: '16px', 
-              borderTop: '1px solid #eee',
-              height: '20px' // Fixed height for the icon section
-            }}
-          >
-            <IconButton aria-label="like" sx={{ flex: 1 }}>
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton aria-label="comment" sx={{ flex: 1 }}>
-              <CommentIcon />
-            </IconButton>
-            <IconButton aria-label="share" sx={{ flex: 1 }}>
-              <ShareIcon />
-            </IconButton>
-          </Box>
-          
-        </Card>
+      {/* Posts Section */}
+      <h1 style={{ textAlign: 'center', marginTop: '40px' }}>Latest Posts</h1>
+      <Grid container spacing={4} sx={{ padding: 2 }}>
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <Grid item xs={12} sm={6} md={4} key={post.id}>
+              <Card sx={{ boxShadow: 3 }}>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={post.postImageUrl}
+                  alt="Post image"
+                />
+                <CardContent>
+                  <Box display="flex" alignItems="center" mb={2}>
+                    <CardMedia
+                      component="img"
+                      image={post.userProfilePic}
+                      alt="User profile"
+                      sx={{ width: 40, height: 40, borderRadius: '50%', mr: 2 }}
+                    />
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333' }}>
+                      {post.title}
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary">
+                    {post.description.length > 100
+                      ? post.description.substring(0, 100) + '...'
+                      : post.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        ) : (
+          <Typography variant="h6" align="center" color="text.secondary" sx={{ width: '100%', mt: 4 }}>
+            No posts available
+          </Typography>
+        )}
       </Grid>
-    ))}
-  </Grid>
-</div>
     </>
   );
 };
