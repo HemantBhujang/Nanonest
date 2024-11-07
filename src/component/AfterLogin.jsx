@@ -9,7 +9,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
-import { Box, Typography, Card, CardContent, CardMedia, Grid } from '@mui/material';
+import { Box, Typography, Card, CardContent, IconButton,CardMedia, Grid } from '@mui/material';
+
+import ShareIcon from '@mui/icons-material/Share';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CommentIcon from '@mui/icons-material/Comment';
+
 
 const AfterLogin = ({ title, content, wave }) => {
   const navigate = useNavigate();
@@ -39,7 +44,7 @@ const AfterLogin = ({ title, content, wave }) => {
 
     // Fetch Posts Data
     const fetchPostsData = async () => {
-      const postsRef = ref(database, '/posts');
+      const postsRef = ref(database, '/post');
       const snapshot = await get(postsRef);
 
       if (snapshot.exists()) {
@@ -48,8 +53,9 @@ const AfterLogin = ({ title, content, wave }) => {
           id: key,
           title: data[key].title,
           description: data[key].description,
-          postImageUrl: data[key].postImageUrl,
-          userProfilePic: data[key].userProfilePic
+          postImageUrl: data[key].imageUrl,
+          userId: data[key].userId,
+          createdAt: data[key].createdAt
         }));
         setPosts(formattedPosts);
       } else {
@@ -110,44 +116,69 @@ const AfterLogin = ({ title, content, wave }) => {
 
       {/* Posts Section */}
       <h1 style={{ textAlign: 'center', marginTop: '40px' }}>Latest Posts</h1>
-      <Grid container spacing={4} sx={{ padding: 2 }}>
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <Grid item xs={12} sm={6} md={4} key={post.id}>
-              <Card sx={{ boxShadow: 3 }}>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={post.postImageUrl}
-                  alt="Post image"
-                />
-                <CardContent>
-                  <Box display="flex" alignItems="center" mb={2}>
-                    <CardMedia
-                      component="img"
-                      image={post.userProfilePic}
-                      alt="User profile"
-                      sx={{ width: 40, height: 40, borderRadius: '50%', mr: 2 }}
-                    />
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333' }}>
-                      {post.title}
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    {post.description.length > 100
-                      ? post.description.substring(0, 100) + '...'
-                      : post.description}
-                  </Typography>
-                </CardContent>
-              </Card>
+      <Swiper
+        direction="vertical" // Set the direction to vertical
+        spaceBetween={30}
+        slidesPerView={1} // Each slide will contain three columns
+        navigation
+        pagination={{ clickable: true }}
+        style={{ height: '500px', padding: '20px' }} // Adjust height as needed
+        modules={[Navigation, Pagination]}
+      >
+        {Array.from({ length: Math.ceil(posts.length / 3) }).map((_, index) => (
+          <SwiperSlide key={index}>
+            <Grid container spacing={2}>
+              {posts.slice(index * 3, index * 3 + 3).map((post) => {
+                // Find the corresponding user profile image using userId
+                const user = entrepreneurData.find(entrepreneur => entrepreneur.id === post.userId);
+                const userProfileImage = user ? user.profileImageUrl : '/path/to/default/profile.png'; // Default image if user not found
+
+                return (
+                  <Grid item xs={12} sm={4} key={post.id}>
+  <Card sx={{ boxShadow: 3, height: '400px', display: 'flex', flexDirection: 'column' }}>
+    <CardMedia
+      component="img"
+      height="150"
+      image={post.postImageUrl}
+      alt="Post image"
+    />
+    <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <Box display="flex" alignItems="center" mb={2}>
+        <CardMedia
+          component="img"
+          image={userProfileImage} // Use fetched user profile image
+          alt="User profile"
+          sx={{ width: 40, height: 40, borderRadius: '50%', mr: 2 }}
+        />
+        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333' }}>
+          {post.title}
+        </Typography>
+      </Box>
+      <Typography variant="body2" color="text.secondary">
+        {post.description.length > 100
+          ? post.description.substring(0, 100) + '...'
+          : post.description}
+      </Typography>
+    </CardContent>
+    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 16px' }}>
+      <IconButton aria-label="like" size="small">
+        <FavoriteIcon />
+      </IconButton>
+      <IconButton aria-label="comment" size="small">
+        <CommentIcon />
+      </IconButton>
+      <IconButton aria-label="share" size="small">
+        <ShareIcon />
+      </IconButton>
+    </div>
+  </Card>
+</Grid>
+                );
+              })}
             </Grid>
-          ))
-        ) : (
-          <Typography variant="h6" align="center" color="text.secondary" sx={{ width: '100%', mt: 4 }}>
-            No posts available
-          </Typography>
-        )}
-      </Grid>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </>
   );
 };
