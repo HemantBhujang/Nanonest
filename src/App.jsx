@@ -82,7 +82,7 @@ const MainLayout = ({ user }) => {
         <Route path="/" element={  
           <>  
             <HeroSection />  
-            <Section2 />  
+            <Section2 />  <br />
             <Appointment />  
             <Testimonials /> 
             <Footer />
