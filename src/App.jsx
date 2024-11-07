@@ -23,6 +23,10 @@ import Footer from './component/Footer';
 import Team from './component/Team';
 import NewPostForm from './component/NewPostForm'
 import Investment from './component/Investment';
+import AboutUs from './component/AboutUs';
+import EntrepreneurFAQ from './Common/EntreprenuerFAQ';
+import InvestorFAQ from './Common/InvestorFAQ';
+import Resources from './Common/Resources';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -114,7 +118,10 @@ const MainLayout = ({ user }) => {
         <Route path='/NewPostForm' element={<NewPostForm />}/>
         <Route path='/investment' element={<Investment />}/>
         <Route path="/profile/:id" element={<VisitProfile />} /> {/* Route for dynamic profiles */}
-
+        <Route path='/about' element={<AboutUs/>}/> 
+        <Route path='/faq' element={<EntrepreneurFAQ/>}/>
+        <Route path='/investor-faq' element={<InvestorFAQ/>} />
+        <Route path='/blog' element={<Resources/>}/>
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection' element={<MessageSection />}/>
         <Route path="/AfterLogin" element={  
