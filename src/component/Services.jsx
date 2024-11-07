@@ -11,6 +11,7 @@ import {
 import me from '../assets/InvestorRelationManagement.png';
 import me2 from '../Images/Market_Analysis.jpg';
 import me3 from '../Images/communication2.jpg';
+import Footer from '../component/Footer'
 
 const servicesData = [
   {
@@ -34,6 +35,7 @@ const servicesData = [
 
 const Services = ({title,content,itWorker}) => {
   return (
+    <>
         <div className="container text-center my-5">
   <div className="row">
     <div className="col my-5">
@@ -107,7 +109,8 @@ const Services = ({title,content,itWorker}) => {
         })}
       </Container>
     </div>
-   
+   <Footer />
+      </>
   )
 }
 
