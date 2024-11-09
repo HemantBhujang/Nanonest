@@ -25,6 +25,7 @@ import { auth ,database } from './Firebase';
 import { ref, get } from "firebase/database";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import logo from "../Images/Logo_Login.png"
 
 
 function Copyright() {
@@ -120,9 +121,9 @@ export default function SignInSide() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url(${real_img})`,
+          backgroundImage: `url(${logo})`,
           backgroundRepeat: 'no-repeat',
-          backgroundSize: '150%',
+          backgroundSize: '120%',
           backgroundPosition: 'start',
         }}
       />

@@ -21,6 +21,7 @@ import SignUp from '../assets/SignUp.png';
 import { getDatabase, ref, set } from "firebase/database"; // Import Realtime Database
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import logo from "../Images/Logo_Login.png"
 
 
 function Copyright() {
@@ -130,10 +131,10 @@ console.log('Password:', password);
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url(${SignUp})`,
+          backgroundImage: `url(${logo})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'Start',
         }}
       />
       <Grid
