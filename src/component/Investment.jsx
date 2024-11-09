@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Grid, MenuItem, InputAdornment, FormControl, InputLabel, Select, Snackbar, Alert } from '@mui/material';
-
+import { Box, Button, TextField, Typography, Grid, MenuItem, InputAdornment, FormControl, InputLabel, Select, Snackbar, Alert, CardMedia } from '@mui/material';
+import PhonePay from '../Images/PhonePay.png'; // Make sure this path is correct
+import Navbar2 from './Navbar2';
 const Investment = () => {
   const [formData, setFormData] = useState({
     amount: '',
@@ -25,17 +26,13 @@ const Investment = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Add logic to handle form submission, e.g., send data to Firebase
     console.log(formData);
 
-    // Show a notification after submission
     setNotification({
       open: true,
       message: 'Funding request submitted successfully!',
     });
 
-    // Reset form data (optional)
     setFormData({
       amount: '',
       purpose: '',
@@ -50,13 +47,20 @@ const Investment = () => {
   };
 
   return (
+    <>
+    <Navbar2
+        title='NanoNest'
+        msg='Message'
+        notification='Notification'
+        menu='Menu'
+        button='Profile'
+      />
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: 'auto', p: 3, boxShadow: 3, borderRadius: 2 }}>
       <Typography variant="h4" gutterBottom align="center" sx={{ color: '#F9BC6E' }}>
         Funding Request Form
       </Typography>
       
       <Grid container spacing={2}>
-        {/* Funding Amount */}
         <Grid item xs={12}>
           <TextField
             label="Funding Amount"
@@ -73,7 +77,6 @@ const Investment = () => {
           />
         </Grid>
 
-        {/* Purpose of Funding */}
         <Grid item xs={12}>
           <TextField
             label="Purpose of Funding"
@@ -88,7 +91,6 @@ const Investment = () => {
           />
         </Grid>
 
-        {/* Duration for Repayment */}
         <Grid item xs={12}>
           <TextField
             label="Duration for Repayment (in months)"
@@ -102,8 +104,7 @@ const Investment = () => {
           />
         </Grid>
 
-        {/* Payment Method Selection */}
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <FormControl fullWidth variant="outlined">
             <InputLabel>Payment Method</InputLabel>
             <Select
@@ -122,7 +123,15 @@ const Investment = () => {
           </FormControl>
         </Grid>
 
-        {/* Additional Information */}
+        <Grid item xs={12} sm={6} display="flex" justifyContent="center" alignItems="center">
+          <CardMedia
+            component="img"
+            image={PhonePay} // Ensure the image path is correct
+            alt="QR Code for Payment"
+            sx={{ width: 120, height: 120, borderRadius: 1 }}
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <TextField
             label="Additional Information"
@@ -138,14 +147,12 @@ const Investment = () => {
         </Grid>
       </Grid>
 
-      {/* Submit Button */}
       <Box textAlign="center" mt={3}>
         <Button variant="contained" sx={{ backgroundColor: '#F9BC6E', color: 'black' }} type="submit" size="large">
           Submit Funding Request
         </Button>
       </Box>
 
-      {/* Notification Snackbar */}
       <Snackbar
         open={notification.open}
         autoHideDuration={4000}
@@ -157,6 +164,7 @@ const Investment = () => {
         </Alert>
       </Snackbar>
     </Box>
+    </>
   );
 };
 

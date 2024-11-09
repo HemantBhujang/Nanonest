@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { database } from './Firebase'; // Firebase setup
-import { ref, get, child } from 'firebase/database';
-import { useParams } from 'react-router-dom';
+import { ref, get } from 'firebase/database';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navbar2 from './Navbar2';
 import { Box, Grid, Typography, Button, Card, CardContent, CardMedia, Stack } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const VisitProfile = () => {
   const [profileData, setProfileData] = useState(null);
-  const [posts, setPosts] = useState([]); // State to hold posts
+  const [posts, setPosts] = useState([]);
   const { id } = useParams(); // Get profile ID from route
+  const navigate = useNavigate(); // Initialize navigate function
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -18,7 +19,7 @@ const VisitProfile = () => {
       
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const profileImageUrl = `https://firebasestorage.googleapis.com/v0/b/nanonest-eb325.appspot.com/o/profileImages%2F${id}?alt=media&token=YOUR_TOKEN_HERE`; // Replace YOUR_TOKEN_HERE if necessary
+        const profileImageUrl = `https://firebasestorage.googleapis.com/v0/b/nanonest-eb325.appspot.com/o/profileImages%2F${id}?alt=media&token=YOUR_TOKEN_HERE`;
         setProfileData({ ...data, profileImageUrl });
       } else {
         console.log('No profile data available');
@@ -26,7 +27,7 @@ const VisitProfile = () => {
     };
 
     const fetchPostsData = async () => {
-      const postsRef = ref(database, `/posts`); // Assuming posts are stored under 'posts'
+      const postsRef = ref(database, `/posts`);
       const snapshot = await get(postsRef);
 
       if (snapshot.exists()) {
@@ -52,6 +53,14 @@ const VisitProfile = () => {
       </Box>
     );
   }
+
+  const handleInvestClick = () => {
+    navigate(`/investment`, { state: { userName: profileData.name } });
+  };
+
+  const handleMessageClick = () => {
+    navigate(`/MessageSection`, { state: { userName: profileData.name } });
+  };
 
   return (
     <>
@@ -93,9 +102,9 @@ const VisitProfile = () => {
                 </Typography>
 
                 <Stack direction="row" spacing={2} mt={4} justifyContent="center">
-                  <Button variant="outlined" color="warning" size="large">Add to List</Button>
-                  <Button variant="outlined" color="warning" size="large">Message</Button>
-                  <Button variant="outlined" color="warning" size="large">Invest</Button>
+                <Button variant="outlined" color="warning" size="large">Add to List</Button>
+                  <Button variant="outlined" color="warning" size="large" onClick={handleInvestClick}>Invest</Button>
+                  <Button variant="outlined" color="warning" size="large" onClick={handleMessageClick}>Message</Button>
                 </Stack>
               </CardContent>
             </Grid>
@@ -103,7 +112,6 @@ const VisitProfile = () => {
         </Card>
       </Box>
 
-      {/* Posts Section */}
       <Box sx={{ padding: 4 }}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
           Posts by {profileData.name}
@@ -123,7 +131,7 @@ const VisitProfile = () => {
                     component="img"
                     image={post.image}
                     alt={post.title}
-                    sx={{ height: 140, borderRadius: 1, objectFit: 'cover' }} // Ensures the image is properly sized
+                    sx={{ height: 140, borderRadius: 1, objectFit: 'cover' }}
                   />
                 )}
               </CardContent>
