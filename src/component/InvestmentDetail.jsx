@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar2 from './Navbar2';
+import solar from '../images/Solar_Power.jpg';
 import {
   Box,
   Typography,
@@ -10,7 +11,9 @@ import {
   Button,
   Divider,
   Grid,
+  Chip, // For highlighting the status
 } from '@mui/material';
+import { CheckCircle, Cancel, HourglassEmpty } from '@mui/icons-material'; // Icons for status
 
 const InvestmentDetail = () => {
   const { id } = useParams(); // Get the investment ID from the URL
@@ -26,16 +29,13 @@ const InvestmentDetail = () => {
     amountInvested: 5000,
     expectedROI: 15,
     dateOfInvestment: '2023-05-15',
-    projectImages: [
-      'D:\DIEMS\NanoNest\Nanonest\src\Images\Solar_Power.jpg', // Placeholder images
-      'D:\DIEMS\NanoNest\Nanonest\src\Images\Solar_Power.jpg',
-    ],
+    projectImages: [solar, solar], // Use the imported image for both references
     entrepreneurProfile: {
       bio: 'John Doe is a passionate environmentalist with over 10 years of experience in renewable energy.',
       contact: 'johndoe@example.com',
       location: 'California, USA',
     },
-    status: 'Active',
+    status: 'Active', // You can change this value to 'Completed' or 'Pending' to test other states
     updates: [
       {
         date: '2023-06-10',
@@ -46,6 +46,26 @@ const InvestmentDetail = () => {
         message: 'Training sessions conducted for locals on solar panel maintenance.',
       },
     ],
+  };
+
+  // Style for highlighting the status
+  const statusStyle = {
+    Active: { backgroundColor: '#28a745', color: 'white', display: 'inline-flex', alignItems: 'center' },
+    Completed: { backgroundColor: '#007bff', color: 'white', display: 'inline-flex', alignItems: 'center' },
+    Pending: { backgroundColor: '#ffc107', color: 'white', display: 'inline-flex', alignItems: 'center' },
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'Active':
+        return <CheckCircle sx={{ mr: 1 }} />;
+      case 'Completed':
+        return <Cancel sx={{ mr: 1 }} />;
+      case 'Pending':
+        return <HourglassEmpty sx={{ mr: 1 }} />;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -110,9 +130,12 @@ const InvestmentDetail = () => {
                 <Typography variant="body2" color="text.secondary">
                   Date of Investment: {investmentDetails.dateOfInvestment}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Status: {investmentDetails.status}
-                </Typography>
+
+                <Chip
+                  label={investmentDetails.status}
+                  sx={statusStyle[investmentDetails.status]} // Apply the correct style for status
+                  icon={getStatusIcon(investmentDetails.status)}
+                />
 
                 <Divider sx={{ my: 2 }} />
 

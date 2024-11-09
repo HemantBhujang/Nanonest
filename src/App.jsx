@@ -130,7 +130,7 @@ const MainLayout = ({ user }) => {
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection' element={<MessageSection />}/>
         <Route path='/InvestorDashboard' element={<InvestorDashboard/>}/>
-        <Route path='/investment/:id' element={<InvestmentDetail/>}/>
+        <Route path='/investment/1' element={<InvestmentDetail/>}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
