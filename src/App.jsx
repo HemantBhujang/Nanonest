@@ -16,6 +16,7 @@ import AfterLogInInvestor from './component/AfterLogInInvestor';
 import Profile from './component/Profile';  
 import { getAuth, onAuthStateChanged } from "firebase/auth";  
 import VisitProfile from './component/VisitProfile';
+import MesssageScreen from './component/MessageScreen';
 import Menu from './component/Menu';
 import EntrepreneurProfileForm from './component/EntrepreneurProfileForm';
 import MessageSection from './component/MessageSection';
@@ -23,6 +24,10 @@ import Footer from './component/Footer';
 import Team from './component/Team';
 import NewPostForm from './component/NewPostForm'
 import Investment from './component/Investment';
+import AboutUs from './component/AboutUs';
+import EntrepreneurFAQ from './Common/EntreprenuerFAQ';
+import InvestorFAQ from './Common/InvestorFAQ';
+import Resources from './Common/Resources';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -114,9 +119,13 @@ const MainLayout = ({ user }) => {
         <Route path='/NewPostForm' element={<NewPostForm />}/>
         <Route path='/investment' element={<Investment />}/>
         <Route path="/profile/:id" element={<VisitProfile />} /> {/* Route for dynamic profiles */}
-
+        <Route path='/about' element={<AboutUs/>}/> 
+        <Route path='/faq' element={<EntrepreneurFAQ/>}/>
+        <Route path='/investor-faq' element={<InvestorFAQ/>} />
+        <Route path='/blog' element={<Resources/>}/>
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection' element={<MessageSection />}/>
+        <Route path='message/:id' element={<MesssageScreen/>}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
@@ -124,7 +133,7 @@ const MainLayout = ({ user }) => {
             content='where your entrepreneurial journey meets limitless growth and opportunity!'   
           />  
         } /> 
-
+         
         <Route path='/AfterLogInInvestor' element={<AfterLogInInvestor/>}/>
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  

@@ -164,9 +164,7 @@ const AfterLogin = ({ title, content, wave }) => {
       <IconButton aria-label="like" size="small">
         <FavoriteIcon />
       </IconButton>
-      <IconButton aria-label="comment" size="small">
-        <CommentIcon />
-      </IconButton>
+      
       <IconButton aria-label="share" size="small">
         <ShareIcon />
       </IconButton>

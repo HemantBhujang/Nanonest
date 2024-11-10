@@ -10,6 +10,7 @@ import {
 import techWave from '../Images/techWave.png';
 import greenWorld from '../Images/GreenWorld.jpeg';
 import finSecure from '../Images/FinSecure.jpg';
+import Footer from './Footer';
 
 const companies = [
   {
@@ -32,6 +33,7 @@ const companies = [
 
 const Industry = () => {
   return (
+    <>
     <Container maxWidth="lg" style={{ marginTop: '20px' }}>
       <Typography
         variant="h2"
@@ -113,6 +115,8 @@ const Industry = () => {
         `}
       </style>
     </Container>
+    <Footer/>
+    </>
   );
 };
 
