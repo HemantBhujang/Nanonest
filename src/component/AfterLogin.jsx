@@ -14,6 +14,7 @@ import { Box, Typography, Card, CardContent, IconButton,CardMedia, Grid } from '
 import ShareIcon from '@mui/icons-material/Share';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
+import Footer from './Footer'
 
 
 const AfterLogin = ({ title, content, wave }) => {
@@ -177,6 +178,7 @@ const AfterLogin = ({ title, content, wave }) => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <Footer></Footer>
     </>
   );
 };
