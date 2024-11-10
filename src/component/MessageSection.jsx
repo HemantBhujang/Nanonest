@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useNavigate and useLocation
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { auth } from "./Firebase"; // Import Firebase auth
 import Navbar2 from './Navbar2';
 import {
   AppBar,
@@ -20,23 +21,36 @@ import SendIcon from "@mui/icons-material/Send";
 const MessageSection = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const userName = location.state?.userName || "User"; // Get userName from state, default to "User" if not provided
+  const userName = location.state?.userName || "User"; // Get userName from state
   const [messages, setMessages] = useState([
-    { text: "Hello! How are you?", sender: "other" },
-    { text: "I'm good! How about you?", sender: "me" },
+    { text: "Hello! How are you?", senderId: "other" },
+    { text: "I'm good! How about you?", senderId: "me" },
   ]);
   const [newMessage, setNewMessage] = useState("");
+  const [currentUserId, setCurrentUserId] = useState(""); // State to store current user ID
+
+  useEffect(() => {
+    // Get the current user ID when the component mounts
+    const user = auth.currentUser;
+    if (user) {
+      setCurrentUserId(user.uid); // Set the user ID when authenticated
+    } else {
+      navigate("/login"); // Redirect if not authenticated
+    }
+  }, [navigate]);
 
   const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      setMessages([...messages, { text: newMessage, sender: "me" }]);
+    if (newMessage.trim() && currentUserId) {
+      setMessages([
+        ...messages,
+        { text: newMessage, senderId: currentUserId }, // Include senderId
+      ]);
       setNewMessage(""); // Clear input after sending
     }
   };
 
   return (
     <>
-      {/* Navbar */}
       <Navbar2
         title="NanoNest"
         msg="Message"
@@ -45,14 +59,12 @@ const MessageSection = () => {
         button="Profile"
       />
 
-      {/* Header */}
       <AppBar position="static" style={{ backgroundColor: "#F9BC6E" }}>
         <Toolbar>
           <Typography variant="h6" style={{ color: "#FFF" }}>
             Message with {userName}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          {/* Invest Button */}
           <Button
             variant="contained"
             style={{
@@ -60,14 +72,13 @@ const MessageSection = () => {
               color: "#FFF",
               fontWeight: "bold",
             }}
-            onClick={() => navigate('/investment', { state: { userName } })} // Pass userName when navigating
+            onClick={() => navigate('/investment', { state: { userName } })}
           >
             Invest
           </Button>
         </Toolbar>
       </AppBar>
 
-      {/* Chat Container */}
       <Container maxWidth="md" style={{ marginTop: "20px" }}>
         <Paper
           style={{
@@ -76,27 +87,27 @@ const MessageSection = () => {
             overflowY: "auto",
             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
             borderRadius: "10px",
-            backgroundColor: "#FFFBEA", // Light background to match theme
+            backgroundColor: "#FFFBEA",
           }}
         >
-          {/* Messages List */}
           <List>
             {messages.map((message, index) => (
               <ListItem
                 key={index}
                 alignItems="flex-start"
                 style={{
-                  justifyContent: message.sender === "me" ? "flex-end" : "flex-start",
+                  justifyContent: message.senderId === currentUserId ? "flex-end" : "flex-start",
                 }}
               >
                 <ListItemText
                   primary={message.text}
                   style={{
-                    backgroundColor: message.sender === "me" ? "#F9BC6E" : "#F1F1F1",
+                    backgroundColor:
+                      message.senderId === currentUserId ? "#F9BC6E" : "#F1F1F1",
                     padding: "10px 20px",
                     borderRadius: "10px",
                     maxWidth: "70%",
-                    color: message.sender === "me" ? "#FFF" : "#424242",
+                    color: message.senderId === currentUserId ? "#FFF" : "#424242",
                     boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
                   }}
                 />
@@ -105,7 +116,6 @@ const MessageSection = () => {
           </List>
         </Paper>
 
-        {/* Message Input Section */}
         <Box
           component="form"
           sx={{ display: "flex", marginTop: 2, alignItems: "center" }}

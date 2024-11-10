@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { database } from './Firebase';
-import { ref, get } from 'firebase/database';
+import { database } from './Firebase'; // Firebase setup
+import { ref, get, child } from 'firebase/database';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import Navbar2 from './Navbar2';
@@ -42,8 +42,8 @@ const VisitProfile = () => {
         const data = snapshot.val();
         const filteredPosts = Object.keys(data)
           .map(key => ({
-            id: key,
-            ...data[key],
+          id: key,
+          ...data[key],
           }))
           .filter(post => post.userId === id);
 
@@ -63,12 +63,14 @@ const VisitProfile = () => {
         <CircularProgress />
       </Box>
     );
+
+   
   }
 
   return (
     <>
       <Navbar2 title="NanoNest" msg="Message" notification="Notification" button="Profile" />
-
+      
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 4 }}>
         <Card sx={{ maxWidth: '800px', boxShadow: 3, borderRadius: 4 }}>
           <Grid container spacing={3} alignItems="center" justifyContent="center" padding={2}>
@@ -107,6 +109,7 @@ const VisitProfile = () => {
                 <Stack direction="row" spacing={2} mt={4} justifyContent="center">
                   <Button variant="outlined" color="warning" size="large">Add to List</Button>
                   <Button onClick={handleMessageClick} variant="outlined" color="warning" size="large">Message</Button>
+                  <Button variant="outlined" color="warning" size="large">Invest</Button>
                 </Stack>
               </CardContent>
             </Grid>
@@ -121,7 +124,7 @@ const VisitProfile = () => {
         </Typography>
         <div className="container my-5">
           <Grid container spacing={3}>
-            {posts.length > 0 ? (
+        {posts.length > 0 ? (
               posts.map((post, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card sx={{ maxWidth: '100%', margin: 'auto', borderRadius: '15px', boxShadow: 3, height: "500px" }}>
@@ -131,10 +134,10 @@ const VisitProfile = () => {
                       image={post.imageUrl}
                       alt={post.title}
                     />
-                    <CardContent>
+              <CardContent>
                       <Typography gutterBottom variant="h5" component="div" sx={{ height: "100px" }}>
-                        {post.title}
-                      </Typography>
+                  {post.title}
+                </Typography>
                       <Typography 
                         variant="body2" 
                         color="text.secondary" 
@@ -147,9 +150,17 @@ const VisitProfile = () => {
                           WebkitBoxOrient: "vertical"
                         }}
                       >
-                        {post.description}
-                      </Typography>
-                    </CardContent>
+                  {post.description}
+                </Typography>
+                {post.image && (
+                  <CardMedia
+                    component="img"
+                    image={post.image}
+                    alt={post.title}
+                    sx={{ height: 140, borderRadius: 1, objectFit: 'cover' }} // Ensures the image is properly sized
+                  />
+                )}
+              </CardContent>
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 16px 16px' }}>
                       <IconButton aria-label="like">
                         <FavoriteIcon />
@@ -161,12 +172,12 @@ const VisitProfile = () => {
                         <ShareIcon />
                       </IconButton>
                     </div>
-                  </Card>
+            </Card>
                 </Grid>
-              ))
-            ) : (
-              <Typography>No posts available</Typography>
-            )}
+          ))
+        ) : (
+          <Typography>No posts available</Typography>
+        )}
           </Grid>
         </div>
       </Box>

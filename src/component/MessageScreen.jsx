@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ref, onValue, push } from "firebase/database";
-
-import { database, auth } from "./Firebase"; // Import auth and database
+import { io } from "socket.io-client";
+import { auth } from "./Firebase"; // Import auth
 import Navbar2 from "./Navbar2";
 import {
   AppBar,
@@ -26,6 +25,7 @@ const MessageSection = () => {
   const [currentUser, setCurrentUser] = useState(null); // Store current logged-in user
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState(null);
 
   // Fetch current logged-in user
   useEffect(() => {
@@ -40,45 +40,42 @@ const MessageSection = () => {
     return () => unsubscribe(); // Clean up listener on unmount
   }, [navigate]);
 
-  // Fetch messages from Realtime Database in real-time
+  // Establish socket connection
   useEffect(() => {
     if (currentUser) {
-      const chatId =
-        currentUser.uid < receiverId
-          ? `${currentUser.uid}_${receiverId}`
-          : `${receiverId}_${currentUser.uid}`;
-      const messagesRef = ref(database, `messages/${chatId}`);
-  
-      onValue(messagesRef, (snapshot) => {
-        const messagesData = [];
-        snapshot.forEach((childSnapshot) => {
-          messagesData.push(childSnapshot.val());
-        });
-        setMessages(messagesData);
+      const newSocket = io("http://localhost:5000"); // Change this to your server URL
+      setSocket(newSocket);
+
+      // Join the socket room based on user IDs
+      const chatRoom = `${currentUser.uid}_${receiverId}`;
+      newSocket.emit("join_room", chatRoom);
+
+      // Listen for incoming messages
+      newSocket.on("receive_message", (message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
       });
-  
-      return () => messagesRef.off();
+
+      return () => {
+        newSocket.emit("leave_room", chatRoom);
+        newSocket.disconnect();
+      };
     }
   }, [currentUser, receiverId]);
   
 
   // Handle sending a new message
-  const handleSendMessage = async () => {
-    if (newMessage.trim() && currentUser) {
-      const chatId =
-        currentUser.uid < receiverId
-          ? `${currentUser.uid}_${receiverId}`
-          : `${receiverId}_${currentUser.uid}`;
-      const messagesRef = ref(database, `messages/${chatId}`);
-  
-      const newMessageData = {
+  const handleSendMessage = () => {
+    if (newMessage.trim() && currentUser && socket) {
+      const chatRoom = `${currentUser.uid}_${receiverId}`;
+      const messageData = {
         senderId: currentUser.uid,
         receiverId,
         message: newMessage,
         timestamp: new Date().toISOString(),
       };
-  
-      await push(messagesRef, newMessageData); // Use push to add the new message
+
+      // Emit the message to the server
+      socket.emit("send_message", { chatRoom, messageData });
       setNewMessage(""); // Clear input after sending
     }
   };

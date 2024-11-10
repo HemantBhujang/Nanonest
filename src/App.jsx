@@ -65,7 +65,8 @@ const MainLayout = ({ user }) => {
     '/AfterLogInInvestor',
     '/investment',
     '/InvestorDashboard',
-    '/investment/1'
+    '/investment/1',
+    '/message/:id'
   ];
 
   const isDynamicProfile = /^\/profile\/[a-zA-Z0-9]+$/.test(location.pathname);
@@ -123,6 +124,7 @@ const MainLayout = ({ user }) => {
         <Route path="/Team" element={<Team />} />
         <Route path='/NewPostForm' element={<NewPostForm />}/>
         <Route path='/investment' element={<Investment />}/>
+        <Route path='/message/:id' element={<MesssageScreen/>}/>
         <Route path="/profile/:id" element={<VisitProfile />} /> {/* Route for dynamic profiles */}
         <Route path='/about' element={<AboutUs/>}/> 
         <Route path='/faq' element={<EntrepreneurFAQ/>}/>

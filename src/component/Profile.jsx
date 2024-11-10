@@ -172,17 +172,7 @@ const Profile = () => {
                     {post.content}
                   </Typography>
                 </CardContent>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 16px 16px' }}>
-                  <IconButton aria-label="like">
-                    <FavoriteIcon />
-                  </IconButton>
-                  <IconButton aria-label="comment">
-                    <CommentIcon />
-                  </IconButton>
-                  <IconButton aria-label="share">
-                    <ShareIcon />
-                  </IconButton>
-                </div>
+                
               </Card>
             </Grid>
           ))}
