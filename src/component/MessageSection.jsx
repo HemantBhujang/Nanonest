@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate, useLocation } from "react-router-dom"; // Import useNavigate and useLocation
 import Navbar2 from './Navbar2';
 import {
   AppBar,
@@ -18,7 +18,9 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 
 const MessageSection = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userName = location.state?.userName || "User"; // Get userName from state, default to "User" if not provided
   const [messages, setMessages] = useState([
     { text: "Hello! How are you?", sender: "other" },
     { text: "I'm good! How about you?", sender: "me" },
@@ -36,18 +38,18 @@ const MessageSection = () => {
     <>
       {/* Navbar */}
       <Navbar2
-        title='NanoNest'
-        msg='Message'
-        notification='Notification'
-        menu='Menu'
-        button='Profile'
+        title="NanoNest"
+        msg="Message"
+        notification="Notification"
+        menu="Menu"
+        button="Profile"
       />
 
       {/* Header */}
       <AppBar position="static" style={{ backgroundColor: "#F9BC6E" }}>
         <Toolbar>
           <Typography variant="h6" style={{ color: "#FFF" }}>
-            Message Sender Profile
+            Message with {userName}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           {/* Invest Button */}
@@ -58,7 +60,7 @@ const MessageSection = () => {
               color: "#FFF",
               fontWeight: "bold",
             }}
-            onClick={() => navigate('/investment')} // Navigate to Investment page
+            onClick={() => navigate('/investment', { state: { userName } })} // Pass userName when navigating
           >
             Invest
           </Button>

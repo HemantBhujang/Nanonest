@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Card, CardContent, Grid, Avatar } from '@mui/material';
 import teamImage from '../Images/teamImage.webp'
+import sakshi from '../assets/Sakshi.jpg'
 
 const AboutUs = () => {
   return (
@@ -86,7 +87,7 @@ const AboutUs = () => {
               <CardContent>
                 <Avatar src="/path/to/avatar1.jpg" sx={{ width: 100, height: 100, margin: 'auto' }} />
                 <Typography variant="h6" fontWeight="bold" mt={2}>
-                  John Doe
+                  Hemant Bhujang
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   CEO & Founder
@@ -99,7 +100,7 @@ const AboutUs = () => {
               <CardContent>
                 <Avatar src="/path/to/avatar2.jpg" sx={{ width: 100, height: 100, margin: 'auto' }} />
                 <Typography variant="h6" fontWeight="bold" mt={2}>
-                  Jane Smith
+                  Sakshi Kakde
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   CTO & Co-Founder

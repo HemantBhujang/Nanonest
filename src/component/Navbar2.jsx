@@ -19,6 +19,13 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
 
+  // Sample message data
+  const messages = [
+    { name: 'John Doe', preview: 'Hey, are we still on for the meeting?' },
+    { name: 'Jane Smith', preview: 'Just sent you the files!' },
+    { name: 'Alice Johnson', preview: 'Looking forward to our call.' },
+  ];
+
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -85,13 +92,15 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
           <ListItemText primary="Messages" />
         </ListItem>
         <Divider />
-        {['John Doe', 'Jane Smith', 'Alice Johnson'].map((name, index) => (
-          <ListItem key={name} disablePadding>
-            <ListItemButton onClick={() => navigate('/MessageSection')}>
+        {messages.map((message, index) => (
+          <ListItem key={message.name} disablePadding>
+            <ListItemButton
+              onClick={() => navigate('/MessageSection', { state: { userName: message.name } })}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={name} secondary="Message preview..." />
+              <ListItemText primary={message.name} secondary={message.preview} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -127,6 +136,7 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
               <ul className="dropdown-menu" aria-labelledby="profileDropdown">
                 <li><button className="dropdown-item" onClick={() => navigate('/profile')}>View Profile</button></li>
                 <li><button className="dropdown-item" onClick={() => navigate('/profile/EntrepreneurProfileForm')}>Edit Profile</button></li>
+                <li><button className="dropdown-item" onClick={() => navigate('/InvestorDashboard')}>Dashboard</button></li>
                 <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
               </ul>
             </div>

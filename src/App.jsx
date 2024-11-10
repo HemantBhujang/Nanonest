@@ -12,7 +12,7 @@ import webDesign from './assets/Web Design 1.png';
 import SignIn from './component/SignIn';  
 import SignUp from './component/SignUp';  
 import AfterLogin from './component/AfterLogin';
-import AfterLogInInvestor from './component/AfterLogInInvestor';
+import AfterLogInInvestor from './component/InvestorPage';
 import Profile from './component/Profile';  
 import { getAuth, onAuthStateChanged } from "firebase/auth";  
 import VisitProfile from './component/VisitProfile';
@@ -28,6 +28,8 @@ import AboutUs from './component/AboutUs';
 import EntrepreneurFAQ from './Common/EntreprenuerFAQ';
 import InvestorFAQ from './Common/InvestorFAQ';
 import Resources from './Common/Resources';
+import InvestorDashboard from './component/InvestorDashboard';
+import InvestmentDetail from './component/InvestmentDetail';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -60,7 +62,10 @@ const MainLayout = ({ user }) => {
     '/Profile/Menu', 
     '/profile/EntrepreneurProfileForm', 
     '/MessageSection', 
-    '/AfterLogInInvestor'
+    '/AfterLogInInvestor',
+    '/investment',
+    '/InvestorDashboard',
+    '/investment/1'
   ];
 
   const isDynamicProfile = /^\/profile\/[a-zA-Z0-9]+$/.test(location.pathname);
@@ -125,7 +130,8 @@ const MainLayout = ({ user }) => {
         <Route path='/blog' element={<Resources/>}/>
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection' element={<MessageSection />}/>
-        <Route path='message/:id' element={<MesssageScreen/>}/>
+        <Route path='/InvestorDashboard' element={<InvestorDashboard/>}/>
+        <Route path='/investment/1' element={<InvestmentDetail/>}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
