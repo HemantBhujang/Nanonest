@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/react.svg";
 import { signOut } from 'firebase/auth';
@@ -18,30 +18,19 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
   const navigate = useNavigate();
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [notifications, setNotifications] = useState([]);
 
-  // Fetch messages and notifications from Firebase or an API
-  useEffect(() => {
-    // Simulate fetching data
-    setMessages([
-      { name: 'John Doe', preview: 'Hey, are we still on for the meeting?' },
-      { name: 'Jane Smith', preview: 'Just sent you the files!' },
-      { name: 'Alice Johnson', preview: 'Looking forward to our call.' },
-    ]);
-
-    setNotifications([
-      'Notification 1',
-      'Notification 2',
-      'Notification 3'
-    ]);
-  }, []);
+  // Sample message data
+  const messages = [
+    { name: 'John Doe', preview: 'Hey, are we still on for the meeting?' },
+    { name: 'Jane Smith', preview: 'Just sent you the files!' },
+    { name: 'Alice Johnson', preview: 'Looking forward to our call.' },
+  ];
 
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
         console.log("User signed out");
-        navigate('/'); // Navigate to home without reloading the page
+        window.location.href = '/';
       })
       .catch((error) => {
         console.error("Error signing out: ", error);
@@ -64,7 +53,7 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
       onKeyDown={toggleRightDrawer(false)}
     >
       <List>
-        {notifications.map((text, index) => (
+        {['Notification 1', 'Notification 2', 'Notification 3'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -77,14 +66,16 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
       </List>
       <Divider />
       <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Older Notifications" />
-          </ListItemButton>
-        </ListItem>
+        {['Older Notifications'].map((text) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </Box>
   );
