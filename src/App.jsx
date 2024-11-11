@@ -32,6 +32,7 @@ import InvestorDashboard from './component/InvestorDashboard';
 import InvestmentDetail from './component/InvestmentDetail';
 import Admin from './component/Admin';
 import Email from './component/Email';
+import InvestorForm from './component/InvestorForm';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -63,7 +64,7 @@ const MainLayout = ({ user }) => {
     '/VisitProfile',
     '/Profile/Menu', 
     '/profile/EntrepreneurProfileForm', 
-    '/MessageSection', 
+     '/InvestorForm',
     '/AfterLogInInvestor',
     '/investment',
     '/InvestorDashboard',
@@ -71,6 +72,7 @@ const MainLayout = ({ user }) => {
     '/message/:id',
     '/Admin',
     '/email'
+   
   ];
 
   const isDynamicProfile = /^\/profile\/[a-zA-Z0-9]+$/.test(location.pathname);
@@ -147,7 +149,7 @@ const MainLayout = ({ user }) => {
         } /> 
         <Route path='/Admin' element={<Admin/>}/>
         <Route path='/email' element={<Email/>}/>
-         
+         <Route path ='/InvestorForm' element= {<InvestorForm/>}/>
         <Route path='/AfterLogInInvestor' element={<AfterLogInInvestor/>}/>
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  

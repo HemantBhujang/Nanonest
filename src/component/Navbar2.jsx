@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/react.svg";
-import { signOut } from 'firebase/auth';
-import { auth } from "./Firebase";
+import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { auth } from "./Firebase"; // Assuming Firebase is configured
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -13,18 +13,60 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { getDatabase, ref, get } from 'firebase/database'; // Assuming Realtime Database
+// Or import Firestore if you are using Firestore instead.
 
 const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
   const navigate = useNavigate();
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
-  // Sample message data
   const messages = [
     { name: 'John Doe', preview: 'Hey, are we still on for the meeting?' },
     { name: 'Jane Smith', preview: 'Just sent you the files!' },
     { name: 'Alice Johnson', preview: 'Looking forward to our call.' },
   ];
+
+  // Listen to the authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        fetchUserRole(currentUser.uid); // Fetch role data from database
+      } else {
+        setUser(null);
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
+
+  const fetchUserRole = async (uid) => {
+    const db = getDatabase();  // If using Realtime Database
+    // Replace this with Firestore if necessary
+    const userRef = ref(db, 'users/' + uid);  // Assuming 'users' node stores user data
+    try {
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        if (userData && userData.role) {
+          // Store user data and role
+          setUser({
+            ...user,
+            role: userData.role,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            email: userData.email,
+          });
+        }
+      } else {
+        console.error("No user data found.");
+      }
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+    }
+  };
 
   const handleLogout = () => {
     signOut(auth)
@@ -46,12 +88,7 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
   };
 
   const rightDrawerContent = (
-    <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={toggleRightDrawer(false)}
-      onKeyDown={toggleRightDrawer(false)}
-    >
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleRightDrawer(false)} onKeyDown={toggleRightDrawer(false)}>
       <List>
         {['Notification 1', 'Notification 2', 'Notification 3'].map((text, index) => (
           <ListItem key={text} disablePadding>
@@ -66,27 +103,20 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
       </List>
       <Divider />
       <List>
-        {['Older Notifications'].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Older Notifications" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
 
   const leftDrawerContent = (
-    <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={toggleLeftDrawer(false)}
-      onKeyDown={toggleLeftDrawer(false)}
-    >
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleLeftDrawer(false)} onKeyDown={toggleLeftDrawer(false)}>
       <List>
         <ListItem>
           <ListItemText primary="Messages" />
@@ -94,9 +124,7 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
         <Divider />
         {messages.map((message, index) => (
           <ListItem key={message.name} disablePadding>
-            <ListItemButton
-              onClick={() => navigate('/MessageSection', { state: { userName: message.name } })}
-            >
+            <ListItemButton onClick={() => navigate('/MessageSection', { state: { userName: message.name } })}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -107,6 +135,18 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
       </List>
     </Box>
   );
+
+  const handleEditProfile = () => {
+    if (user && user.role) {
+      if (user.role === 'Investor') {
+        navigate('/InvestorForm');
+      } else if (user.role === 'Entrepreneur') {
+        navigate('/profile/EntrepreneurProfileForm');
+      }
+    } else {
+      console.error("User data or role is missing");
+    }
+  };
 
   return (
     <div>
@@ -131,25 +171,29 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
 
             <div className="dropdown">
               <button className="btn btn-outline-warning dropdown-toggle mx-3" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                {button}
+                {user ? user.firstName || button : "Profile"}
               </button>
               <ul className="dropdown-menu" aria-labelledby="profileDropdown">
-                <li><button className="dropdown-item" onClick={() => navigate('/profile')}>View Profile</button></li>
-                <li><button className="dropdown-item" onClick={() => navigate('/profile/EntrepreneurProfileForm')}>Edit Profile</button></li>
-                <li><button className="dropdown-item" onClick={() => navigate('/InvestorDashboard')}>Dashboard</button></li>
-                <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                {user ? (
+                  <>
+                    <li><button className="dropdown-item" onClick={() => navigate('/profile')}>View Profile</button></li>
+                    <li><button className="dropdown-item" onClick={handleEditProfile}>Edit Profile</button></li>
+                    <li><button className="dropdown-item" onClick={() => navigate('/InvestorDashboard')}>Dashboard</button></li>
+                    <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                  </>
+                ) : (
+                  <li><button className="dropdown-item" onClick={() => navigate('/login')}>Login</button></li>
+                )}
               </ul>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Left-side drawer for Messages */}
       <Drawer anchor="left" open={isLeftDrawerOpen} onClose={toggleLeftDrawer(false)}>
         {leftDrawerContent}
       </Drawer>
 
-      {/* Right-side drawer for Notifications */}
       <Drawer anchor="right" open={isRightDrawerOpen} onClose={toggleRightDrawer(false)}>
         {rightDrawerContent}
       </Drawer>
