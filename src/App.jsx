@@ -30,6 +30,8 @@ import InvestorFAQ from './Common/InvestorFAQ';
 import Resources from './Common/Resources';
 import InvestorDashboard from './component/InvestorDashboard';
 import InvestmentDetail from './component/InvestmentDetail';
+import Admin from './component/Admin';
+import Email from './component/Email';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -66,7 +68,9 @@ const MainLayout = ({ user }) => {
     '/investment',
     '/InvestorDashboard',
     '/investment/1',
-    '/message/:id'
+    '/message/:id',
+    '/Admin',
+    '/email'
   ];
 
   const isDynamicProfile = /^\/profile\/[a-zA-Z0-9]+$/.test(location.pathname);
@@ -131,7 +135,7 @@ const MainLayout = ({ user }) => {
         <Route path='/investor-faq' element={<InvestorFAQ/>} />
         <Route path='/blog' element={<Resources/>}/>
         <Route path="/profile" element={<Profile />} />
-        <Route path='/MessageSection' element={<MessageSection />}/>
+        <Route path='/MessageSection/:id' element={<MessageSection />}/>
         <Route path='/InvestorDashboard' element={<InvestorDashboard/>}/>
         <Route path='/investment/1' element={<InvestmentDetail/>}/>
         <Route path="/AfterLogin" element={  
@@ -141,6 +145,8 @@ const MainLayout = ({ user }) => {
             content='where your entrepreneurial journey meets limitless growth and opportunity!'   
           />  
         } /> 
+        <Route path='/Admin' element={<Admin/>}/>
+        <Route path='/email' element={<Email/>}/>
          
         <Route path='/AfterLogInInvestor' element={<AfterLogInInvestor/>}/>
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
