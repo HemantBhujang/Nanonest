@@ -33,6 +33,7 @@ import InvestmentDetail from './component/InvestmentDetail';
 import Admin from './component/Admin';
 import Email from './component/Email';
 import InvestorForm from './component/InvestorForm';
+import InvestorProfilePage from './component/InvestorProfilePage';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -70,6 +71,7 @@ const MainLayout = ({ user }) => {
     '/InvestorDashboard',
     '/investment/1',
     '/message/:id',
+    '/InvestorProfilePage',
     '/Admin',
     '/email'
    
@@ -131,7 +133,9 @@ const MainLayout = ({ user }) => {
         <Route path='/NewPostForm' element={<NewPostForm />}/>
         <Route path='/investment' element={<Investment />}/>
         <Route path='/message/:id' element={<MesssageScreen/>}/>
-        <Route path="/profile/:id" element={<VisitProfile />} /> {/* Route for dynamic profiles */}
+        <Route path="/profile/:id" element={<VisitProfile />} />
+         {/* Route for dynamic profiles */}
+         <Route path="/InvestorProfilePage/:id" element={<InvestorProfilePage />} />
         <Route path='/about' element={<AboutUs/>}/> 
         <Route path='/faq' element={<EntrepreneurFAQ/>}/>
         <Route path='/investor-faq' element={<InvestorFAQ/>} />

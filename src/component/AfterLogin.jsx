@@ -248,19 +248,20 @@ const AfterLogin = ({ title, content, wave }) => {
                   </a>
                 </Box>
                 <button
-                  style={{
-                    marginTop: '10px',
-                    padding: '6px 12px',
-                    backgroundColor: '#F9BC6E',
-                    border: 'none',
-                    borderRadius: '5px',
-                    color: '#fff',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => navigate(`/profile/${investor.id}`)}
-                >
-                  View Profile
-                </button>
+  style={{
+    marginTop: '10px',
+    padding: '6px 12px',
+    backgroundColor: '#F9BC6E',
+    border: 'none',
+    borderRadius: '5px',
+    color: '#fff',
+    cursor: 'pointer'
+  }}
+  onClick={() => navigate(`/InvestorProfilePage/${investor.id}`)}
+>
+  View Profile
+</button>
+
               </CardContent>
             </Card>
           </Grid>
