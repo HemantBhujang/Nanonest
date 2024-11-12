@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { database } from './Firebase'; // Assuming Firebase setup is already done
 import { ref, get, child } from 'firebase/database';
 import Navbar2 from './Navbar2';
+import Footer from './Footer';
 import {
   Box,
   Grid,
@@ -111,6 +112,7 @@ const InvestorPage = () => {
           ))}
         </Grid>
       </Box>
+      <Footer/>
     </>
   );
 };

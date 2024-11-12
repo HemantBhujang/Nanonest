@@ -21,6 +21,8 @@ const AfterLogin = ({ title, content, wave }) => {
   const navigate = useNavigate();
   const [entrepreneurData, setEntrepreneurData] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [investorData, setInvestorData] = useState([]);
+
 
   useEffect(() => {
     // Fetch Entrepreneur Data
@@ -42,6 +44,32 @@ const AfterLogin = ({ title, content, wave }) => {
         console.log('No data available');
       }
     };
+
+    const fetchInvestorData = async () => {
+      try {
+        const investorRef = ref(database, '/investors');
+        const snapshot = await get(investorRef);
+    
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const formattedData = Object.keys(data).map(key => ({
+            id: key,
+            name: data[key].name,
+            companyName: data[key].companyName,
+            description: data[key].description,
+            profileImageUrl: data[key].profileImageUrl,
+            website: data[key].website,
+            linkedin: data[key].linkedin
+          }));
+          setInvestorData(formattedData);
+        } else {
+          console.log('No data available for investors');
+        }
+      } catch (error) {
+        console.error('Error fetching investor data:', error);
+      }
+    };
+    
 
     // Fetch Posts Data
     const fetchPostsData = async () => {
@@ -65,7 +93,9 @@ const AfterLogin = ({ title, content, wave }) => {
     };
 
     fetchEntrepreneurData();
+    fetchInvestorData();
     fetchPostsData();
+
   }, []);
 
   const handleProfileClick = (id) => {
@@ -178,6 +208,68 @@ const AfterLogin = ({ title, content, wave }) => {
           </SwiperSlide>
         ))}
       </Swiper>
+
+
+{/* Investor Section */}
+<h1 style={{ textAlign: 'center' }}>Top Investors</h1>
+<Swiper
+  spaceBetween={20}
+  slidesPerView={1} // Each slide contains a row of two investors
+  navigation
+  pagination={{ clickable: true }}
+  style={{ height: 'auto', padding: '20px' }}
+  modules={[Navigation, Pagination]}
+>
+  {Array.from({ length: Math.ceil(investorData.length / 2) }).map((_, index) => (
+    <SwiperSlide key={index}>
+      <Grid container spacing={2}>
+        {investorData.slice(index * 2, index * 2 + 2).map((investor) => (
+          <Grid item xs={12} sm={6} key={investor.id}>
+            <Card sx={{ display: 'flex', alignItems: 'center', boxShadow: 3, padding: 2 }}>
+              <CardMedia
+                component="img"
+                image={investor.profileImageUrl}
+                alt={investor.name}
+                sx={{ width: 60, height: 60, borderRadius: '50%', marginRight: 2 }}
+              />
+              <CardContent>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333' }}>
+                  {investor.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {investor.companyName}
+                </Typography>
+                <Box display="flex" alignItems="center" gap={1} mt={1}>
+                  <a href={investor.website} target="_blank" rel="noopener noreferrer">
+                    Website
+                  </a>
+                  <a href={investor.linkedin} target="_blank" rel="noopener noreferrer" style={{ marginLeft: '10px' }}>
+                    LinkedIn
+                  </a>
+                </Box>
+                <button
+                  style={{
+                    marginTop: '10px',
+                    padding: '6px 12px',
+                    backgroundColor: '#F9BC6E',
+                    border: 'none',
+                    borderRadius: '5px',
+                    color: '#fff',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => navigate(`/profile/${investor.id}`)}
+                >
+                  View Profile
+                </button>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </SwiperSlide>
+  ))}
+</Swiper>
+
       <Footer></Footer>
     </>
   );
