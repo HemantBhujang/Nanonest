@@ -34,6 +34,7 @@ import Admin from './component/Admin';
 import Email from './component/Email';
 import InvestorForm from './component/InvestorForm';
 import InvestorProfilePage from './component/InvestorProfilePage';
+import ContactUs from './component/ContactUs';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -155,6 +156,7 @@ const MainLayout = ({ user }) => {
         <Route path='/email' element={<Email/>}/>
          <Route path ='/InvestorForm' element= {<InvestorForm/>}/>
         <Route path='/AfterLogInInvestor' element={<AfterLogInInvestor/>}/>
+        <Route path="/contact" element={<ContactUs />} />
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  
     </div>  

@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography, Card, CardContent, Grid, Avatar } from '@mui/material';
 import teamImage from '../Images/teamImage.webp'
 import sakshi from '../assets/Sakshi.jpg'
+import Footer from './Footer'
 
 const AboutUs = () => {
   return (
@@ -111,6 +112,7 @@ const AboutUs = () => {
           {/* Add more team members as needed */}
         </Grid>
       </Box>
+      <Footer/>
     </>
   );
 };

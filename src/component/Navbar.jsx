@@ -1,8 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import logo from "../Images/Logo_svg.svg";
 
-const Navbar = ({ title, services, industry, about, team, more, faq, in_faq, blog, button }) => {
+
+
+const Navbar = ({ title, services, industry, about, more, faq, in_faq, blog, button }) => {
+
+  const navigate = useNavigate(); // Define navigate inside the component
+
+  const handleButtonClicked = () => {
+    navigate('/contact'); 
+    console.log("hello");
+  };
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary shadow p-2 mb-4 bg-white rounded">
@@ -25,9 +34,7 @@ const Navbar = ({ title, services, industry, about, team, more, faq, in_faq, blo
               <li className="nav-item">
                 <Link className="nav-link active mx-3" to="/about">{about}</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link active mx-3" to="/Team">{team}</Link>
-              </li>
+              
               <li className="nav-item dropdown mx-3">
                 <a className="nav-link dropdown-toggle mx-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   {more}
@@ -41,7 +48,7 @@ const Navbar = ({ title, services, industry, about, team, more, faq, in_faq, blo
               </li>
             </ul>
             
-            <button type="button" className="btn btn-outline-warning mx-3">{button}</button>
+            <button type="button" className="btn btn-outline-warning mx-3" onClick={handleButtonClicked}>{button}</button>
             
           </div>
         </div>
