@@ -6,9 +6,9 @@ import Rajeev from '../Images/Rajeev Suri.jpg';
 const Testimonials = () => {
   return (
     <>
-      <div>
+      {/* <div>
         <h1 style={{ color: 'black' }} className='container text-center my-5'>Our Testimonials</h1>
-      </div>
+      </div> */}
 
       <div className="container">
         {/* Testimonial for Ratan Tata */}

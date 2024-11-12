@@ -74,7 +74,8 @@ const MainLayout = ({ user }) => {
     '/message/:id',
     '/InvestorProfilePage',
     '/Admin',
-    '/email'
+    '/email',
+    '/MessageSection'
    
   ];
 
@@ -143,6 +144,7 @@ const MainLayout = ({ user }) => {
         <Route path='/blog' element={<Resources/>}/>
         <Route path="/profile" element={<Profile />} />
         <Route path='/MessageSection/:id' element={<MessageSection />}/>
+        <Route path='/MessageSection' element={<MessageSection />}/>
         <Route path='/InvestorDashboard' element={<InvestorDashboard/>}/>
         <Route path='/investment/1' element={<InvestmentDetail/>}/>
         <Route path="/AfterLogin" element={  
