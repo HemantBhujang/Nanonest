@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from "../assets/react.svg";
+import logo from "../Images/Logo_svg.svg";
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from "./Firebase"; // Assuming Firebase is configured
 import Box from '@mui/material/Box';
