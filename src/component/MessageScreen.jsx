@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
-import { auth } from "./Firebase"; // Import auth
+import { auth, database } from "./Firebase"; // Import database
+import { ref, onValue, push, serverTimestamp } from "firebase/database"; // Import Firebase functions
 import Navbar2 from "./Navbar2";
 import {
   AppBar,
@@ -19,13 +19,12 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 
-const MessageSection = () => {
+const MessageScreen = () => {
   const { id: receiverId } = useParams(); // Receiver ID from URL parameters
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null); // Store current logged-in user
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState(null);
 
   // Fetch current logged-in user
   useEffect(() => {
@@ -40,46 +39,41 @@ const MessageSection = () => {
     return () => unsubscribe(); // Clean up listener on unmount
   }, [navigate]);
 
-  // Establish socket connection
+  // Retrieve messages from Firebase in real-time
   useEffect(() => {
-    if (currentUser) {
-      const newSocket = io("http://localhost:5000"); // Change this to your server URL
-      setSocket(newSocket);
-
-      // Join the socket room based on user IDs
+    if (currentUser && receiverId) {
       const chatRoom = `${currentUser.uid}_${receiverId}`;
-      newSocket.emit("join_room", chatRoom);
+      const messagesRef = ref(database, `messages/${chatRoom}`);
 
-      // Listen for incoming messages
-      newSocket.on("receive_message", (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
+      // Listen for new messages
+      onValue(messagesRef, (snapshot) => {
+        const data = snapshot.val();
+        const loadedMessages = data
+          ? Object.values(data)
+          : [];
+        setMessages(loadedMessages);
       });
-
-      return () => {
-        newSocket.emit("leave_room", chatRoom);
-        newSocket.disconnect();
-      };
     }
   }, [currentUser, receiverId]);
-  
 
   // Handle sending a new message
   const handleSendMessage = () => {
-    if (newMessage.trim() && currentUser && socket) {
+    if (newMessage.trim() && currentUser) {
       const chatRoom = `${currentUser.uid}_${receiverId}`;
+      const messagesRef = ref(database, `messages/${chatRoom}`);
+      
       const messageData = {
         senderId: currentUser.uid,
         receiverId,
         message: newMessage,
-        timestamp: new Date().toISOString(),
+        timestamp: serverTimestamp(), // Use Firebase server timestamp
       };
 
-      // Emit the message to the server
-      socket.emit("send_message", { chatRoom, messageData });
+      // Push the message to Firebase
+      push(messagesRef, messageData);
       setNewMessage(""); // Clear input after sending
     }
   };
-  
 
   return (
     <>
@@ -134,7 +128,11 @@ const MessageSection = () => {
               >
                 <ListItemText
                   primary={message.message}
-                  secondary={new Date(message.timestamp).toLocaleTimeString()}
+                  secondary={
+                    message.timestamp
+                      ? new Date(message.timestamp).toLocaleTimeString()
+                      : ""
+                  }
                   style={{
                     backgroundColor:
                       message.senderId === currentUser?.uid ? "#F9BC6E" : "#F1F1F1",
@@ -184,4 +182,4 @@ const MessageSection = () => {
   );
 };
 
-export default MessageSection;
+export default MessageScreen;

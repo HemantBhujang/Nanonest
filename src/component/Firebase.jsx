@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";  
-import { getAnalytics } from "firebase/analytics"; 
+// import { getAnalytics } from "firebase/analytics"; 
 import { getStorage } from "firebase/storage";
-import { getDatabase } from "firebase/database";
+import { getDatabase ,ref, onValue} from "firebase/database";
 import { getFirestore } from "firebase/firestore";  // Import Firestore
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";  
+import { getAuth } from "firebase/auth";  
   
 const firebaseConfig = {  
   apiKey: "AIzaSyCbAZKVgSXp9eg2oDOTF_4yyqhQZ29SdGY",  
@@ -23,4 +23,4 @@ const storage = getStorage(app);
 const database = getDatabase(app); // Initialize the database
 const firestore = getFirestore(app); // Initialize Firestore
   
-export { auth, storage, database, firestore }; // Export firestore
+export { auth, storage, database, firestore ,onValue , ref}; // Export firestore
