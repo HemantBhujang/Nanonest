@@ -79,62 +79,10 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
       });
   };
 
-  const toggleRightDrawer = (open) => () => {
-    setIsRightDrawerOpen(open);
-  };
+  
+  
 
-  const toggleLeftDrawer = (open) => () => {
-    setIsLeftDrawerOpen(open);
-  };
-
-  const rightDrawerContent = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleRightDrawer(false)} onKeyDown={toggleRightDrawer(false)}>
-      <List>
-        {['Notification 1', 'Notification 2', 'Notification 3'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Older Notifications" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </Box>
-  );
-
-  const leftDrawerContent = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleLeftDrawer(false)} onKeyDown={toggleLeftDrawer(false)}>
-      <List>
-        <ListItem>
-          <ListItemText primary="Messages" />
-        </ListItem>
-        <Divider />
-        {messages.map((message, index) => (
-          <ListItem key={message.name} disablePadding>
-            <ListItemButton onClick={() => navigate('/MessageSection', { state: { userName: message.name } })}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={message.name} secondary={message.preview} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+  
 
   const handleEditProfile = () => {
     if (user && user.role) {
@@ -162,10 +110,10 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active mx-3" to="#" onClick={toggleLeftDrawer(true)}>{msg}</Link>
+                <Link className="nav-link active mx-3" to="/messages">{msg}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active mx-3" to="#" onClick={toggleRightDrawer(true)}>{notification}</Link>
+                <Link className="nav-link active mx-3" to="/notifications" >{notification}</Link>
               </li>
             </ul>
 
@@ -190,13 +138,13 @@ const Navbar2 = ({ title, msg, notification, button = "Profile" }) => {
         </div>
       </nav>
 
-      <Drawer anchor="left" open={isLeftDrawerOpen} onClose={toggleLeftDrawer(false)}>
+      {/* <Drawer anchor="left" open={isLeftDrawerOpen} onClose={toggleLeftDrawer(false)}>
         {leftDrawerContent}
       </Drawer>
 
       <Drawer anchor="right" open={isRightDrawerOpen} onClose={toggleRightDrawer(false)}>
         {rightDrawerContent}
-      </Drawer>
+      </Drawer> */}
     </div>
   );
 };
