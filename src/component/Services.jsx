@@ -1,5 +1,6 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useNavigate } from 'react-router-dom'; // make sure to import useNavigate
 import {
   Container,
   Card,
@@ -10,8 +11,8 @@ import {
 } from '@mui/material';
 import me from '../assets/InvestorRelationManagement.png';
 import me2 from '../Images/communication2.jpg';
-import me3 from '../Images/communication2.jpg';
-import Footer from '../component/Footer'
+import me3 from '../Images/Market_Analysis.jpg';
+import Footer from '../component/Footer';
 
 const servicesData = [
   {
@@ -32,86 +33,91 @@ const servicesData = [
   // Add more services as needed
 ];
 
+const Services = ({ title, content, itWorker }) => {
+  const navigate = useNavigate(); // Place this inside the component
 
-const Services = ({title,content,itWorker}) => {
+  // Define the function to handle the button click
+  const handleContactClick = () => {
+    navigate('/contact'); // This will navigate to '/contact'
+  };
+
   return (
     <>
-        <div className="container text-center my-5">
-  <div className="row">
-    <div className="col my-5">
-    <h1 className="my-5 "style={{textShadow: "5px 5px 10px #F9BC6E",fontSize: '12vmin'}}>{title}</h1>
-        <h4 className='text-start my-3' >{content}</h4>
-        <button type="button" className="btn btn-lg my-4 mx-5" style={{backgroundColor : '#F9BC6E'}}>Contact Us </button>
-    </div>
-    <div className="col">
-      <img src={itWorker} width="735rem" height='433rem' alt="It Worker" className='img-fluid' />
-    </div>
-      </div>
-      
-    
-    {/* Service Cards Section */}
-    <Container maxWidth="lg">
-        {servicesData.map((service, index) => {
-          const { ref, inView } = useInView({
-            triggerOnce: true,
-            threshold: 0.2,
-          });
-          return (
-            <Box
-              ref={ref}
-              key={index}
-              style={{
-                marginBottom: '30px',
-                transform: inView ? 'translateY(0)' : 'translateY(50px)',
-                opacity: inView ? 1 : 0,
-                transition: 'all 0.6s ease-out',
-              }}
-            >
-              <Card
+      <div className="container text-center my-5">
+        <div className="row">
+          <div className="col my-5">
+            <h1 className="my-5 " style={{ textShadow: "5px 5px 10px #F9BC6E", fontSize: '12vmin' }}>{title}</h1>
+            <h4 className='text-start my-3'>{content}</h4>
+            <button type="button" className="btn btn-lg my-4 mx-5" style={{ backgroundColor: '#F9BC6E' }} onClick={handleContactClick}>Contact Us</button>
+          </div>
+          <div className="col">
+            <img src={itWorker} width="735rem" height='433rem' alt="It Worker" className='img-fluid' />
+          </div>
+        </div>
+
+        {/* Service Cards Section */}
+        <Container maxWidth="lg">
+          {servicesData.map((service, index) => {
+            const { ref, inView } = useInView({
+              triggerOnce: true,
+              threshold: 0.2,
+            });
+            return (
+              <Box
+                ref={ref}
+                key={index}
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  borderRadius: '15px',
-                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-                  backgroundColor: '#FFFBEA',
-                  overflow: 'hidden',
-                  width: '100%',
+                  marginBottom: '30px',
+                  transform: inView ? 'translateY(0)' : 'translateY(50px)',
+                  opacity: inView ? 1 : 0,
+                  transition: 'all 0.6s ease-out',
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height="300"
-                  image={service.image}
-                  alt={service.title}
+                <Card
                   style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    borderRadius: '15px',
+                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                    backgroundColor: '#FFFBEA',
+                    overflow: 'hidden',
                     width: '100%',
-                    objectFit: 'cover',
-                    borderTopLeftRadius: '15px',
-                    borderTopRightRadius: '15px',
                   }}
-                />
-                <CardContent style={{ padding: '20px', textAlign: 'center' }}>
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    style={{ color: '#F9BC6E', fontWeight: 'bold', marginBottom: '15px' }}
-                  >
-                    {service.title}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {service.content}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-          );
-        })}
-      </Container>
-    </div>
-   <Footer />
-      </>
-  )
-}
+                >
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={service.image}
+                    alt={service.title}
+                    style={{
+                      width: '100%',
+                      objectFit: 'cover',
+                      borderTopLeftRadius: '15px',
+                      borderTopRightRadius: '15px',
+                    }}
+                  />
+                  <CardContent style={{ padding: '20px', textAlign: 'center' }}>
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      style={{ color: '#F9BC6E', fontWeight: 'bold', marginBottom: '15px' }}
+                    >
+                      {service.title}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {service.content}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Box>
+            );
+          })}
+        </Container>
+      </div>
+      <Footer />
+    </>
+  );
+};
 
-export default Services
+export default Services;

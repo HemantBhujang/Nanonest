@@ -1,31 +1,71 @@
-import React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-
-const notifications = ['Notification 1', 'Notification 2', 'Notification 3', 'Older Notifications'];
+import React, { useEffect, useState } from 'react';
+import { List, ListItem, ListItemText, CircularProgress, Container } from '@mui/material';
+import { ref, onValue } from 'firebase/database';
+import { database } from './Firebase';  // Import db from Firebase.jsx
 
 const NotificationPage = () => {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch notifications from Firebase
+  useEffect(() => {
+    const notificationsRef = ref(database, 'notifications'); // Path to your notifications node
+  
+    onValue(notificationsRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log("Raw Firebase Data:", data);  // Log raw Firebase data
+  
+      if (data) {
+        // Check if we have nested data correctly
+        Object.entries(data).forEach(([key, notification]) => {
+          console.log(`Notification Key: ${key}`);
+          console.log('Notification:', notification);
+        });
+  
+        const fetchedNotifications = Object.entries(data).map(([key, notification]) => ({
+          message: notification.message,
+          senderId: notification.senderId,
+          receiverId: notification.receiverId,
+        }));
+        
+        setNotifications(fetchedNotifications);
+      } else {
+        setNotifications([]);  // In case there are no notifications
+      }
+  
+      setLoading(false);
+    });
+  
+    return () => setLoading(false);
+  }, []);
+  
+  if (loading) {
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
   return (
-    <div style={{ backgroundColor: '#F9BC6E', padding: '20px', color: '#333' }}>
-      <h2>Notifications</h2>
+    <Container>
       <List>
-        {notifications.map((notification, index) => (
-          <ListItem key={notification} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={notification} />
-            </ListItemButton>
+        {notifications.length > 0 ? (
+          notifications.map((notification, index) => (
+            <ListItem key={index} divider>
+              <ListItemText
+                primary={`message: ${notification.message}`} // Display message field name
+                secondary={`senderId: ${notification.senderId}`} // Display senderId field name
+              />
+            </ListItem>
+          ))
+        ) : (
+          <ListItem>
+            <ListItemText primary="No notifications available" />
           </ListItem>
-        ))}
+        )}
       </List>
-    </div>
+    </Container>
   );
 };
 
