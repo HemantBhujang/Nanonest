@@ -109,6 +109,19 @@ const AboutUs = () => {
               </CardContent>
             </Card>
           </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ boxShadow: 2, textAlign: 'center' }}>
+              <CardContent>
+                <Avatar src="/path/to/avatar2.jpg" sx={{ width: 100, height: 100, margin: 'auto' }} />
+                <Typography variant="h6" fontWeight="bold" mt={2}>
+                  Sneha Sonwane
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Project Manager & UI/UX
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
           {/* Add more team members as needed */}
         </Grid>
       </Box>
