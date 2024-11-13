@@ -35,6 +35,7 @@ import Email from './component/Email';
 import InvestorForm from './component/InvestorForm';
 import InvestorProfilePage from './component/InvestorProfilePage';
 import ContactUs from './component/ContactUs';
+import AdminMessage from './component/AdminMessage';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -75,8 +76,9 @@ const MainLayout = ({ user }) => {
     '/InvestorProfilePage',
     '/Admin',
     '/email',
-    '/MessageSection'
-   
+    '/MessageSection',
+    '/AdminMessage'
+     
   ];
 
   const isDynamicProfile = /^\/profile\/[a-zA-Z0-9]+$/.test(location.pathname);
@@ -147,6 +149,7 @@ const MainLayout = ({ user }) => {
         <Route path='/MessageSection' element={<MessageSection />}/>
         <Route path='/InvestorDashboard' element={<InvestorDashboard/>}/>
         <Route path='/investment/1' element={<InvestmentDetail/>}/>
+       <Route path ='/AdminMessage' element={<AdminMessage/>}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   

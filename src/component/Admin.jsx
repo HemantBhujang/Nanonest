@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, Container, Dialog, DialogContent, DialogActions } from '@mui/material';
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Container,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogTitle,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [isErrorPopupOpen, setErrorPopupOpen] = useState(false);
+  const [isSuccessPopupOpen, setSuccessPopupOpen] = useState(false); // Success popup state
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
@@ -13,7 +24,7 @@ const AdminLogin = () => {
 
     // Simple authentication check; replace with real backend logic
     if (userId === 'admin' && password === 'admin123') {
-      navigate('/email');  // Redirect to Email component
+      setSuccessPopupOpen(true); // Show success popup with options
     } else {
       setErrorPopupOpen(true);  // Show error popup if credentials are invalid
     }
@@ -21,6 +32,16 @@ const AdminLogin = () => {
 
   const handleCloseErrorPopup = () => {
     setErrorPopupOpen(false);
+  };
+
+  const handleNavigateToEmail = () => {
+    setSuccessPopupOpen(false);
+    navigate('/email'); // Navigate to Email component
+  };
+
+  const handleNavigateToMessages = () => {
+    setSuccessPopupOpen(false);
+    navigate('/AdminMessage'); // Navigate to Message component
   };
 
   return (
@@ -96,6 +117,24 @@ const AdminLogin = () => {
         <DialogActions>
           <Button onClick={handleCloseErrorPopup} color="primary">
             Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Success Popup with options */}
+      <Dialog open={isSuccessPopupOpen} onClose={() => setSuccessPopupOpen(false)}>
+        <DialogTitle>Select an Option</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="textSecondary">
+            Choose the component you would like to navigate to:
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleNavigateToEmail} color="primary">
+            Email
+          </Button>
+          <Button onClick={handleNavigateToMessages} color="primary">
+            Messages
           </Button>
         </DialogActions>
       </Dialog>
