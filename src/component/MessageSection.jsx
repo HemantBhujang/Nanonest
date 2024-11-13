@@ -28,6 +28,42 @@ const MessageSection = ({ loggedInUserId }) => {
   const [userList, setUserList] = useState([]); 
   const [messages, setMessages] = useState([]);
 
+
+  // Fetch messages for the selected user  
+// Fetch messages for the selected user  
+useEffect(() => {  
+  if (!selectedUser) return;  
+
+  const messagesRef = ref(database, "messages");  
+  onValue(messagesRef, (snapshot) => {  
+    const data = snapshot.val();  
+    const fetchedMessages = [];  
+
+    console.log("Message Data: ", data); // Log the entire data snapshot  
+
+    if (data) {  
+      for (const messageId in data) {  
+        const message = data[messageId];  
+        console.log("Current Message: ", message); // Log each message for debugging  
+
+        const isChatBetweenUsers =  
+          (message.senderId === loggedInUserId && message.receiverId === selectedUser.id) ||  
+          (message.senderId === selectedUser.id && message.receiverId === loggedInUserId);  
+
+        if (isChatBetweenUsers) {  
+          fetchedMessages.push({  
+            text: message.message,  
+            sender: message.senderId === loggedInUserId ? "me" : "other",  
+            timestamp: message.timestamp,  
+          });  
+        }  
+      }  
+    }  
+
+    console.log("Fetched Messages: ", fetchedMessages); // Log the fetched messages  
+    setMessages(fetchedMessages);  
+  });  
+}, [selectedUser, loggedInUserId]);
   // Fetch users who have messaged or been messaged by the logged-in user
   useEffect(() => {
     const messagesRef = ref(database, "messages");
@@ -170,7 +206,7 @@ const MessageSection = ({ loggedInUserId }) => {
               <List>
                 {userList.map((user) => (
                   <ListItem
-                    button
+                   button="true"
                     key={user.id}
                     onClick={() => setSelectedUser(user)} 
                     selected={selectedUser?.id === user.id}
