@@ -1,23 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { database } from './Firebase'; // Firebase setup
-import { ref, get, child } from 'firebase/database';
+import { ref, get, child, set } from 'firebase/database';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import Navbar2 from './Navbar2';
-import { Box, Grid, Typography, Button, Card, CardContent, CardMedia, IconButton, Stack } from '@mui/material';
+import { Box, Grid, Typography, Button, Card, CardContent, CardMedia, IconButton, Stack, Snackbar } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import ShareIcon from '@mui/icons-material/Share';
+import { getAuth } from 'firebase/auth'; // Import Firebase Authentication
 
 const VisitProfile = () => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false); // For the snackbar
   const { id } = useParams();
 
   const handleMessageClick = () => {
     navigate(`/message/${id}`);
+  };
+
+  const handleInvestRequestClick = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser; // Get the logged-in user
+    if (user) {
+      const loggedInUserId = user.uid; // Get the logged-in user's UID
+
+      try {
+        // Show the snackbar message
+        setOpenSnackbar(true);
+
+        // Add the notification to Firebase
+        const notificationRef = ref(database, `/notifications/${id}`); // Use the receiver's ID as the key
+        const newNotificationKey = Date.now(); // Use current timestamp as a unique key for the notification
+
+        const notificationData = {
+          senderId: loggedInUserId,
+          receiverId: id, // This is the profile user
+          message: "Investment request",
+          timestamp: new Date().toISOString(),
+        };
+
+        await set(ref(database, `/notifications/${id}/${newNotificationKey}`), notificationData);
+
+        console.log("Investment request sent and added to notifications.");
+      } catch (error) {
+        console.error("Error sending investment request:", error);
+      }
+    } else {
+      console.log('User not logged in');
+    }
   };
 
   useEffect(() => {
@@ -63,8 +97,6 @@ const VisitProfile = () => {
         <CircularProgress />
       </Box>
     );
-
-   
   }
 
   return (
@@ -109,7 +141,7 @@ const VisitProfile = () => {
                 <Stack direction="row" spacing={2} mt={4} justifyContent="center">
                   <Button variant="outlined" color="warning" size="large">Add to List</Button>
                   <Button onClick={handleMessageClick} variant="outlined" color="warning" size="large">Message</Button>
-                  <Button variant="outlined" color="warning" size="large">Invest</Button>
+                  <Button onClick={handleInvestRequestClick} variant="outlined" color="warning" size="large">Invest request</Button>
                 </Stack>
               </CardContent>
             </Grid>
@@ -124,7 +156,7 @@ const VisitProfile = () => {
         </Typography>
         <div className="container my-5">
           <Grid container spacing={3}>
-        {posts.length > 0 ? (
+            {posts.length > 0 ? (
               posts.map((post, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card sx={{ maxWidth: '100%', margin: 'auto', borderRadius: '15px', boxShadow: 3, height: "500px" }}>
@@ -134,10 +166,10 @@ const VisitProfile = () => {
                       image={post.imageUrl}
                       alt={post.title}
                     />
-              <CardContent>
+                    <CardContent>
                       <Typography gutterBottom variant="h5" component="div" sx={{ height: "100px" }}>
-                  {post.title}
-                </Typography>
+                        {post.title}
+                      </Typography>
                       <Typography 
                         variant="body2" 
                         color="text.secondary" 
@@ -150,17 +182,17 @@ const VisitProfile = () => {
                           WebkitBoxOrient: "vertical"
                         }}
                       >
-                  {post.description}
-                </Typography>
-                {post.image && (
-                  <CardMedia
-                    component="img"
-                    image={post.image}
-                    alt={post.title}
-                    sx={{ height: 140, borderRadius: 1, objectFit: 'cover' }} // Ensures the image is properly sized
-                  />
-                )}
-              </CardContent>
+                        {post.description}
+                      </Typography>
+                      {post.image && (
+                        <CardMedia
+                          component="img"
+                          image={post.image}
+                          alt={post.title}
+                          sx={{ height: 140, borderRadius: 1, objectFit: 'cover' }}
+                        />
+                      )}
+                    </CardContent>
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 16px 16px' }}>
                       <IconButton aria-label="like">
                         <FavoriteIcon />
@@ -172,15 +204,23 @@ const VisitProfile = () => {
                         <ShareIcon />
                       </IconButton>
                     </div>
-            </Card>
+                  </Card>
                 </Grid>
-          ))
-        ) : (
-          <Typography>No posts available</Typography>
-        )}
+              ))
+            ) : (
+              <Typography>No posts available</Typography>
+            )}
           </Grid>
         </div>
       </Box>
+
+      {/* Snackbar for Request Sent */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        message="Investment request sent"
+      />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, Container, Grid, Paper } from '@mui/material';
-import Navbar2 from './Navbar2';
+import { Box, Typography, TextField, Button, Container, Grid, Paper, Alert } from '@mui/material';
+import { database, ref, push } from './Firebase'; // Import Firebase functions
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +8,7 @@ const ContactUs = () => {
     email: '',
     message: '',
   });
+  const [successMessage, setSuccessMessage] = useState(''); // State for success message
 
   const handleChange = (e) => {
     setFormData({
@@ -18,13 +19,25 @@ const ContactUs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Integrate API to submit the form data
-    console.log('Form submitted', formData);
+
+    const contactsRef = ref(database, 'contacts');
+    push(contactsRef, formData)
+      .then(() => {
+        setSuccessMessage('MessageSent!'); // Set success message
+        setFormData({ name: '', email: '', message: '' }); // Clear form data
+
+        // Hide the success message after a few seconds
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error('Error saving data', error);
+      });
   };
 
   return (
     <>
-      
       <Container maxWidth="md" sx={{ mt: 4 }}>
         <Paper elevation={3} sx={{ p: 4, borderRadius: 2, backgroundColor: '#FFFBEA' }}>
           <Typography variant="h4" fontWeight="bold" gutterBottom>
@@ -33,6 +46,12 @@ const ContactUs = () => {
           <Typography variant="body1" color="text.secondary" gutterBottom>
             We'd love to hear from you! Reach out with any questions or feedback.
           </Typography>
+
+          {successMessage && ( // Display success message if it's set
+            <Alert severity="success" sx={{ mt: 2 }}>
+              {successMessage}
+            </Alert>
+          )}
 
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3} sx={{ mt: 2 }}>

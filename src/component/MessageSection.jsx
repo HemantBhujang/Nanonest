@@ -298,5 +298,4 @@ useEffect(() => {
     </>
   );
 };
-
 export default MessageSection;

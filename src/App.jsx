@@ -35,6 +35,8 @@ import Email from './component/Email';
 import InvestorForm from './component/InvestorForm';
 import InvestorProfilePage from './component/InvestorProfilePage';
 import ContactUs from './component/ContactUs';
+import AdminMessage from './component/AdminMessage';
+import NotificationPage from './component/NotificationPage';
 
 const App = () => {  
   const [user, setUser] = useState(null);  
@@ -75,12 +77,16 @@ const MainLayout = ({ user }) => {
     '/InvestorProfilePage',
     '/Admin',
     '/email',
-    '/MessageSection'
-   
+    '/MessageSection',
+    '/AdminMessage',
+    '/notifications'
+     
   ];
 
   const isDynamicProfile = /^\/profile\/[a-zA-Z0-9]+$/.test(location.pathname);
-  const showNavbar = !noNavbarPaths.includes(location.pathname) && !isDynamicProfile;
+  const isDynamicMessage = /^\/message\/[a-zA-Z0-9]+$/.test(location.pathname);
+
+  const showNavbar = !noNavbarPaths.includes(location.pathname) && !isDynamicProfile && !isDynamicMessage;
 
   return (  
     <div>  
@@ -147,6 +153,7 @@ const MainLayout = ({ user }) => {
         <Route path='/MessageSection' element={<MessageSection />}/>
         <Route path='/InvestorDashboard' element={<InvestorDashboard/>}/>
         <Route path='/investment/1' element={<InvestmentDetail/>}/>
+       <Route path ='/AdminMessage' element={<AdminMessage/>}/>
         <Route path="/AfterLogin" element={  
           <AfterLogin
             wave={wave}   
@@ -159,6 +166,7 @@ const MainLayout = ({ user }) => {
          <Route path ='/InvestorForm' element= {<InvestorForm/>}/>
         <Route path='/AfterLogInInvestor' element={<AfterLogInInvestor/>}/>
         <Route path="/contact" element={<ContactUs />} />
+        <Route path='/notifications' element={<NotificationPage/>}/>
         <Route path="*" element={<h2>404 Not Found</h2>} /> 
       </Routes>  
     </div>  
