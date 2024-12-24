@@ -1,5 +1,5 @@
 # NanoNest
-![NanoNest Logo](src\Images\Logo_Login.png)
+![NanoNest Logo](src/Images/Logo_Login.png)
 
 **NanoNest** is an innovative platform designed to connect micro and nano entrepreneurs with potential investors and collaborators. It serves as a crowdfunding and networking platform, empowering small businesses to showcase their projects, raise funds, and interact with like-minded individuals.
 
@@ -114,21 +114,19 @@ NanoNest/
 ## Screenshots
 
 ### Home Page:
-![alt text](HomePage.png)
+![Home Page](src/Images/homepage.png)
 
 ### Entrepreneur Profile:
-[Include a screenshot of an entrepreneur profile]
+![Entrepreneur Profile](src/Images/entrepreneur-profile.png)
 
 ### Investor Dashboard:
-[Include a screenshot of the investor dashboard]
+![Investor Dashboard](src/Images/investor-dashboard.png)
+
 
 ---
 
 
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
