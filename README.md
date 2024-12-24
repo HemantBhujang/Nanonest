@@ -1,4 +1,5 @@
 # NanoNest
+![NanoNest Logo](src\Images\Logo_Login.png)
 
 **NanoNest** is an innovative platform designed to connect micro and nano entrepreneurs with potential investors and collaborators. It serves as a crowdfunding and networking platform, empowering small businesses to showcase their projects, raise funds, and interact with like-minded individuals.
 
@@ -113,7 +114,6 @@ NanoNest/
 ## Screenshots
 
 ### Home Page:
-[Include a screenshot of the home page]
 ![alt text](HomePage.png)
 
 ### Entrepreneur Profile:
