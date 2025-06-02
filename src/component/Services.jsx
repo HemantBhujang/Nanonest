@@ -10,7 +10,7 @@ import {
   Box,
 } from '@mui/material';
 import me from '../assets/InvestorRelationManagement.png';
-import me2 from '../Images/communication2.jpg';
+import me2 from '../Images/Communication2.jpg';
 import me3 from '../Images/Market_Analysis.jpg';
 import Footer from '../component/Footer';
 
