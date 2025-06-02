@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar2 from './Navbar2';
-import solar from '../images/Solar_Power.jpg';
+import solar from '../Images/Solar_Power.jpg';
 import {
   Box,
   Typography,
